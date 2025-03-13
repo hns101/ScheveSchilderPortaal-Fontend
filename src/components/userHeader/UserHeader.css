@@ -1,0 +1,87 @@
+.user-header {
+    display: flex;
+    flex-direction: column;
+    height: 8rem;
+    background-color: var(--brown);
+    align-items: flex-end;
+}
+.header-logo{
+    margin-right: 1rem;
+    align-self: flex-end;
+    height: 90px;
+}
+.user-header-nav{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 15px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    background-color: var(--light-brown);
+    border-radius: 0 2rem 0 0;
+}
+.menu-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style-type: none;
+    text-decoration: none;
+    gap: 1rem;
+    margin-bottom: -1px;
+}
+.menu-item {
+    display: flex;
+}
+.default-menu-link, .default-menu-link:visited {
+    color: var(--background-color);
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+    padding: 0.2rem 2rem 0.2rem 2rem;
+    border-radius: 0.5rem  0.5rem 0 0;
+    background-color: var(--mid-brown);
+    margin-bottom: 1px;
+}
+.active-menu-settings, .active-menu-settings:visited,
+.active-menu-gallerij, .active-menu-gallerij:visited,
+.active-menu-lesplanning, .active-menu-lesplanning:visited{
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    text-decoration: none;
+    background-color: var(--background-color);
+    padding: 0.2rem 2rem 0.2rem 2rem;
+    border-radius: 0.5rem  0.5rem 0 0;
+    font-weight: 500;
+}
+.active-menu-gallerij:after{
+    content: "Gallerij";
+    font-size: 2rem;
+    font-weight: bold;
+    position: absolute;
+    color: var(--background-color);
+    margin-top: -53px;
+    margin-left: -280px;
+}
+.active-menu-settings:after{
+    content: "Settings";
+    font-size: 2rem;
+    font-weight: bold;
+    position: absolute;
+    color: var(--background-color);
+    margin-top: -53px;
+    margin-left: -420px;
+}
+.active-menu-lesplanning:after{
+    content: "Les planning";
+    font-size: 2rem;
+    font-weight: bold;
+    position: absolute;
+    color: var(--background-color);
+    margin-top: -53px;
+    margin-left: -140px;
+}
+
