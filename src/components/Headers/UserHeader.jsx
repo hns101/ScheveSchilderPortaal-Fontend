@@ -1,13 +1,13 @@
-import './UserHeader.css'
+import './Headers.css'
 import {Link, NavLink} from "react-router-dom";
 import logo from '../../assets/ScheveSchilder-logo.svg'
 
 function UserHeader() {
     return (
         <>
-            <header className="user-header">
+            <header className="header">
                 <img className="header-logo" src={logo} alt="ScheveSchilder-logo"/>
-                <nav className="user-header-nav">
+                <nav className="header-nav">
                     <ul className="menu-list">
                         <li className="menu-item">
                             <NavLink to="/"

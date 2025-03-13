@@ -6,15 +6,15 @@ import UserLessonPlanning from "./pages/userLessonPlanning/UserLessonPlanning.js
 import AdminLessonPlanning from "./pages/adminLessonPlanning/AdminLessonPlanning.jsx";
 import UserGallery from "./pages/userGallery/UserGallery.jsx";
 import UserSettings from "./pages/userSettings/UserSettings.jsx";
-import UserHeader from "./components/userHeader/UserHeader.jsx";
-import AdminHeader from "./components/adminHeader/AdminHeader.jsx";
+import UserHeader from "./components/Headers/UserHeader.jsx";
+import AdminHeader from "./components/Headers/AdminHeader.jsx";
 
 function App() {
 
     return (
         <>
-            <AdminHeader/>
-            {/*<UserHeader/>*/}
+            {/*<AdminHeader/>*/}
+            <UserHeader/>
             {/*<Routes>*/}
             {/*    <Route Path="/" element={<UserLessonPlanning/>}/>*/}
             {/*    <Route path="/gallerij" element={<UserGallery/>}/>*/}
