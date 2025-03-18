@@ -13,3 +13,77 @@
     align-items: center;
 
 }
+.lesson-outer-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.lesson-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+.lesson {
+    width: 182px;
+    box-shadow: rgba(64, 64, 64, 0.5) 1px 1px 5px;
+    height: 450px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+}
+.lesson-info {
+    background: var(--mid-brown);
+    color: white;
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px 15px 0 0;
+}
+.lesson-info-slot {
+    font-weight: bold;
+}
+.lesson-info-time {
+    font-weight: 500;
+}
+.lesson-info-date {
+    font-weight: 300;
+    font-style: italic;
+}
+.lesson-students {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+    width: 100%;
+}
+.lesson-student-name {
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--light-brown);
+    width: 85%;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+.lesson-student-filler {
+    color: var(--light-gray);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--light-gray);
+    width: 85%;
+    margin-top: 10px;
+    border-radius: 5px;
+    height: 23gitpx
+}
+
