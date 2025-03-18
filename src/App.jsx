@@ -15,8 +15,9 @@ function App() {
         <>
             {/*<AdminHeader/>*/}
             <UserHeader/>
+
             <Routes>
-                <Route Path="/" element={<UserLessonPlanning/>}/>
+                <Route path="/" element={<UserLessonPlanning/>}/>
                 <Route path="/gallerij" element={<UserGallery/>}/>
                 <Route path="/settings" element={<UserSettings/>}/>
                 {/*<Route path="/*" element={ <h2>Pagina niet gevonden</h2> }/>*/}
