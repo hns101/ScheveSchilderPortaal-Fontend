@@ -1,9 +1,29 @@
-.test {
+.week-name {
     color: #414141;
     font-weight: bold;
     font-size: 16px;
     padding: 10px;
     margin: 10px;
+}
+.week-button {
+    color: var(--white);
+    background-color: var(--brown);
+    padding: 5px 8px;
+    border: none;
+    border-radius: 5px;
+}
+.week-button:hover {
+    background-color: var(--mid-brown);
+}
+.week-button:disabled {
+    background-color: var(--light-brown);
+}
+.lesson-week-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
 }
 .main{
     display: flex;
@@ -11,7 +31,6 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-
 }
 .lesson-outer-container {
     display: flex;
@@ -28,7 +47,7 @@
     gap: 2rem;
 }
 .lesson {
-    width: 182px;
+    width: 184px;
     box-shadow: rgba(64, 64, 64, 0.5) 1px 1px 5px;
     height: 450px;
     margin-bottom: 20px;
@@ -84,6 +103,6 @@
     width: 85%;
     margin-top: 10px;
     border-radius: 5px;
-    height: 23gitpx
+    height: 23px
 }
 
