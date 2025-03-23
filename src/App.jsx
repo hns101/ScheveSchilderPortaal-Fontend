@@ -9,10 +9,11 @@ import UserSettings from "./pages/userSettings/UserSettings.jsx";
 import UserHeader from "./components/Headers/UserHeader.jsx";
 import AdminHeader from "./components/Headers/AdminHeader.jsx";
 import {useState} from "react";
+import userTestData1 from "./testData/userTestData1.json";
 
 function App() {
 
-    const [user, setUser] = useState();
+    const [user, setUser] = useState(userTestData1);
 
     return (
         <>
@@ -22,7 +23,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<UserLessonPlanning/>}/>
                 <Route path="/gallerij" element={<UserGallery/>}/>
-                <Route path="/settings" element={<UserSettings/>}/>
+                <Route path="/settings" element={<UserSettings user={user} setUser={setUser} />}/>
                 {/*<Route path="/*" element={ <h2>Pagina niet gevonden</h2> }/>*/}
             </Routes>
         </>

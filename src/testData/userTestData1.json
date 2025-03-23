@@ -4,7 +4,7 @@
   "lastname": "Doe",
   "email": "john.doe@example.com",
   "password": "securepassword123",
-  "default-class-time": "Vrijdag Avond",
+  "defaultClassTime": "Vrijdag Avond",
   "phone": "+31 6 12345678",
   "role": "student",
   "active-member": "true"
