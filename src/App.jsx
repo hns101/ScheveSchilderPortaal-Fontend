@@ -21,7 +21,7 @@ function App() {
             <UserHeader/>
 
             <Routes>
-                <Route path="/" element={<UserLessonPlanning/>}/>
+                <Route path="/" element={<UserLessonPlanning user={user} />}/>
                 <Route path="/gallerij" element={<UserGallery/>}/>
                 <Route path="/settings" element={<UserSettings user={user} setUser={setUser} />}/>
                 {/*<Route path="/*" element={ <h2>Pagina niet gevonden</h2> }/>*/}

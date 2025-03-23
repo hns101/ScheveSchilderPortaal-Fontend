@@ -25,6 +25,26 @@
     align-items: center;
 
 }
+.lesson-changer {
+    display: flex;
+}
+.lesson-student-fullname {
+    color: var(--white);
+    background-color: var(--brown);
+    padding: 5px 8px;
+    margin: 5px 0 20px 0 ;
+    border-radius: 10px 0 0 10px ;
+}
+.lesson-student-input {
+    cursor: pointer;
+    color: var(--text-color);
+    font-weight: 600;
+    margin: 5px 0 20px 0 ;
+    height: 40px;
+    padding-right: 15px;
+    border: 2px solid var(--brown);
+    border-radius:   0 10px 10px 0;
+}
 .main{
     display: flex;
     flex-direction: column;
@@ -92,6 +112,18 @@
     width: 85%;
     margin-top: 10px;
     border-radius: 5px;
+}
+.lesson-student-name-active {
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--brown);
+    width: 85%;
+    margin-top: 10px;
+    border-radius: 5px;
+
 }
 .lesson-student-filler {
     color: var(--light-gray);

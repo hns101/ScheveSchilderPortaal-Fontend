@@ -2,7 +2,7 @@ import './UserLessonPlanning.css'
 import {useState} from "react";
 import testDataAll from "../../testData/testDataAll.json";
 
-function UserLessonPlanning() {
+function UserLessonPlanning({user}) {
     const [allData, setAllData] = useState(testDataAll);
     const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
 
@@ -31,6 +31,15 @@ function UserLessonPlanning() {
                             ▶
                         </button>
                     </div>
+                    <div className="lesson-changer">
+                        <h3 className="lesson-student-fullname">{user.firstname} {user.lastname}</h3>
+                        <select
+                            className="lesson-student-input" name="class" id="class">
+                            {allData[currentWeekIndex].Lessons.map((data) => (
+                            <option value={data.slot}>{data.slot} {data.Date}</option>))}
+
+                        </select>
+                    </div>
 
 
                     <div className="lesson-container">
@@ -43,7 +52,10 @@ function UserLessonPlanning() {
                                 </div>
                                 <div className="lesson-students">
                                     {data.Students.map((data) =>
-                                        (<p key={data.id} className="lesson-student-name">{data.firstname}</p>))}
+                                        (<p key={data.id}
+                                            className={data.id === user.id ?
+                                                        "lesson-student-name-active" :"lesson-student-name"}
+                                        >{data.firstname} </p>))}
                                     {[...Array(10 - data.Students.length)].map(() => (
                                         <p key={data.id} className="lesson-student-filler"></p>))}
                                 </div>
