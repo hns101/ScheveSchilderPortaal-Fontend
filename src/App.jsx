@@ -8,8 +8,11 @@ import UserGallery from "./pages/userGallery/UserGallery.jsx";
 import UserSettings from "./pages/userSettings/UserSettings.jsx";
 import UserHeader from "./components/Headers/UserHeader.jsx";
 import AdminHeader from "./components/Headers/AdminHeader.jsx";
+import {useState} from "react";
 
 function App() {
+
+    const [user, setUser] = useState();
 
     return (
         <>

@@ -1,6 +1,6 @@
 import './UserLessonPlanning.css'
 import {useState} from "react";
-import testDataAll from "./testDataAll.json";
+import testDataAll from "../../testData/testDataAll.json";
 
 function UserLessonPlanning() {
     const [allData, setAllData] = useState(testDataAll);
