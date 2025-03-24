@@ -22,7 +22,7 @@ function App() {
 
             <Routes>
                 <Route path="/" element={<UserLessonPlanning user={user} />}/>
-                <Route path="/gallerij" element={<UserGallery/>}/>
+                <Route path="/gallerij" element={<UserGallery user={user}/>}/>
                 <Route path="/settings" element={<UserSettings user={user} setUser={setUser} />}/>
                 {/*<Route path="/*" element={ <h2>Pagina niet gevonden</h2> }/>*/}
             </Routes>
