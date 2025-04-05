@@ -2,7 +2,7 @@
   {
     "Week": "1",
     "Date": "2025-02-03",
-    "Lessons": [
+    "lessons": [
       {
         "slot": "Woensdag Avond",
         "Time": "19:00 - 21:30",
@@ -37,7 +37,7 @@
   {
     "Week": "2",
     "Date": "2025-02-10",
-    "Lessons": [
+    "lessons": [
       {
         "slot": "Woensdag Avond",
         "Time": "19:00 - 21:30",
@@ -71,7 +71,7 @@
   {
     "Week": "3",
     "Date": "2025-02-17",
-    "Lessons": [
+    "lessons": [
       {
         "slot": "Woensdag Avond",
         "Time": "19:00 - 21:30",

@@ -1,6 +1,6 @@
-import './UserLessonPlanning.css'
+import '../LessonPlanning.css'
 import {useState} from "react";
-import testDataAll from "../../testData/testDataAll.json";
+import testDataAll from "../../../TestData/testDataAll.json";
 
 function UserLessonPlanning({user}) {
     const [allData, setAllData] = useState(testDataAll);
@@ -35,32 +35,34 @@ function UserLessonPlanning({user}) {
                         <h3 className="lesson-student-fullname">{user.firstname} {user.lastname}</h3>
                         <select
                             className="lesson-student-input" name="class" id="class">
-                            {allData[currentWeekIndex].Lessons.map((data) => (
-                            <option value={data.slot}>{data.slot} {data.Date}</option>))}
+                            {allData[currentWeekIndex].lessons.map((data) => (
+                            <option key={data.slot} value={data.slot}>{data.slot} {data.Date}</option>))}
 
                         </select>
                     </div>
 
 
                     <div className="lesson-container">
-                        {allData[currentWeekIndex].Lessons.map((data) => (
-                            <div key={data.slot} className="lesson">
+                        {allData[currentWeekIndex].lessons.map((data) => (
+                            <div key={data.Date} className="lesson">
                                 <div className="lesson-info">
                                     <p className="lesson-info-slot">{data.slot}</p>
                                     <p className="lesson-info-time">{data.Time}</p>
                                     <p className="lesson-info-date">{data.Date}</p>
                                 </div>
                                 <div className="lesson-students">
-                                    {data.Students.map((data) =>
-                                        (<p key={data.id}
-                                            className={data.id === user.id ?
-                                                        "lesson-student-name-active" :"lesson-student-name"}
-                                        >{data.firstname} </p>))}
-                                    {[...Array(10 - data.Students.length)].map(() => (
-                                        <p key={data.id} className="lesson-student-filler"></p>))}
+                                    {data.Students.map((student) => (
+                                        <p key={student.id}
+                                           className={student.id === user.id ? "lesson-student-name-active" : "lesson-student-name"}>
+                                            {student.firstname}
+                                        </p>
+                                    ))}
+                                    {[...Array(10 - data.Students.length)].map((_, index) => (
+                                        <p key={`empty-slot-${index}`} className="lesson-student-filler"></p>
+                                    ))}
                                 </div>
                             </div>
-                        ))}
+                            ))}
                     </div>
                 </div>
             </main>

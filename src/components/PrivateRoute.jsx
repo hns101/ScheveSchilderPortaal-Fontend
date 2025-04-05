@@ -1,11 +1,19 @@
-import { useContext } from "react";
+
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
+import {AuthContext, useAuth} from "../context/AuthContext";
 
-function PrivateRoute({ children }) {
-    const { isAuth } = useContext(AuthContext);
+function PrivateRoute({ children, adminOnly = false }) {
+    const { user } = useAuth(); // Get logged-in user
 
-    return isAuth.isAuth ? children : <Navigate to="/signin" />;
+    if (!user) {
+        return <Navigate to="/login" />; // Redirect if not logged in
+    }
+
+    if (adminOnly && user.role !== "ROLE_ADMIN") {
+        return <Navigate to="/planning" />; // Redirect non-admins to home
+    }
+
+    return children; // Render protected content
 }
 
 export default PrivateRoute;

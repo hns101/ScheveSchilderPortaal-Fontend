@@ -69,14 +69,15 @@
 }
 .lesson {
     width: 184px;
+    background: var(--white);
     box-shadow: rgba(64, 64, 64, 0.5) 1px 1px 5px;
-    height: 450px;
+    height: 460px;
     margin-bottom: 20px;
     border-radius: 15px;
 }
 .lesson-info {
     background: var(--mid-brown);
-    color: white;
+    color: var(--white);
     padding: 1rem;
     width: 100%;
     display: flex;
@@ -106,7 +107,7 @@
 .lesson-student-name {
     color: var(--white);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     background: var(--light-brown);
@@ -124,7 +125,6 @@
     width: 85%;
     margin-top: 10px;
     border-radius: 5px;
-
 }
 .lesson-student-filler {
     color: var(--light-gray);
@@ -139,3 +139,60 @@
     height: 23px
 }
 
+.planning-h2 {
+    margin-top: 18px;
+    margin-bottom: -12px;
+    color: var(--text-color);
+}
+
+.lesson-student-name-overview {
+    color: var(--white);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: var(--light-brown);
+    width: 85%;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.lesson-student-name-overview:hover {
+    background: #934b4b;
+}
+.removal-message {
+    margin-top: -10px;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+.adding-students {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 80vw;
+    background: var(--light-gray);
+    min-height: 50px;
+    border-radius: 10px;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+.lesson-student-adding-input{
+    background-color: var(--light-gray);
+    margin-bottom: -1px;
+    padding: 10px;
+    color: var(--white);
+    border: none;
+    border-radius: 10px 10px 0 0;
+}
+.adding-students-names{
+    color: var(--white);
+    padding: 4px 15px;
+    background-color: var(--light-brown);
+    margin: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.adding-students-names:hover {
+    background: #697e68;
+}

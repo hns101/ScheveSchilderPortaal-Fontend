@@ -8,10 +8,14 @@ html { /*Setting up the default for rem use*/
 }
 :root { /*All Theme Colors*/
     --brown: #6f4d3f;
-    --mid-brown: #7d6660;
+    --mid-brown: #8c6f63;
     --light-brown: #af9e9a;
     --light-gray: #c3c3c3;
     --text-color: #4a4a4a;
     --background-color: #f9f9fb;
     --white: #ffffff;
+}
+::selection {
+    color: var(--white);
+    background: var(--mid-brown);
 }

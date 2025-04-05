@@ -47,9 +47,11 @@
     margin-bottom: 1px;
 }
 .active-menu-settings, .active-menu-settings:visited,
+.active-menu-admin-settings, .active-menu-admin-settings:visited,
 .active-menu-gallerij, .active-menu-gallerij:visited,
 .active-menu-lesplanning, .active-menu-lesplanning:visited
 .active-menu-gallerij, .active-menu-gallerij:visited,
+.active-menu-admin-gallerij, .active-menu-admin-gallerij:visited,
 .active-menu-account-beheer, .active-menu-account-beheer:visited,
 .active-menu-lesbeheer, .active-menu-lesbeheer:visited{
     justify-content: center;

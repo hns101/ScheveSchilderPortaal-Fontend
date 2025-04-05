@@ -10,7 +10,7 @@ function UserHeader() {
                 <nav className="header-nav">
                     <ul className="menu-list">
                         <li className="menu-item">
-                            <NavLink to="/"
+                            <NavLink to="/planning"
                                      className={({isActive}) =>
                                          isActive ? 'active-menu-lesplanning' : 'default-menu-link'}
                             >Les Planning</NavLink>
