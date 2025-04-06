@@ -1,8 +1,9 @@
 import React from "react";
 import "../../pages/LessonPlanning/LessonPlanning.css";
 
-function WeekNavigator({ currentWeekIndex, totalWeeks, onPrev, onNext, weekNum }) {
-    return (
+function WeekNavigator({currentWeekIndex, totalWeeks, onPrev, onNext, onDelete, weekNum}) {
+    return (<>
+
         <div className="lesson-week-nav">
             <button
                 className="week-button"
@@ -11,7 +12,9 @@ function WeekNavigator({ currentWeekIndex, totalWeeks, onPrev, onNext, weekNum }
             >
                 ◀
             </button>
+
             <p className="week-name">Les week {weekNum}</p>
+
             <button
                 className="week-button"
                 onClick={onNext}
@@ -19,8 +22,18 @@ function WeekNavigator({ currentWeekIndex, totalWeeks, onPrev, onNext, weekNum }
             >
                 ▶
             </button>
+
+
         </div>
-    );
+        {onDelete && (
+            <button
+                className="delete-week-button"
+                onClick={onDelete}
+                title="Verwijder deze week"
+            > Delete
+            </button>
+        )}
+    </>);
 }
 
 export default WeekNavigator;
