@@ -25,6 +25,20 @@
     align-items: center;
 
 }
+.delete-week-button {
+    border: none;
+    padding: 5px 30px;
+    background-color: var(--brown);
+    font-weight: 500;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    margin-top: -15px;
+}
+.delete-week-button:hover {
+    background-color: #8f4949;
+}
 .lesson-changer {
     display: flex;
 }
@@ -171,6 +185,7 @@
     justify-content: center;
     align-items: center;
     width: 80vw;
+    max-width: 700px;
     background: var(--mid-brown);
     min-height: 50px;
     border-radius: 10px;
@@ -196,4 +211,112 @@
 .adding-students-names:hover {
     color: white;
     background: #697e68;
+}
+.submit-week-button {
+     border: none;
+    padding: 5px 70px;
+    color: var(--white);
+    font-weight: 600;
+    background-color: var(--brown);
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+
+ }
+.submit-week-button:hover {
+    background-color: #697e68;
+}
+.adding-week-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90vw;
+    max-width: 700px;
+    background: var(--text-color);
+    min-height: 550px;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 40px 0;
+}
+.input-week-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+    background-color: var(--brown);
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+.input-week-lesson-button {
+    border-radius: 5px;
+    border: none;
+    padding: 5px 20px 5px 23px;
+    height: 32px;
+    align-self: flex-end;
+    color: var(--text-color);
+    cursor: pointer;
+}
+.input-week-lesson-button:hover {
+    background-color: #697e68;
+    color: var(--white);
+}
+.input-week-item-bundel {
+    display: flex;
+    flex-direction: column;
+}
+
+.week-lesson-input {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.2rem;
+}
+.week-lesson-input-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 0.4rem;
+    background-color: var(--brown);
+    border-radius: 15px;
+}
+.adding-week-form input ,.week-lesson-input-container input {
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    padding: 0.5rem;
+    width: 132px;
+    text-align: center;
+    border-radius: 5px;
+}
+.adding-week-form label ,.week-lesson-input-container label {
+    color: var(--white);
+    border: none;
+    outline: none;
+    text-align: center;
+    margin-bottom: -4px;
+}
+.week-lesson-delete-button {
+    color: var(--text-color);
+    border-radius: 5px;
+    border: none;
+    padding: 5px 20px;
+    height: 32px;
+    cursor: pointer;
+}
+.week-lesson-delete-button:hover {
+    background-color: #934b4b;
+    color: var(--white);
+}
+.input-week-lesson-student {
+    text-align: center;
+    cursor: pointer;
+    color: var(--text-color);
+    background-color: var(--white);
+    border-radius: 5px;
+}
+.input-week-lesson-student:hover {
+    background-color: #934b4b;
+    color: var(--white);
 }
