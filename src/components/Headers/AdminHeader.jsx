@@ -11,7 +11,7 @@ function AdminHeader() {
                 <nav className="header-nav">
                     <ul className="menu-list">
                         <li className="menu-item">
-                            <NavLink to="/"
+                            <NavLink to="/planning-beheer"
                                      className={({isActive}) =>
                                          isActive ? 'active-menu-lesbeheer' : 'default-menu-link'}
                             >Les beheer</NavLink>

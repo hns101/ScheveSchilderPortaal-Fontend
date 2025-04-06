@@ -1,0 +1,54 @@
+.user-settings-outer-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.user-settings-container {
+    margin-top: 50px;
+    width: 400px;
+    border-radius: 5px;
+
+}
+.user-settings-header {
+    background: var(--mid-brown);
+    color: var(--white);
+    padding: 8px 20px;
+    border-radius: 5px 5px 0 0;
+
+
+}
+.user-settings-list {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.user-settings-item {
+    border: 2px solid var(--mid-brown);
+    border-top: none;
+    padding: 7px 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+.icon-edit {
+    justify-self: flex-end;
+    align-self: flex-end;
+    cursor: pointer;
+    height: 1.2rem;
+}
+.logout-button {
+    margin-top: 1rem;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    color: var(--white);
+    background: #b23838;
+    border: none;
+    cursor: pointer;
+}
+.logout-button:hover {
+    background-color: rgba(178, 56, 56, 0.85);
+}
