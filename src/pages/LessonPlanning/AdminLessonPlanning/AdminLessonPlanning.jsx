@@ -123,6 +123,9 @@ function AdminLessonPlanning() {
                             })
                         }
                     />
+                    <section className="adding-week-form">
+
+                    </section>
                 </div>
             )}
         </main>

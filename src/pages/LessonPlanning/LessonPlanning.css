@@ -171,14 +171,14 @@
     justify-content: center;
     align-items: center;
     width: 80vw;
-    background: var(--light-gray);
+    background: var(--mid-brown);
     min-height: 50px;
     border-radius: 10px;
     flex-wrap: wrap;
     padding: 10px;
 }
 .lesson-student-adding-input{
-    background-color: var(--light-gray);
+    background-color: var(--mid-brown);
     margin-bottom: -1px;
     padding: 10px;
     color: var(--white);
@@ -186,13 +186,14 @@
     border-radius: 10px 10px 0 0;
 }
 .adding-students-names{
-    color: var(--white);
+    color: var(--text-color);
     padding: 4px 15px;
-    background-color: var(--light-brown);
+    background-color: var(--white);
     margin: 5px;
     border-radius: 10px;
     cursor: pointer;
 }
 .adding-students-names:hover {
+    color: white;
     background: #697e68;
 }
