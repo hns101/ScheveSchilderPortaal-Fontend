@@ -41,9 +41,9 @@
     height: 1.2rem;
 }
 .logout-button {
-    margin-top: 1rem;
-    border-radius: 8px;
-    padding: 0.6rem 1.2rem;
+    margin-bottom: 1px;
+    border-radius: 8px  8px 0 0;
+    padding: 0.4rem 1.2rem;
     color: var(--white);
     background: #b23838;
     border: none;

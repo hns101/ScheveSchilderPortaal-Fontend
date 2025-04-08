@@ -22,6 +22,9 @@ function UserSettings({ user }) {
         <>
             <main className="user-settings-outer-container">
                 <section className="user-settings-container">
+                    <button type="button" className="logout-button" onClick={handleLogout}>
+                        Logout
+                    </button>
                     <h3 className="user-settings-header">Account</h3>
                     <ul className="user-settings-list">
                         <li className="user-settings-item">
@@ -51,9 +54,7 @@ function UserSettings({ user }) {
                         </li>
                     </ul>
                 </section>
-                <button type="button" className="logout-button" onClick={handleLogout}>
-                    Logout
-                </button>
+
             </main>
         </>
     );

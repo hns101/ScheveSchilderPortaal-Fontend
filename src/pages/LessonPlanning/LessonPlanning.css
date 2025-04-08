@@ -41,20 +41,22 @@
 }
 .lesson-changer {
     display: flex;
+    flex-direction: column;
 }
 .lesson-student-fullname {
     color: var(--white);
     background-color: var(--brown);
-    padding: 5px 28px;
-    margin: 5px 0 20px 0 ;
+    padding: 5px 28px 9.5px 28px;
+    margin: -5px 0 20px 0 ;
     border-radius: 10px 0 0 10px ;
+    display: inline;
 }
 .lesson-student-input {
     cursor: pointer;
     color: var(--text-color);
     font-weight: 600;
-    margin: 5px 0 20px 0 ;
-    height: 40px;
+    margin: -5px 0 20px 0 ;
+    height: 41px;
     padding-right: 15px;
     padding-left: 15px;
     border: 2px solid var(--brown);
@@ -232,7 +234,8 @@
     align-items: center;
     width: 90vw;
     max-width: 700px;
-    background: var(--text-color);
+    background: var(--light-gray);
+    box-shadow: rgba(64, 64, 64, 0.5) 1px 1px 5px;
     min-height: 550px;
     border-radius: 10px;
     padding: 10px;

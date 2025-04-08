@@ -27,22 +27,34 @@ export function AuthProvider({ children }) {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        "Accept": "application/json",
+                        Accept: "application/json",
                     },
                     withCredentials: false,
                 }
             );
-            // console.log("Login Response:", res); // Debugging
-            setToken(res.token);
-            localStorage.setItem("token", res.data.token);
-            setUser({ email, role: res.data.role });
-            localStorage.setItem("user", JSON.stringify({ email, role: res.data.role }));
+
+            const token = res.data.token;
+            setToken(token);
+            localStorage.setItem("token", token);
+
+            // Set default token header for axios
+            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+            // Fetch detailed user info
+            const userDetails = await axios.get(
+                `http://localhost:8080/register/admin/users/${email}`
+            );
+
+            setUser(userDetails.data);
+            localStorage.setItem("user", JSON.stringify(userDetails.data));
+
             return res;
         } catch (error) {
-            console.error(error);
+            console.error("Login failed:", error);
             return error;
         }
     };
+
 
     const logout = () => {
         setUser(null);
