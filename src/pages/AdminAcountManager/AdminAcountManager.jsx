@@ -192,9 +192,12 @@ function AdminAcountManager() {
                             type="text"
                             name="email"
                             value={editingUser.email}
-                            onChange={handleInputChange}
+                            readOnly
+                            style={{backgroundColor: "#f0f0f0", cursor: "not-allowed"}}
                         />
-                        <button className="password-edit-button" onClick={() => setShowPasswordModal(true)}>🔒 Wachtwoord wijzigen</button>
+                        <button className="password-edit-button" onClick={() => setShowPasswordModal(true)}>🔒 Wachtwoord
+                            wijzigen
+                        </button>
                         <label>Roles (comma-separated)</label>
                         <input
                             type="text"

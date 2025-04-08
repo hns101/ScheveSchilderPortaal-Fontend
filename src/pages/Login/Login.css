@@ -56,3 +56,54 @@
 .login-logo {
     width: 48vw;
 }
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .login-form {
+        width: 100vw;
+        padding: 1rem;
+    }
+
+    .login-form-form {
+        width: 90%;
+        max-width: 320px;
+    }
+
+    .login-hero {
+        display: flex; /* hide the image section on small screens */
+        height: 250px;
+        width: 100%;
+    }
+
+    .login-logo {
+        width: 60%;
+        height: auto;
+    }
+
+    .login-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    .login-form-input {
+        font-size: 0.9rem;
+    }
+
+    .login-button {
+        font-size: 0.95rem;
+    }
+
+    .login-h2 {
+        font-size: 1.4rem;
+    }
+
+    .login-description {
+        font-size: 0.9rem;
+    }
+}

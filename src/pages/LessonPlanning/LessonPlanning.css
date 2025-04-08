@@ -47,20 +47,32 @@
     color: var(--white);
     background-color: var(--brown);
     padding: 5px 28px 9.5px 28px;
-    margin: -5px 0 20px 0 ;
-    border-radius: 10px 0 0 10px ;
-    display: inline;
+    margin: -5px 0 0 0 ;
+    border-radius: 10px 10px 0 0 ;
 }
 .lesson-student-input {
     cursor: pointer;
     color: var(--text-color);
     font-weight: 600;
     margin: -5px 0 20px 0 ;
+    min-width: 240px;
     height: 41px;
     padding-right: 15px;
     padding-left: 15px;
     border: 2px solid var(--brown);
-    border-radius:   0 10px 10px 0;
+    border-radius:   0 0 0 10px ;
+}
+.lesson-send-button {
+    padding: 11px 15px;
+    background-color: var(--mid-brown);
+    color: white;
+    border: 2px solid var(--brown);
+    border-radius: 0 0 10px 0 ;
+    font-weight: bold;
+    cursor: pointer;
+}
+.lesson-send-button:hover {
+    background-color: var(--light-brown);
 }
 .main{
     display: flex;
@@ -322,4 +334,11 @@
 .input-week-lesson-student:hover {
     background-color: #934b4b;
     color: var(--white);
+}
+.loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
 }
