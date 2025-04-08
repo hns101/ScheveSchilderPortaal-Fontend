@@ -13,12 +13,9 @@ import userTestData1 from "./TestData/userTestData1.json";
 import Login from "./pages/Login/Login.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import AdminGalleryManager from "./pages/AdminGalleryManager/AdminGalleryManager.jsx";
-import AdminSettings from "./pages/AdminSettings/AdminSettings.jsx";
 import AdminAcountManager from "./pages/AdminAcountManager/AdminAcountManager.jsx";
 
 function App() {
-
-    const [user, setUser] = useState(userTestData1);
 
     return (
         <>
@@ -27,16 +24,15 @@ function App() {
                 <Route path="/login" element={<Login />} />
 
                 {/* Protected User Routes */}
-                <Route path="/planning" element={<PrivateRoute><UserHeader /><UserLessonPlanning user={user} /></PrivateRoute>} />
-                <Route path="/gallerij" element={<PrivateRoute><UserHeader /><UserGallery user={user} /></PrivateRoute>} />
-                <Route path="/settings" element={<PrivateRoute><UserHeader /><UserSettings user={user} setUser={setUser} /></PrivateRoute>} />
+                <Route path="/planning" element={<PrivateRoute><UserHeader /><UserLessonPlanning  /></PrivateRoute>} />
+                <Route path="/gallerij" element={<PrivateRoute><UserHeader /><UserGallery  /></PrivateRoute>} />
+                <Route path="/settings" element={<PrivateRoute><UserHeader /><UserSettings  /></PrivateRoute>} />
                 <Route path="*" element={<PrivateRoute><UserHeader /><h2>Pagina niet gevonden</h2></PrivateRoute>} />
 
                 {/* Protected Admin Routes */}
-                <Route path="/planning-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminLessonPlanning user={user} /></PrivateRoute>} />
-                <Route path="/gallerij-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminGalleryManager user={user} /></PrivateRoute>} />
-                <Route path="/account-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminAcountManager user={user} /></PrivateRoute>} />
-                <Route path="/admin-settings" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminSettings user={user} /></PrivateRoute>} />
+                <Route path="/planning-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminLessonPlanning /></PrivateRoute>} />
+                <Route path="/gallerij-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminGalleryManager  /></PrivateRoute>} />
+                <Route path="/account-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminAcountManager  /></PrivateRoute>} />
             </Routes>
         </>
     )

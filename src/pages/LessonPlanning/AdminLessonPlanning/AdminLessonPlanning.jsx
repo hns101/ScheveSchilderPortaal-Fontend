@@ -52,9 +52,9 @@ function AdminLessonPlanning() {
                 const sortedWeeks = result.data
                     .map(week => ({
                         ...week,
-                        lessons: [...week.lessons].sort(
-                            (a, b) => new Date(a.date) - new Date(b.date)
-                        )
+                        lessons: Array.isArray(week.lessons)
+                            ? [...week.lessons].sort((a, b) => new Date(a.date) - new Date(b.date))
+                            : []
                     }))
                     .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
 
@@ -100,7 +100,10 @@ function AdminLessonPlanning() {
             if (response.status === 204) {
                 setRemoveMessage("Week succesvol verwijderd.");
                 if (onSuccess) onSuccess();
-            } else {
+                await fetchData();
+                setCurrentWeekIndex((prev) => Math.max(prev - 1, 0));
+            }
+            else {
                 throw new Error("Verwijderen mislukt");
             }
         } catch (error) {

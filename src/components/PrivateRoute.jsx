@@ -9,7 +9,7 @@ function PrivateRoute({ children, adminOnly = false }) {
         return <Navigate to="/login" />; // Redirect if not logged in
     }
 
-    if (adminOnly && user.role !== "ROLE_ADMIN") {
+    if (adminOnly && user.roles[0] !== "ROLE_ADMIN") {
         return <Navigate to="/planning" />; // Redirect non-admins to home
     }
 

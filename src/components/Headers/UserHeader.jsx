@@ -1,8 +1,17 @@
 import './Headers.css'
-import {Link, NavLink} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 import logo from '../../assets/ScheveSchilder-logo.svg'
+import {useAuth} from "../../context/AuthContext.jsx";
 
 function UserHeader() {
+
+    const handleLogout = () => {
+        logout();  // Call logout from AuthContext
+        navigate('/login'); // Redirect to login page
+    };
+
+    const navigate = useNavigate();
+    const { logout } = useAuth(); // Get logout function
     return (
         <>
             <header className="header">
@@ -29,6 +38,7 @@ function UserHeader() {
                                          isActive ? 'active-menu-settings' : 'default-menu-link'}
                             >Settings</NavLink>
                         </li>
+                        <button type="button" className="logout-button" onClick={handleLogout}>Logout</button>
                     </ul>
                 </nav>
             </header>

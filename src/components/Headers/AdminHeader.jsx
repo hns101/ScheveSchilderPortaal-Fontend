@@ -1,9 +1,19 @@
 import React from 'react';
 import './Headers.css'
 import logo from "../../assets/ScheveSchilder-logo.svg";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
+import {useAuth} from "../../context/AuthContext.jsx";
 
 function AdminHeader() {
+
+    const handleLogout = () => {
+        logout();  // Call logout from AuthContext
+        navigate('/login'); // Redirect to login page
+    };
+
+    const navigate = useNavigate();
+    const { logout } = useAuth(); // Get logout function
+
     return (
         <>
             <header className="header">
@@ -30,13 +40,9 @@ function AdminHeader() {
                                          isActive ? 'active-menu-account-beheer' : 'default-menu-link'}
                             >Account beheer</NavLink>
                         </li>
-                        <li className="menu-item">
-                            <NavLink to="/admin-settings"
-                                     id="admin-settings"
-                                     className={({isActive}) =>
-                                         isActive ? 'active-menu-admin-settings' : 'default-menu-link'}
-                            >Settings</NavLink>
-                        </li>
+                        <button type="button" className="logout-button" onClick={handleLogout}>
+                            Logout
+                        </button>
                     </ul>
                 </nav>
             </header>

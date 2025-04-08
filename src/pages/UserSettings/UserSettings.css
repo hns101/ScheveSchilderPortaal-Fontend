@@ -40,15 +40,15 @@
     cursor: pointer;
     height: 1.2rem;
 }
-.logout-button {
-    margin-top: 1rem;
-    border-radius: 8px;
-    padding: 0.6rem 1.2rem;
-    color: var(--white);
-    background: #b23838;
+
+.save-settings-button {
+    background: var(--mid-brown);
     border: none;
+    color: var(--white);
     cursor: pointer;
+    padding: 7px 10px;
+    border-radius:0 0 8px 8px ;
 }
-.logout-button:hover {
-    background-color: rgba(178, 56, 56, 0.85);
+.save-settings-button:hover {
+    background-color: var(--brown);
 }
