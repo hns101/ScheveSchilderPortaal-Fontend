@@ -79,11 +79,15 @@ function AdminLessonPlanning() {
 
     const handleSubmitWeek = async () => {
         try {
+            const token = localStorage.getItem("token");
+
             const result = await axios.post("http://localhost:8080/weeks", editableWeek, {
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}` // ← Add the Bearer token here
                 }
             });
+
             if (result.status === 201) {
                 setRemoveMessage("Nieuwe week succesvol toegevoegd.");
                 await fetchData(); // refresh the list
@@ -93,6 +97,7 @@ function AdminLessonPlanning() {
             setRemoveMessage("Fout bij het toevoegen van week.");
         }
     };
+
 
     const deleteWeek = async (weekId, onSuccess) => {
         try {

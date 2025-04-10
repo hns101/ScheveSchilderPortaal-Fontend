@@ -110,9 +110,15 @@ function AdminAcountManager() {
 
     const handleCreateUser = async () => {
         try {
+            const token = localStorage.getItem("token");
+
             await axios.post("http://localhost:8080/register", newUserData, {
-                headers: { "Content-Type": "application/json" }
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
             });
+
             alert("Gebruiker succesvol aangemaakt.");
             setShowCreateModal(false);
             setNewUserData({
@@ -124,13 +130,18 @@ function AdminAcountManager() {
             });
 
             // Refresh list
-            const updated = await axios.get("http://localhost:8080/users");
+            const updated = await axios.get("http://localhost:8080/users", {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             setUsers(updated.data);
         } catch (err) {
             console.error("Create failed:", err);
             alert("Fout bij het aanmaken van gebruiker.");
         }
     };
+
 
 
 
