@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './AdminAcountManager.css';
+import {axiosWithAuth} from "../../../helpers/axiosWithAuth.js"
 
 function AdminAcountManager() {
     const [users, setUsers] = useState([]);
@@ -17,10 +18,14 @@ function AdminAcountManager() {
         defaultSlot: SLOT_OPTIONS[0]
     });
 
+    // Get the token from localStorage
+    const token = localStorage.getItem("token");
+
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/users");
+                const response = await axiosWithAuth().get("/users");
                 setUsers(response.data);
             } catch (error) {
                 console.error("Error fetching users:", error);
@@ -28,11 +33,11 @@ function AdminAcountManager() {
             }
         };
         fetchUsers();
-    }, []);
+    }, [token]);
 
     const handlePasswordChange = async () => {
         try {
-            await axios.put(`http://localhost:8080/users/${editingUser.email}/password`, {
+            await axiosWithAuth().put(`/users/${editingUser.email}/password`, {
                 newPassword
             });
             alert("Wachtwoord succesvol gewijzigd.");
@@ -68,13 +73,11 @@ function AdminAcountManager() {
 
     const saveUserChanges = async () => {
         try {
-            const response = await axios.put(`http://localhost:8080/users/${editingUser.email}`, editingUser, {
-                headers: { 'Content-Type': 'application/json' }
-            });
+            const response = await axiosWithAuth().put(`/users/${editingUser.email}`, editingUser);
             if (response.status === 200) {
                 setErrorMessage("Gebruiker succesvol bijgewerkt.");
                 setEditingUser(null);
-                const updated = await axios.get("http://localhost:8080/users");
+                const updated = await axiosWithAuth.get("/users");
                 setUsers(updated.data);
             }
         } catch (err) {
@@ -88,10 +91,10 @@ function AdminAcountManager() {
         if (!confirm) return;
 
         try {
-            const response = await axios.delete(`http://localhost:8080/users/${email}`);
+            const response = await axiosWithAuth().delete(`/users/${email}`);
             if (response.status === 204) {
                 setErrorMessage("Gebruiker succesvol verwijderd.");
-                const updated = await axios.get("http://localhost:8080/users");
+                const updated = await axiosWithAuth().get("/users");
                 setUsers(updated.data);
             }
         } catch (err) {
@@ -110,14 +113,7 @@ function AdminAcountManager() {
 
     const handleCreateUser = async () => {
         try {
-            const token = localStorage.getItem("token");
-
-            await axios.post("http://localhost:8080/register", newUserData, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            });
+            await axiosWithAuth().post("/register", newUserData);
 
             alert("Gebruiker succesvol aangemaakt.");
             setShowCreateModal(false);
@@ -130,20 +126,13 @@ function AdminAcountManager() {
             });
 
             // Refresh list
-            const updated = await axios.get("http://localhost:8080/users", {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
+            const updated = await axiosWithAuth().get("/users");
             setUsers(updated.data);
         } catch (err) {
             console.error("Create failed:", err);
             alert("Fout bij het aanmaken van gebruiker.");
         }
     };
-
-
-
 
     return (
         <main className="account-management-container">
@@ -276,4 +265,3 @@ function AdminAcountManager() {
 }
 
 export default AdminAcountManager;
-

@@ -10,7 +10,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const { login, user } = useAuth(); // Get login function from AuthContext
+    const { login } = useAuth(); // Get login function from AuthContext
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "../LessonPlanning.css";
 
 // Helper functions to manage student add/remove operations
-import { handleAddStudent ,handleRemoveStudent} from "../../../helpers/adminLessonHelpers.js";
+import { handleAddStudent, handleRemoveStudent } from "../../../helpers/adminLessonHelpers.js";
+import {axiosWithAuth} from "../../../helpers/axiosWithAuth.js"
 
 // Reusable components for lesson display, student list, and week/lesson navigation
 import LessonCard from "../../../components/admin/LessonCard.jsx";
@@ -11,7 +11,6 @@ import StudentList from "../../../components/admin/StudentList.jsx";
 import LessonSelector from "../../../components/admin/LessonSelector.jsx";
 import WeekNavigator from "../../../components/admin/WeekNavigator.jsx";
 import AddWeekCard from "../../../components/admin/AddWeekCard.jsx";
-
 
 import testWeekInputData from "../../../TestData/testWeekInputData.json";
 
@@ -24,12 +23,16 @@ function AdminLessonPlanning() {
     const [selectedLessonId, setSelectedLessonId] = useState(null);
     const [editableWeek, setEditableWeek] = useState(testWeekInputData);
 
+    // Get the token from localStorage
+    const token = localStorage.getItem("token");
+
+
     // === Initial data loading ===
     // Fetch week and student data once after component mounts
     useEffect(() => {
         fetchData();
         fetchStudents();
-    }, []);
+    }, [token]);
 
     // When week data changes or index updates, select the first lesson by default (if not yet selected)
     useEffect(() => {
@@ -46,7 +49,7 @@ function AdminLessonPlanning() {
     // Fetch all planned weeks with associated lessons and students
     const fetchData = async () => {
         try {
-            const result = await axios.get("http://localhost:8080/weeks");
+            const result = await axiosWithAuth().get("/weeks");
 
             if (Array.isArray(result.data)) {
                 const sortedWeeks = result.data
@@ -68,7 +71,7 @@ function AdminLessonPlanning() {
     // Fetch all registered students (used to add them to lessons)
     const fetchStudents = async () => {
         try {
-            const result = await axios.get("http://localhost:8080/students");
+            const result = await axiosWithAuth().get("/students");
             if (Array.isArray(result.data)) {
                 setAllStudents(result.data);
             }
@@ -79,14 +82,7 @@ function AdminLessonPlanning() {
 
     const handleSubmitWeek = async () => {
         try {
-            const token = localStorage.getItem("token");
-
-            const result = await axios.post("http://localhost:8080/weeks", editableWeek, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}` // ← Add the Bearer token here
-                }
-            });
+            const result = await axiosWithAuth().post("/weeks", editableWeek);
 
             if (result.status === 201) {
                 setRemoveMessage("Nieuwe week succesvol toegevoegd.");
@@ -98,10 +94,9 @@ function AdminLessonPlanning() {
         }
     };
 
-
     const deleteWeek = async (weekId, onSuccess) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/weeks/${weekId}`);
+            const response = await axiosWithAuth().delete(`/weeks/${weekId}`);
             if (response.status === 204) {
                 setRemoveMessage("Week succesvol verwijderd.");
                 if (onSuccess) onSuccess();
@@ -120,6 +115,22 @@ function AdminLessonPlanning() {
         }
     };
 
+    // Need to update the helper functions to use axiosWithAuth
+    // You'll need to modify the imported helper functions or pass axiosWithAuth to them
+    const modifiedHandleAddStudent = (params) => {
+        return handleAddStudent({
+            ...params,
+            axiosInstance: axiosWithAuth
+        });
+    };
+
+    const modifiedHandleRemoveStudent = (params) => {
+        return handleRemoveStudent({
+            ...params,
+            axiosInstance: axiosWithAuth
+        });
+    };
+
     return (
         <main className="main">
             <h2 className="planning-h2">Les overzicht</h2>
@@ -128,73 +139,73 @@ function AdminLessonPlanning() {
                 <p>Loading...</p>
             ) : (
                 weekData[currentWeekIndex] && (
-                <div className="lesson-outer-container">
+                    <div className="lesson-outer-container">
 
-                    {/* Navigation bar for browsing between weeks */}
-                    <WeekNavigator
-                        currentWeekIndex={currentWeekIndex}
-                        totalWeeks={weekData.length}
-                        onPrev={() => setCurrentWeekIndex((i) => Math.max(i - 1, 0))}
-                        onNext={() => setCurrentWeekIndex((i) => Math.min(i + 1, weekData.length - 1))}
-                        weekNum={weekData[currentWeekIndex]?.weekNum ?? ""}
-                        onDelete={() =>
-                            deleteWeek(
-                                weekData[currentWeekIndex].id,
-                                setRemoveMessage
-                            )
-                        }
-                    />
+                        {/* Navigation bar for browsing between weeks */}
+                        <WeekNavigator
+                            currentWeekIndex={currentWeekIndex}
+                            totalWeeks={weekData.length}
+                            onPrev={() => setCurrentWeekIndex((i) => Math.max(i - 1, 0))}
+                            onNext={() => setCurrentWeekIndex((i) => Math.min(i + 1, weekData.length - 1))}
+                            weekNum={weekData[currentWeekIndex]?.weekNum ?? ""}
+                            onDelete={() =>
+                                deleteWeek(
+                                    weekData[currentWeekIndex].id,
+                                    setRemoveMessage
+                                )
+                            }
+                        />
 
-                    {/* Display each lesson and its current student list */}
-                    <div className="lesson-container">
-                        {weekData[currentWeekIndex]?.lessons?.map((lesson) => (
-                            <LessonCard
-                                key={lesson.id}
-                                lesson={lesson}
-                                weekId={weekData[currentWeekIndex].id}
-                                onRemoveStudent={(weekId, lessonId, student) =>
-                                    handleRemoveStudent({
-                                        weekId,
-                                        lessonId,
-                                        student,
-                                        setMessage: setRemoveMessage,
-                                        onSuccess: fetchData,
-                                    })
-                                }
-                            />
-                        ))}
+                        {/* Display each lesson and its current student list */}
+                        <div className="lesson-container">
+                            {weekData[currentWeekIndex]?.lessons?.map((lesson) => (
+                                <LessonCard
+                                    key={lesson.id}
+                                    lesson={lesson}
+                                    weekId={weekData[currentWeekIndex].id}
+                                    onRemoveStudent={(weekId, lessonId, student) =>
+                                        modifiedHandleRemoveStudent({
+                                            weekId,
+                                            lessonId,
+                                            student,
+                                            setMessage: setRemoveMessage,
+                                            onSuccess: fetchData,
+                                        })
+                                    }
+                                />
+                            ))}
+                        </div>
+
+                        {/* Feedback messages (e.g., success/failure of operations) */}
+                        <p className="removal-message">{removeMessage}</p>
+
+                        {/* Dropdown selector to choose a specific lesson to add students to */}
+                        <LessonSelector
+                            lessons={weekData[currentWeekIndex]?.lessons ?? []}
+                            selectedLessonId={selectedLessonId}
+                            onChange={setSelectedLessonId}
+                        />
+
+                        {/* List of all students. Click to add them to the selected lesson */}
+                        <StudentList
+                            students={allStudents}
+                            onStudentClick={(student) =>
+                                modifiedHandleAddStudent({
+                                    weekId: weekData[currentWeekIndex]?.id,
+                                    lessonId: selectedLessonId,
+                                    student,
+                                    setMessage: setRemoveMessage,
+                                    onSuccess: fetchData,
+                                })
+                            }
+                        />
+                        <AddWeekCard
+                            editableWeek={editableWeek}
+                            setEditableWeek={setEditableWeek}
+                            allStudents={allStudents}
+                            handleSubmitWeek={handleSubmitWeek}
+                        />
                     </div>
-
-                    {/* Feedback messages (e.g., success/failure of operations) */}
-                    <p className="removal-message">{removeMessage}</p>
-
-                    {/* Dropdown selector to choose a specific lesson to add students to */}
-                    <LessonSelector
-                        lessons={weekData[currentWeekIndex]?.lessons ?? []}
-                        selectedLessonId={selectedLessonId}
-                        onChange={setSelectedLessonId}
-                    />
-
-                    {/* List of all students. Click to add them to the selected lesson */}
-                    <StudentList
-                        students={allStudents}
-                        onStudentClick={(student) =>
-                            handleAddStudent({
-                                weekId: weekData[currentWeekIndex]?.id,
-                                lessonId: selectedLessonId,
-                                student,
-                                setMessage: setRemoveMessage,
-                                onSuccess: fetchData,
-                            })
-                        }
-                    />
-                    <AddWeekCard
-                        editableWeek={editableWeek}
-                        setEditableWeek={setEditableWeek}
-                        allStudents={allStudents}
-                        handleSubmitWeek={handleSubmitWeek}
-                    />
-                </div>
                 ))}
         </main>
     );
