@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
 
             // Fetch detailed user info
             const userDetails = await axios.get(
-                `http://localhost:8080/register/admin/users/${email}`
+                `http://localhost:8080/users/${email}`
             );
 
             setUser(userDetails.data);

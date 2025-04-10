@@ -20,7 +20,7 @@ function AdminAcountManager() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/register/admin/users");
+                const response = await axios.get("http://localhost:8080/users");
                 setUsers(response.data);
             } catch (error) {
                 console.error("Error fetching users:", error);
@@ -32,7 +32,7 @@ function AdminAcountManager() {
 
     const handlePasswordChange = async () => {
         try {
-            await axios.put(`http://localhost:8080/register/admin/users/${editingUser.email}/password`, {
+            await axios.put(`http://localhost:8080/users/${editingUser.email}/password`, {
                 newPassword
             });
             alert("Wachtwoord succesvol gewijzigd.");
@@ -68,13 +68,13 @@ function AdminAcountManager() {
 
     const saveUserChanges = async () => {
         try {
-            const response = await axios.put(`http://localhost:8080/register/admin/users/${editingUser.email}`, editingUser, {
+            const response = await axios.put(`http://localhost:8080/users/${editingUser.email}`, editingUser, {
                 headers: { 'Content-Type': 'application/json' }
             });
             if (response.status === 200) {
                 setErrorMessage("Gebruiker succesvol bijgewerkt.");
                 setEditingUser(null);
-                const updated = await axios.get("http://localhost:8080/register/admin/users");
+                const updated = await axios.get("http://localhost:8080/users");
                 setUsers(updated.data);
             }
         } catch (err) {
@@ -88,10 +88,10 @@ function AdminAcountManager() {
         if (!confirm) return;
 
         try {
-            const response = await axios.delete(`http://localhost:8080/register/admin/users/${email}`);
+            const response = await axios.delete(`http://localhost:8080/users/${email}`);
             if (response.status === 204) {
                 setErrorMessage("Gebruiker succesvol verwijderd.");
-                const updated = await axios.get("http://localhost:8080/register/admin/users");
+                const updated = await axios.get("http://localhost:8080/users");
                 setUsers(updated.data);
             }
         } catch (err) {
@@ -124,7 +124,7 @@ function AdminAcountManager() {
             });
 
             // Refresh list
-            const updated = await axios.get("http://localhost:8080/register/admin/users");
+            const updated = await axios.get("http://localhost:8080/users");
             setUsers(updated.data);
         } catch (err) {
             console.error("Create failed:", err);

@@ -16,7 +16,7 @@ function UserSettings() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/register/admin/users/${user.email}`);
+                const response = await axios.get(`http://localhost:8080/users/${user.email}`);
                 setFormData(response.data);
                 setSelectedClassTime(response.data.student.defaultSlot);
             } catch (error) {
@@ -48,7 +48,7 @@ function UserSettings() {
 
     const handleSaveChanges = async () => {
         try {
-            await axios.put(`http://localhost:8080/register/admin/users/${user.email}`, formData, {
+            await axios.put(`http://localhost:8080/users/${user.email}`, formData, {
                 headers: { 'Content-Type': 'application/json' }
             });
             alert("Gegevens succesvol bijgewerkt.");
@@ -62,7 +62,7 @@ function UserSettings() {
 
     const handlePasswordChange = async () => {
         try {
-            await axios.put(`http://localhost:8080/register/admin/users/${user.email}/password`, { newPassword });
+            await axios.put(`http://localhost:8080/users/${user.email}/password`, { newPassword });
             alert("Wachtwoord succesvol gewijzigd.");
             setNewPassword("");
             setEditingField(null);
