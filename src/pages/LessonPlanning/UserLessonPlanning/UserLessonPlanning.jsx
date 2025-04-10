@@ -1,6 +1,6 @@
 import '../LessonPlanning.css';
 import {useState, useEffect} from "react";
-import axios from "axios";
+import axiosWithAuth from "../../../helpers/axiosWithAuth.js"
 
 function UserLessonPlanning() {
     const [allData, setAllData] = useState([]);
@@ -8,7 +8,9 @@ function UserLessonPlanning() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("token"); // Get the token from localStorage
     const [selections, setSelections] = useState({});
+
 
     const handleSlotChange = (lessonId, newLessonId) => {
         setSelections(prev => ({...prev, [lessonId]: newLessonId}));
@@ -17,7 +19,7 @@ function UserLessonPlanning() {
     useEffect(() => {
         const fetchWeeks = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/weeks");
+                const response = await axiosWithAuth().get("/weeks");
 
                 if (Array.isArray(response.data)) {
                     const sortedWeeks = response.data
@@ -41,7 +43,7 @@ function UserLessonPlanning() {
         };
 
         fetchWeeks();
-    }, []);
+    }, [token]);
 
     const nextWeek = () => {
         if (currentWeekIndex < allData.length - 1) {
@@ -60,7 +62,7 @@ function UserLessonPlanning() {
 
         if (newLessonId === "niet-aanwezig") {
             try {
-                await axios.delete(`http://localhost:8080/weeks/${originalLesson.weekId}/lessons/${originalLesson.id}/students/${studentEmail}`);
+                await axiosWithAuth().delete(`/weeks/${originalLesson.weekId}/lessons/${originalLesson.id}/students/${studentEmail}`);
                 alert("Je bent afgemeld voor deze les.");
                 window.location.reload();
             } catch (err) {
@@ -74,8 +76,8 @@ function UserLessonPlanning() {
         if (!newLesson || newLesson.id === originalLesson.id) return;
 
         try {
-            await axios.delete(`http://localhost:8080/weeks/${originalLesson.weekId}/lessons/${originalLesson.id}/students/${studentEmail}`);
-            await axios.post(`http://localhost:8080/weeks/${newLesson.weekId}/lessons/${newLesson.id}/students/${studentEmail}`);
+            await axiosWithAuth().delete(`/weeks/${originalLesson.weekId}/lessons/${originalLesson.id}/students/${studentEmail}`);
+            await axiosWithAuth().post(`/weeks/${newLesson.weekId}/lessons/${newLesson.id}/students/${studentEmail}`);
             alert("Inschrijving bijgewerkt!");
             window.location.reload();
         } catch (err) {
@@ -144,7 +146,6 @@ function UserLessonPlanning() {
                                 </div>
                             ));
                         } else {
-                            const studentEmail = user.student.email;
                             const futureLessons = upcomingWeeks.flatMap(week => week.lessons);
                             const registeredCount = futureLessons.filter(lesson =>
                                 lesson.students.some(s => s.id === user.student.id)
@@ -205,8 +206,8 @@ function UserLessonPlanning() {
                                             }
 
                                             try {
-                                                await axios.post(
-                                                    `http://localhost:8080/weeks/${targetLesson.weekId}/lessons/${targetLesson.id}/students/${user.student.email}`
+                                                await axiosWithAuth().post(
+                                                    `/weeks/${targetLesson.weekId}/lessons/${targetLesson.id}/students/${user.student.email}`
                                                 );
                                                 alert("Je bent aangemeld voor deze les.");
                                                 window.location.reload();

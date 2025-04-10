@@ -1,13 +1,11 @@
 import './UserSettings.css';
 import edit from './../../assets/edit-icon-01.svg';
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosWithAuth from "../../helpers/axiosWithAuth.js"
 
 function UserSettings() {
-    const navigate = useNavigate();
-    const { logout, user } = useAuth();
+    const {  user } = useAuth();
     const [formData, setFormData] = useState(null);
     const [editingField, setEditingField] = useState(null);
     const [newPassword, setNewPassword] = useState("");
@@ -16,7 +14,7 @@ function UserSettings() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/users/${user.email}`);
+                const response = await axiosWithAuth().get(`http://localhost:8080/users/${user.email}`);
                 setFormData(response.data);
                 setSelectedClassTime(response.data.student.defaultSlot);
             } catch (error) {
@@ -27,10 +25,6 @@ function UserSettings() {
         fetchUserData();
     }, [user.email]);
 
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -48,7 +42,7 @@ function UserSettings() {
 
     const handleSaveChanges = async () => {
         try {
-            await axios.put(`http://localhost:8080/users/${user.email}`, formData, {
+            await axiosWithAuth().put(`http://localhost:8080/users/${user.email}`, formData, {
                 headers: { 'Content-Type': 'application/json' }
             });
             alert("Gegevens succesvol bijgewerkt.");
@@ -62,7 +56,7 @@ function UserSettings() {
 
     const handlePasswordChange = async () => {
         try {
-            await axios.put(`http://localhost:8080/users/${user.email}/password`, { newPassword });
+            await axiosWithAuth().put(`http://localhost:8080/users/${user.email}/password`, { newPassword });
             alert("Wachtwoord succesvol gewijzigd.");
             setNewPassword("");
             setEditingField(null);
