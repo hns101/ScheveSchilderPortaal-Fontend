@@ -1,6 +1,6 @@
 import '../LessonPlanning.css';
 import {useState, useEffect} from "react";
-import {axiosWithAuth} from "../../../helpers/axiosWithAuth.js"
+import axiosWithAuth from "../../../helpers/axiosWithAuth.js"
 
 function UserLessonPlanning() {
     const [allData, setAllData] = useState([]);

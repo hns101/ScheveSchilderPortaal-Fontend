@@ -2,7 +2,7 @@ import './UserSettings.css';
 import edit from './../../assets/edit-icon-01.svg';
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useEffect, useState } from "react";
-import {axiosWithAuth} from "../../helpers/axiosWithAuth.js"
+import axiosWithAuth from "../../helpers/axiosWithAuth.js"
 
 function UserSettings() {
     const {  user } = useAuth();

@@ -3,7 +3,7 @@ import "../LessonPlanning.css";
 
 // Helper functions to manage student add/remove operations
 import { handleAddStudent, handleRemoveStudent } from "../../../helpers/adminLessonHelpers.js";
-import {axiosWithAuth} from "../../../helpers/axiosWithAuth.js"
+import axiosWithAuth from "../../../helpers/axiosWithAuth.js"
 
 // Reusable components for lesson display, student list, and week/lesson navigation
 import LessonCard from "../../../components/admin/LessonCard.jsx";

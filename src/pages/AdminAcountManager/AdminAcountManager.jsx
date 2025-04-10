@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import './AdminAcountManager.css';
-import {axiosWithAuth} from "../../../helpers/axiosWithAuth.js"
+import axiosWithAuth from "../../helpers/axiosWithAuth.js"
 
 function AdminAcountManager() {
     const [users, setUsers] = useState([]);
@@ -77,7 +76,7 @@ function AdminAcountManager() {
             if (response.status === 200) {
                 setErrorMessage("Gebruiker succesvol bijgewerkt.");
                 setEditingUser(null);
-                const updated = await axiosWithAuth.get("/users");
+                const updated = await axiosWithAuth().get("/users");
                 setUsers(updated.data);
             }
         } catch (err) {
