@@ -20,10 +20,43 @@
     flex-wrap: wrap;
     gap:50px;
     justify-content: center;
+    margin: 100px;
  }
 .gallery-card{
 
 }
 .gallery-photo {
-    height: 450px;
+    height: 400px;
 }
+.preview-photo {
+    height: 70vh;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+.modal-content-preview {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    gap: 0.8rem;
+    text-align: center;
+}
+.delete-button {
+    background-color: #b23838;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    margin-top: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.cancel-button {
+    background-color: gray;
+    color: white;
+    border: none;
+    padding: 0.4rem 1rem;
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.

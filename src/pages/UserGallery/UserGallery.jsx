@@ -7,6 +7,9 @@ function UserGallery() {
     const [file, setFile] = useState(null);
     const [title, setTitle] = useState("");
     const [year, setYear] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [selectedArtwork, setSelectedArtwork] = useState(null);
+    const [showPreview, setShowPreview] = useState(false);
 
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -25,7 +28,6 @@ function UserGallery() {
 
     const handleUpload = async () => {
         try {
-            // Step 1: Save metadata
             const metadataRes = await axios.post(`http://localhost:8080/galleries/${user.email}/artworks`, {
                 title,
                 year,
@@ -33,7 +35,6 @@ function UserGallery() {
 
             const artworkId = metadataRes.data.id;
 
-            // Step 2: Upload photo
             const formData = new FormData();
             formData.append("file", file);
 
@@ -47,6 +48,7 @@ function UserGallery() {
             setTitle("");
             setYear("");
             setFile(null);
+            setShowModal(false);
             fetchArtworks();
         } catch (err) {
             console.error("Upload mislukt:", err);
@@ -58,6 +60,7 @@ function UserGallery() {
         try {
             await axios.delete(`http://localhost:8080/galleries/${user.email}/artworks/${artworkId}`);
             alert("Kunstwerk verwijderd");
+            setShowPreview(false);
             fetchArtworks();
         } catch (err) {
             console.error("Delete failed:", err);
@@ -68,22 +71,41 @@ function UserGallery() {
     return (
         <main className="gallery-outer-container">
             <h2 className="gallery-title">Jouw Gallerij</h2>
-            <div className="gallery-upload">
-                <input
-                    type="text"
-                    placeholder="Titel"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Jaar"
-                    value={year}
-                    onChange={(e) => setYear(e.target.value)}
-                />
-                <input type="file" onChange={(e) => setFile(e.target.files[0])}/>
-                <button onClick={handleUpload}>Upload</button>
-            </div>
+
+            <button className="open-upload-button" onClick={() => setShowModal(true)}>➕ Voeg kunstwerk toe</button>
+
+            {showModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h3>Upload nieuw kunstwerk</h3>
+                        <input type="text" placeholder="Titel" value={title} onChange={(e) => setTitle(e.target.value)} />
+                        <input type="text" placeholder="Jaar" value={year} onChange={(e) => setYear(e.target.value)} />
+                        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+                        <div className="modal-buttons">
+                            <button onClick={handleUpload}>Upload</button>
+                            <button onClick={() => setShowModal(false)}>Annuleer</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showPreview && selectedArtwork && (
+                <div className="modal-overlay" onClick={() => setShowPreview(false)}>
+                    <div className="modal-content-preview" onClick={(e) => e.stopPropagation()}>
+                        <img
+                            src={`http://localhost:8080/artworks/${selectedArtwork.id}/photo`}
+                            alt={selectedArtwork.title}
+                            className="preview-photo"
+                        />
+                        <h3>{selectedArtwork.title}</h3>
+                        <p><strong>Jaar:</strong> {selectedArtwork.year}</p>
+                        <p><strong>Kunstenaar:</strong> {selectedArtwork.artistName}</p>
+                        <button className="delete-button" onClick={() => handleDelete(selectedArtwork.id)}>🗑 Verwijder</button>
+                        <button className="cancel-button" onClick={() => setShowPreview(false)}>Sluiten</button>
+                    </div>
+                </div>
+            )}
+
             <section className="gallery-inner-container">
                 <div className="gallery-grid">
                     {artworks.map((art) => (
@@ -92,11 +114,11 @@ function UserGallery() {
                                 src={`http://localhost:8080/artworks/${art.id}/photo`}
                                 alt={art.title}
                                 className="gallery-photo"
+                                onClick={() => {
+                                    setSelectedArtwork(art);
+                                    setShowPreview(true);
+                                }}
                             />
-                            <h4>{art.title}</h4>
-                            <p>{art.year}</p>
-                            <p>{art.artistName}</p>
-                            <button onClick={() => handleDelete(art.id)}>Verwijder</button>
                         </div>
                     ))}
                 </div>
