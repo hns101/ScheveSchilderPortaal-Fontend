@@ -68,24 +68,23 @@ function UserGallery() {
     return (
         <main className="gallery-outer-container">
             <h2 className="gallery-title">Jouw Gallerij</h2>
+            <div className="gallery-upload">
+                <input
+                    type="text"
+                    placeholder="Titel"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Jaar"
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                />
+                <input type="file" onChange={(e) => setFile(e.target.files[0])}/>
+                <button onClick={handleUpload}>Upload</button>
+            </div>
             <section className="gallery-inner-container">
-                <div className="gallery-upload">
-                    <input
-                        type="text"
-                        placeholder="Titel"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Jaar"
-                        value={year}
-                        onChange={(e) => setYear(e.target.value)}
-                    />
-                    <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-                    <button onClick={handleUpload}>Upload</button>
-                </div>
-
                 <div className="gallery-grid">
                     {artworks.map((art) => (
                         <div key={art.id} className="gallery-card">
@@ -96,6 +95,7 @@ function UserGallery() {
                             />
                             <h4>{art.title}</h4>
                             <p>{art.year}</p>
+                            <p>{art.artistName}</p>
                             <button onClick={() => handleDelete(art.id)}>Verwijder</button>
                         </div>
                     ))}
