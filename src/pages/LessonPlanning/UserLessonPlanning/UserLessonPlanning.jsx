@@ -1,51 +1,37 @@
 import '../LessonPlanning.css';
-import {useState, useEffect} from "react";
-import axiosWithAuth from "../../../helpers/axiosWithAuth.js";
+import { useState } from "react";
 import UserWeekNavigator from "../../../components/user/UserWeekNavigator.jsx";
 import LessonSwitcher from "../../../components/user/LessonSwitcher.jsx";
 import LessonGrid from "../../../components/user/LessonGrid.jsx";
+import useWeeks from "../../../hooks/useWeeks";
+import useAuth from "../../../hooks/useAuth";
+import { updateLessonSlot } from "../../../helpers/lessonHelpers.js";
 
 function UserLessonPlanning() {
-    const [allData, setAllData] = useState([]);
     const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = localStorage.getItem("token");
     const [selections, setSelections] = useState({});
+    const { user, token } = useAuth();
+    const { weeks: allData, loading, error } = useWeeks(token);
 
     const handleSlotChange = (lessonId, newLessonId) => {
-        setSelections(prev => ({...prev, [lessonId]: newLessonId}));
+        setSelections(prev => ({ ...prev, [lessonId]: newLessonId }));
     };
 
-    useEffect(() => {
-        const fetchWeeks = async () => {
-            try {
-                const response = await axiosWithAuth().get("/weeks");
-
-                if (Array.isArray(response.data)) {
-                    const sortedWeeks = response.data
-                        .map(week => ({
-                            ...week,
-                            lessons: week.lessons.map(lesson => ({...lesson, weekId: week.id}))
-                                .sort((a, b) => new Date(a.date) - new Date(b.date))
-                        }))
-                        .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
-
-                    setAllData(sortedWeeks);
-                } else {
-                    setError("Dataformaat is ongeldig.");
-                }
-            } catch (err) {
-                console.error("Error fetching week data:", err);
-                setError("Fout bij het laden van weekdata.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        void fetchWeeks();
-    }, [token]);
+    const handleSlotUpdate = async (originalLesson, newLessonId) => {
+        try {
+            await updateLessonSlot({
+                originalLesson,
+                newLessonId,
+                studentEmail: user.student.email,
+                allData,
+            });
+            alert("Inschrijving bijgewerkt!");
+            window.location.reload();
+        } catch (err) {
+            console.error("Update failed", err);
+            alert("Fout bij het bijwerken van je inschrijving.");
+        }
+    };
 
     const nextWeek = () => {
         if (currentWeekIndex < allData.length - 1) {
@@ -59,42 +45,10 @@ function UserLessonPlanning() {
         }
     };
 
-    const handleSlotUpdate = async (originalLesson, newLessonId) => {
-        const studentEmail = user.student.email;
-
-        if (newLessonId === "niet-aanwezig") {
-            if (!originalLesson) return;
-            try {
-                await axiosWithAuth().delete(`/weeks/${originalLesson.weekId}/lessons/${originalLesson.id}/students/${studentEmail}`);
-                alert("Je bent afgemeld voor deze les.");
-                window.location.reload();
-            } catch (err) {
-                console.error("Afmelden mislukt", err);
-                alert("Fout bij afmelden.");
-            }
-            return;
-        }
-
-        const newLesson = allData.flatMap(w => w.lessons).find(l => l.id === newLessonId);
-        if (!newLesson || (originalLesson && newLesson.id === originalLesson.id)) return;
-
-        try {
-            if (originalLesson) {
-                await axiosWithAuth().delete(`/weeks/${originalLesson.weekId}/lessons/${originalLesson.id}/students/${studentEmail}`);
-            }
-            await axiosWithAuth().post(`/weeks/${newLesson.weekId}/lessons/${newLesson.id}/students/${user.student.email}`);
-            alert("Inschrijving bijgewerkt!");
-            window.location.reload();
-        } catch (err) {
-            console.error("Update failed", err);
-            alert("Fout bij het bijwerken van je inschrijving.");
-        }
-    };
-
     if (loading) return <p className="loading">Loading...</p>;
-    if (error) return <p style={{color: "red"}}>{error}</p>;
+    if (error) return <p style={{ color: "red" }}>{error}</p>;
     if (!allData.length) return <p>Geen lesdata beschikbaar.</p>;
-    if (!user || !user?.student) return <p style={{color: "red"}}>Gebruiker niet gevonden. Log opnieuw in.</p>;
+    if (!user || !user?.student) return <p style={{ color: "red" }}>Gebruiker niet gevonden. Log opnieuw in.</p>;
 
     const currentWeek = allData[currentWeekIndex];
     const upcomingWeeks = allData.slice(currentWeekIndex + 1, currentWeekIndex + 3);
@@ -128,4 +82,6 @@ function UserLessonPlanning() {
         </main>
     );
 }
+
 export default UserLessonPlanning;
+
