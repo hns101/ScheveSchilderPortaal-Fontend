@@ -86,6 +86,7 @@ function EditUserModal({ user, onClose, onUserUpdated, slotOptions }) {
 
                         <label>Voorkeurs tijdslot</label>
                         <select
+                            className="user-edit-selector"
                             name="student.defaultSlot"
                             value={form.student.defaultSlot}
                             onChange={handleChange}

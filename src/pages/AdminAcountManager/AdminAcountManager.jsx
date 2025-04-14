@@ -78,8 +78,8 @@ function AdminAccountManager() {
                                 🎨 {user.student.defaultSlot}
                             </p>
                         )}
-                        <button onClick={() => setEditingUser({ ...user })}>✏️ Bewerken</button>
-                        <button onClick={() => handleDelete(user.email)}>🗑 Verwijderen</button>
+                        <button type="button" className="user-edit-button" onClick={() => setEditingUser({ ...user })}>✏️ Bewerken</button>
+                        <button type="button" className="user-edit-button" onClick={() => handleDelete(user.email)}>🗑 Verwijderen</button>
                     </li>
                 ))}
             </ul>
