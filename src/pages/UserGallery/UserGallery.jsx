@@ -1,13 +1,14 @@
 import './UserGallery.css';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { shuffleArray } from '../../helpers/shuffleArray.js';
+import { useState } from 'react';
 import UploadModal from '../../components/user/UploadModal.jsx';
 import GalleryGrid from '../../components/user/GalleryGrid.jsx';
 import ArtworkPreviewModal from "../../components/user/ArtworkPreviewModal.jsx";
+import useGallery from "../../hooks/useGallery.js";
+import { uploadArtwork } from '../../helpers/artworkHelpers.js';
+import useAuth from "../../hooks/useAuth.js";
 
 function UserGallery() {
-    const [artworks, setArtworks] = useState([]);
+    const { user } = useAuth();
     const [file, setFile] = useState(null);
     const [title, setTitle] = useState("");
     const [year, setYear] = useState("");
@@ -15,33 +16,11 @@ function UserGallery() {
     const [selectedArtwork, setSelectedArtwork] = useState(null);
     const [showPreview, setShowPreview] = useState(false);
 
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    const fetchArtworks = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/galleries/${user.email}/artworks`);
-            setArtworks(shuffleArray(response.data));
-        } catch (err) {
-            console.error("Error fetching artworks:", err);
-        }
-    };
-
-    useEffect(() => {
-        fetchArtworks();
-    }, []);
+    const { artworks, fetchArtworks, loading, error } = useGallery(user.email);
 
     const handleUpload = async () => {
         try {
-            const metadataRes = await axios.post(`http://localhost:8080/galleries/${user.email}/artworks`, { title, year });
-            const artworkId = metadataRes.data.id;
-
-            const formData = new FormData();
-            formData.append("file", file);
-
-            await axios.post(`http://localhost:8080/artworks/${artworkId}/photo`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
-
+            await uploadArtwork({ email: user.email, title, year, file });
             alert("Kunstwerk succesvol toegevoegd!");
             setTitle("");
             setYear("");
@@ -75,11 +54,16 @@ function UserGallery() {
                 <h2 className="gallery-title">{user.student.firstname}'s Gallerij</h2>
                 <button
                     aria-label="Upload een nieuw kunstwerk"
-                    type="button" className="open-upload-button"
-                    onClick={() => setShowModal(true)}>
+                    type="button"
+                    className="open-upload-button"
+                    onClick={() => setShowModal(true)}
+                >
                     Upload kunstwerk
                 </button>
             </div>
+
+            {loading && <p className="loading">Laden...</p>}
+            {error && <p className="error">{error}</p>}
 
             {showModal && (
                 <UploadModal
@@ -116,3 +100,4 @@ function UserGallery() {
 }
 
 export default UserGallery;
+
