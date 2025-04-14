@@ -1,15 +1,11 @@
-// import { useState } from 'react'
 import './App.css'
-
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import UserLessonPlanning from "./pages/LessonPlanning/UserLessonPlanning/UserLessonPlanning.jsx";
 import AdminLessonPlanning from "./pages/LessonPlanning/AdminLessonPlanning/AdminLessonPlanning.jsx";
 import UserGallery from "./pages/UserGallery/UserGallery.jsx";
 import UserSettings from "./pages/UserSettings/UserSettings.jsx";
 import UserHeader from "./components/Headers/UserHeader.jsx";
 import AdminHeader from "./components/Headers/AdminHeader.jsx";
-import {useState} from "react";
-import userTestData1 from "./TestData/userTestData1.json";
 import Login from "./pages/Login/Login.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import AdminGalleryManager from "./pages/AdminGalleryManager/AdminGalleryManager.jsx";
@@ -22,6 +18,9 @@ function App() {
             <Routes>
                 {/* Public Route */}
                 <Route path="/login" element={<Login />} />
+
+                {/* Redirect root to /planning */}
+                <Route path="/" element={<PrivateRoute><Navigate to="/planning" /></PrivateRoute>} />
 
                 {/* Protected User Routes */}
                 <Route path="/planning" element={<PrivateRoute><UserHeader /><UserLessonPlanning  /></PrivateRoute>} />

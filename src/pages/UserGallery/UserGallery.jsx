@@ -1,6 +1,7 @@
 import './UserGallery.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import {shuffleArray} from "../../helpers/shuffleArray.js";
 
 function UserGallery() {
     const [artworks, setArtworks] = useState([]);
@@ -16,7 +17,8 @@ function UserGallery() {
     const fetchArtworks = async () => {
         try {
             const response = await axios.get(`http://localhost:8080/galleries/${user.email}/artworks`);
-            setArtworks(response.data);
+            const shuffled = shuffleArray(response.data);
+            setArtworks(shuffled);
         } catch (err) {
             console.error("Error fetching artworks:", err);
         }
@@ -70,13 +72,15 @@ function UserGallery() {
 
     return (
         <main className="gallery-outer-container">
-            <h2 className="gallery-title">Jouw Gallerij</h2>
+            <div className="gallery-title-container">
+                 <h2 className="gallery-title">{user.student.firstname}'s Gallerij</h2>
+                 <button className="open-upload-button" onClick={() => setShowModal(true)}>Upload kunstwerk</button>
+            </div>
 
-            <button className="open-upload-button" onClick={() => setShowModal(true)}>➕ Voeg kunstwerk toe</button>
 
             {showModal && (
                 <div className="modal-overlay">
-                    <div className="modal-content">
+                <div className="modal-content">
                         <h3>Upload nieuw kunstwerk</h3>
                         <input type="text" placeholder="Titel" value={title} onChange={(e) => setTitle(e.target.value)} />
                         <input type="text" placeholder="Jaar" value={year} onChange={(e) => setYear(e.target.value)} />
@@ -100,8 +104,8 @@ function UserGallery() {
                         <h3>{selectedArtwork.title}</h3>
                         <p><strong>Jaar:</strong> {selectedArtwork.year}</p>
                         <p><strong>Kunstenaar:</strong> {selectedArtwork.artistName}</p>
-                        <button className="delete-button" onClick={() => handleDelete(selectedArtwork.id)}>🗑 Verwijder</button>
-                        <button className="cancel-button" onClick={() => setShowPreview(false)}>Sluiten</button>
+                        <button className="photo-delete-button" onClick={() => handleDelete(selectedArtwork.id)}>Verwijder</button>
+                        <button className="photo-cancel-button" onClick={() => setShowPreview(false)}>Sluiten</button>
                     </div>
                 </div>
             )}
