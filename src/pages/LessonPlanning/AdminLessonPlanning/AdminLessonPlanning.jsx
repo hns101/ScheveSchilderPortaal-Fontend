@@ -10,7 +10,7 @@ import LessonSelector from "../../../components/admin/LessonSelector.jsx";
 import WeekNavigator from "../../../components/admin/WeekNavigator.jsx";
 import AddWeekCard from "../../../components/admin/AddWeekCard.jsx";
 
-import testWeekInputData from "../../../weekInputData/weekInputData.json";
+import testWeekInputData from "../../../assets/weekInputData/weekInputData.json";
 
 function AdminLessonPlanning() {
     const {
