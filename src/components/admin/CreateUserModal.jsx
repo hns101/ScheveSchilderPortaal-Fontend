@@ -6,6 +6,7 @@ function CreateUserModal({ onClose, onUserCreated, slotOptions }) {
         firstname: "",
         lastname: "",
         email: "",
+        password: "",
         defaultSlot: slotOptions[0]
     });
 
@@ -16,7 +17,7 @@ function CreateUserModal({ onClose, onUserCreated, slotOptions }) {
 
     const handleSubmit = async () => {
         try {
-            await axiosWithAuth().post("/register", form);
+            await axiosWithAuth().post("/register", form); // Now sends a complete RegisterStudentDto
             alert("Gebruiker aangemaakt.");
             onClose();
             onUserCreated();
@@ -30,6 +31,7 @@ function CreateUserModal({ onClose, onUserCreated, slotOptions }) {
         <div className="modal-overlay">
             <div className="modal-content">
                 <h3>Nieuwe gebruiker</h3>
+
                 <label>Voornaam</label>
                 <input name="firstname" value={form.firstname} onChange={handleChange} />
 
@@ -37,10 +39,14 @@ function CreateUserModal({ onClose, onUserCreated, slotOptions }) {
                 <input name="lastname" value={form.lastname} onChange={handleChange} />
 
                 <label>Email</label>
-                <input name="email" value={form.email} onChange={handleChange} />
+                <input name="email" type="email" value={form.email} onChange={handleChange} />
+
+                <label>Wachtwoord</label>
+                <input name="password" type="password" value={form.password} onChange={handleChange} />
 
                 <label>Voorkeurs tijdslot</label>
-                <select name="defaultSlot" value={form.defaultSlot} onChange={handleChange}>
+                <select className="user-edit-selector"
+                    name="defaultSlot" value={form.defaultSlot} onChange={handleChange}>
                     {slotOptions.map((slot) => (
                         <option key={slot} value={slot}>{slot}</option>
                     ))}

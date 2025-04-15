@@ -135,3 +135,7 @@
 .user-edit-button:hover {
     background-color: var(--light-gray);
 }
+.user-edit-selector {
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
