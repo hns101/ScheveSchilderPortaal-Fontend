@@ -1,6 +1,6 @@
-# 🎨 Scheve Schilder Portaal – Frontend
+#  Scheve Schilder Portaal – Front-end 🎨
 
-This is the **React frontend** for the painting lesson platform "Scheve Schilder Portaal." Users can manage their lesson attendance, while admins can manage students, lessons, and weekly schedules through a custom-built dashboard.
+This is the **React frontend** for the painting lesson platform "Scheve Schilder Portaal." Users can manage their lesson attendance and upload artworks in their own gallery, while admins can manage students, lessons, and weekly schedules through a custom-built dashboard.
 
 ---
 
@@ -39,7 +39,7 @@ This is the **React frontend** for the painting lesson platform "Scheve Schilder
 - Change slot, catch up or cancel
 - See classmates in each lesson
 - Default preferences remembered
-- View own gallery 
+- Viewing own gallery 
 - Uploading & deleting Artwork
 
 ### 👩‍💼 For Admins
@@ -51,30 +51,17 @@ This is the **React frontend** for the painting lesson platform "Scheve Schilder
 - Password reset for students
 - Visual capacity overview for each slot
 
-### 🎯 UX / UI
-
-- Clean layout with custom header + tab navigation
-- Mobile responsive
-- Editable user fields (inline edit)
-
 ---
 
 ## 📬 API Integration
 
 All backend requests point to:
-
 http://localhost:8080/
 
+All API calls are build on this backend:
+https://github.com/hns101/ScheveSchilderPortaal-Backend
 
-JWT token is automatically attached to all secure endpoints using `axios.defaults.headers.common.Authorization`.
 
----
-## 🖱️Test Roles
-USER
-##### email : `john@example.com` || Password : `password123`
-
-ADMIN
-#### Email : `admin@test.nl` || Password : `password123`
 
 ---
 ## 🔧 Getting Started
@@ -89,4 +76,11 @@ https://github.com/hns101/ScheveSchilderPortaal-Backend
 2. Start development server:
    ```bash
    npm run dev 
-3. Go to the provided Localhost port to login.
+3. Go to the provided Localhost port to login with one of the test roles.
+---
+## 🖱️Test Roles
+USER
+##### email : `john@example.com` || Password : `password123`
+
+ADMIN
+#### Email : `admin@test.nl` || Password : `password123`
