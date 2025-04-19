@@ -46,9 +46,9 @@ function UserLessonPlanning() {
     };
 
     if (loading) return <p className="loading">Loading...</p>;
-    if (error) return <p style={{ color: "red" }}>{error}</p>;
-    if (!allData.length) return <p>Geen lesdata beschikbaar.</p>;
-    if (!user || !user?.student) return <p style={{ color: "red" }}>Gebruiker niet gevonden. Log opnieuw in.</p>;
+    if (error) return <p className="loading" style={{ color: "red" }}>{error}</p>;
+    if (!allData.length) return <p className="loading" >Geen lesdata beschikbaar.</p>;
+    if (!user || !user?.student) return <p className="loading" style={{ color: "red" }}>Gebruiker niet gevonden. Log opnieuw in.</p>;
 
     const currentWeek = allData[currentWeekIndex];
     const upcomingWeeks = allData.slice(currentWeekIndex + 1, currentWeekIndex + 3);
