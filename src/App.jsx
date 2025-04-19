@@ -19,19 +19,19 @@ function App() {
                 {/* Public Route */}
                 <Route path="/login" element={<Login />} />
 
-                {/* Redirect root to /planning */}
-                <Route path="/" element={<PrivateRoute><Navigate to="/planning" /></PrivateRoute>} />
+                {/* Redirect root to login or planning */}
+                <Route path="/" element={<Navigate to={localStorage.getItem("token") ? "/planning" : "/login"} />} />
 
                 {/* Protected User Routes */}
-                <Route path="/planning" element={<PrivateRoute><UserHeader /><UserLessonPlanning  /></PrivateRoute>} />
-                <Route path="/gallerij" element={<PrivateRoute><UserHeader /><UserGallery  /></PrivateRoute>} />
-                <Route path="/settings" element={<PrivateRoute><UserHeader /><UserSettings  /></PrivateRoute>} />
+                <Route path="/planning" element={<PrivateRoute><UserHeader /><UserLessonPlanning /></PrivateRoute>} />
+                <Route path="/gallerij" element={<PrivateRoute><UserHeader /><UserGallery /></PrivateRoute>} />
+                <Route path="/settings" element={<PrivateRoute><UserHeader /><UserSettings /></PrivateRoute>} />
                 <Route path="*" element={<PrivateRoute><UserHeader /><h2>Pagina niet gevonden</h2></PrivateRoute>} />
 
                 {/* Protected Admin Routes */}
                 <Route path="/planning-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminLessonPlanning /></PrivateRoute>} />
-                <Route path="/gallerij-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminGalleryManager  /></PrivateRoute>} />
-                <Route path="/account-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminAcountManager  /></PrivateRoute>} />
+                <Route path="/gallerij-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminGalleryManager /></PrivateRoute>} />
+                <Route path="/account-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminAcountManager /></PrivateRoute>} />
             </Routes>
         </>
     )
