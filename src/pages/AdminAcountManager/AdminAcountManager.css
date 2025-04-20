@@ -39,8 +39,8 @@
 }
 
 .user-list-item {
-    background-color: #f4f4f4;
-    border: 1px solid #ccc;
+    background-color: var(--background-color);
+    border: 1px solid var(--white2);
     padding: 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
@@ -63,7 +63,7 @@
     left: 0;
     height: 100%;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--overlay-black);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -73,7 +73,7 @@
 /* Modal box */
 .edit-modal-content,
 .modal-content {
-    background-color: white;
+    background-color: var(--white);
     padding: 1rem;
     border-radius: 10px;
     width: 400px;
@@ -86,7 +86,7 @@
     padding: 0.4rem;
     margin-top: 0.2rem;
     margin-bottom: 0.8rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--white2);
     border-radius: 4px;
 }
 .edit-modal-buttons,
@@ -102,7 +102,7 @@
     border: none;
     border-radius: 5px;
     background-color: var(--brown);
-    color: white;
+    color: var(--white);
     cursor: pointer;
 }
 .edit-modal-buttons button:hover,

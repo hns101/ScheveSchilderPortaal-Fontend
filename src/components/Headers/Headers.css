@@ -133,12 +133,12 @@
     border-radius: 8px  8px 0 0;
     padding: 0.4rem 1.2rem;
     color: var(--white);
-    background: #b23838;
+    background: var(--red);
     border: none;
     cursor: pointer;
 }
 .logout-button:hover {
-    background-color: rgba(178, 56, 56, 0.85);
+    background-color: var(--red2);
 }
 /* ===== MOBILE HEADER STYLING ===== */
 @media (max-width: 712px) {
@@ -192,7 +192,7 @@
         margin-bottom: -8px;
     }
 
-    /* 🧼 Hide decorative pseudo text labels to avoid overflow */
+    /* Hide decorative pseudo text labels to avoid overflow */
     .active-menu-settings:after,
     .active-menu-admin-settings:after,
     .active-menu-gallerij:after,

@@ -18,7 +18,7 @@
 }
 .open-upload-button {
     background-color: var(--brown);
-    color: white;
+    color: var(--white);
     border: none;
     padding: 0.6rem 1.2rem;
     margin-top: 0.5rem;
@@ -51,15 +51,15 @@
     margin-bottom: 1rem;
 }
 .modal-content-preview {
-    background: white;
+    background: var(--white);
     padding: 2rem;
     border-radius: 12px;
     gap: 0.8rem;
     text-align: center;
 }
 .photo-delete-button {
-    background-color: #b23838;
-    color: white;
+    background-color: var(--red);
+    color: var(--white);
     border: none;
     padding: 0.6rem 1.2rem;
     margin-top: 0.5rem;
@@ -68,8 +68,8 @@
     cursor: pointer;
 }
 .photo-cancel-button {
-    background-color: gray;
-    color: white;
+    background-color: var(--gray);
+    color: var(--white);
     border: none;
     padding: 0.6rem 1.2rem;
     margin-top: 0.5rem;

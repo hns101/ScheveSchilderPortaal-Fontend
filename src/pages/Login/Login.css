@@ -75,7 +75,7 @@
     }
 
     .login-hero {
-        display: flex; /* hide the image section on small screens */
+        display: flex;
         height: 250px;
         width: 100%;
     }

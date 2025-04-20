@@ -14,6 +14,13 @@ html { /*Setting up the default for rem use*/
     --text-color: #4a4a4a;
     --background-color: #f9f9fb;
     --white: #ffffff;
+    --white2: #ccc;
+    --overlay-black: rgba(0, 0, 0, 0.5);
+    --box-black: rgba(64, 64, 64, 0.5);
+    --red: #8f4949;
+    --red2:  rgba(178, 56, 56, 0.85);
+    --green: #697e68;
+    --gray: #808080FF;
 }
 ::selection {
     color: var(--white);

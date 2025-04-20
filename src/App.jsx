@@ -19,8 +19,8 @@ function App() {
                 {/* Public Route */}
                 <Route path="/login" element={<Login />} />
 
-                {/* Redirect root to login or planning */}
-                <Route path="/" element={<Navigate to={localStorage.getItem("token") ? "/planning" : "/login"} />} />
+                {/* Redirect root too login */}
+                <Route path="/" element={<Navigate to="/login" />} />
 
                 {/* Protected User Routes */}
                 <Route path="/planning" element={<PrivateRoute><UserHeader /><UserLessonPlanning /></PrivateRoute>} />

@@ -51,7 +51,27 @@ function UserLessonPlanning() {
     if (!user || !user?.student) return <p className="loading" style={{ color: "red" }}>Gebruiker niet gevonden. Log opnieuw in.</p>;
 
     const currentWeek = allData[currentWeekIndex];
-    const upcomingWeeks = allData.slice(currentWeekIndex + 1, currentWeekIndex + 3);
+    const upcomingWeeksRaw = allData.slice(currentWeekIndex + 1, currentWeekIndex + 3);
+
+// Count how many lessons the student is already in across both weeks
+    const totalUpcomingRegistrations = upcomingWeeksRaw.reduce((count, week) => {
+        return count + week.lessons.filter(lesson =>
+            lesson.students.some(s => s.id === user.student.id)
+        ).length;
+    }, 0);
+
+// Only allow extra options if the student is in fewer than 3 lessons for the coming 2 weeks
+    const upcomingLessons = totalUpcomingRegistrations >= 3
+        ? [] // no extra options if 3 or more
+        : upcomingWeeksRaw
+            .flatMap(week =>
+                week.lessons.filter(lesson => {
+                    const isFull = lesson.students.length >= 10;
+                    const alreadyRegistered = lesson.students.some(s => s.id === user.student.id);
+                    return !isFull && !alreadyRegistered;
+                })
+            );
+
 
     return (
         <main className="main">
@@ -67,12 +87,13 @@ function UserLessonPlanning() {
                 <LessonSwitcher
                     user={user}
                     lessons={currentWeek.lessons}
-                    upcomingLessons={upcomingWeeks.flatMap(w => w.lessons)}
+                    upcomingLessons={upcomingLessons}
                     selections={selections}
                     onSlotChange={handleSlotChange}
                     onSlotUpdate={handleSlotUpdate}
-                    combinedLessons={[...currentWeek.lessons, ...upcomingWeeks.flatMap(w => w.lessons)]}
+                    combinedLessons={[...currentWeek.lessons, ...upcomingLessons]}
                 />
+
 
                 <LessonGrid
                     lessons={currentWeek.lessons}
