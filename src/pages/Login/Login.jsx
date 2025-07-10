@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Login.css';
 import logo from '../../assets/ScheveSchilder-logo.svg';
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // Import Link
 import axios from "axios";
 
 function Login() {
@@ -19,7 +19,6 @@ function Login() {
 
         try {
             const response = await login(email, password);// Call login function
-            // console.log(response);
             if (response.status === 401) {
                 setError("Login mislukt! Controleer je e-mail en wachtwoord.");
             } else {
@@ -61,12 +60,15 @@ function Login() {
                         required
                     />
 
-
-
                     <button className="login-button" type="submit">
                         Login
                     </button>
                     {error && <p className="error-message">{error}</p>}
+
+                    {/* --- NEW: Forgot Password Link --- */}
+                    <div className="forgot-password-container">
+                        <Link className="forgot-password-link" to="/forgot-password">Wachtwoord vergeten?</Link>
+                    </div>
                 </form>
             </div>
             <div className="login-hero">
