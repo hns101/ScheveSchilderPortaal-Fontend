@@ -3,7 +3,6 @@ import './Login.css';
 import logo from '../../assets/ScheveSchilder-logo.svg';
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useNavigate, Link } from "react-router-dom"; // Import Link
-import axios from "axios";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -66,7 +65,7 @@ function Login() {
                     {error && <p className="error-message">{error}</p>}
 
                     {/* --- NEW: Forgot Password Link --- */}
-                    <div className="forgot-password-container">
+                    <div className="forgot-password-container-link">
                         <Link className="forgot-password-link" to="/forgot-password">Wachtwoord vergeten?</Link>
                     </div>
                 </form>

@@ -10,16 +10,21 @@ import Login from "./pages/Login/Login.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import AdminGalleryManager from "./pages/AdminGalleryManager/AdminGalleryManager.jsx";
 import AdminAcountManager from "./pages/AdminAcountManager/AdminAcountManager.jsx";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx"; // Import the new component
 
 function App() {
 
     return (
         <>
             <Routes>
-                {/* Public Route */}
+                {/* Public Routes */}
                 <Route path="/login" element={<Login />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} /> {/* Add the new dynamic route */}
 
-                {/* Redirect root too login */}
+
+                {/* Redirect root to login */}
                 <Route path="/" element={<Navigate to="/login" />} />
 
                 {/* Protected User Routes */}
@@ -37,4 +42,4 @@ function App() {
     )
 }
 
-export default App
+export default App;

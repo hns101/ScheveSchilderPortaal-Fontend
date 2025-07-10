@@ -56,16 +56,18 @@
 .login-logo {
     width: 48vw;
 }
-.forgot-password-container {
+.forgot-password-container-link {
     text-align: right;
-    margin-top: 8px;
+    margin-top: 4px;
 }
 .forgot-password-link {
     color: var(--mid-brown);
+    font-size: 0.9rem;
 }
 .forgot-password-link:visited {
     color: var(--mid-brown);
 }
+
 @media (max-width: 768px) {
     .login-container {
         flex-direction: column-reverse;
