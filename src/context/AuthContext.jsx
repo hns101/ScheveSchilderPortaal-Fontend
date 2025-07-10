@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
+import { createContext, useContext, useState } from "react";
+// Import our new API clients
+import { apiClient, authApiClient } from "../api/api.js";
 
 export const AuthContext = createContext({});
 
@@ -9,41 +10,24 @@ export function AuthProvider({ children }) {
         return storedUser ? JSON.parse(storedUser) : null;
     });
 
-    const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+    // We no longer need to manage the token in state here for API calls
+    // The authApiClient will get it from localStorage directly.
 
-    useEffect(() => {
-        if (token) {
-            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        } else {
-            delete axios.defaults.headers.common["Authorization"];
-        }
-    }, [token]);
+    // REMOVED: The useEffect that set the global default header.
 
     const login = async (email, password) => {
         try {
-            const res = await axios.post(
-                "http://localhost:8080/auth/login",
-                { email, password },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                    withCredentials: false,
-                }
+            // Use the PUBLIC apiClient for the login request
+            const res = await apiClient.post(
+                "/auth/login",
+                { email, password }
             );
 
             const token = res.data.token;
-            setToken(token);
             localStorage.setItem("token", token);
 
-            // Set default token header for axios
-            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-            // Fetch detailed user info
-            const userDetails = await axios.get(
-                `http://localhost:8080/users/${email}`
-            );
+            // Fetch detailed user info using the PRIVATE authApiClient
+            const userDetails = await authApiClient.get(`/users/${email}`);
 
             setUser(userDetails.data);
             localStorage.setItem("user", JSON.stringify(userDetails.data));
@@ -51,17 +35,19 @@ export function AuthProvider({ children }) {
             return res;
         } catch (error) {
             console.error("Login failed:", error);
-            return error;
+            // It's better to throw the error to be handled by the component
+            throw error;
         }
     };
 
-
     const logout = () => {
         setUser(null);
-        setToken("");
         localStorage.removeItem("token");
         localStorage.removeItem("user");
     };
+
+    // We can still provide the token for other uses if needed, but it's not used for API calls anymore
+    const token = localStorage.getItem("token");
 
     return (
         <AuthContext.Provider value={{ user, login, logout, token }}>

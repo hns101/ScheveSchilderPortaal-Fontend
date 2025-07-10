@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// 1. CHANGE THIS: Import our new public apiClient instead of the default axios
+import { apiClient } from '../../api/api.js';
 import { Link } from 'react-router-dom';
-import './ForgotPassword.css'; // We'll create this file next
+import './ForgotPassword.css';
 import logo from '../../assets/ScheveSchilder-logo.svg';
 
 function ForgotPassword() {
@@ -17,14 +18,12 @@ function ForgotPassword() {
         setError('');
 
         try {
-            // The URL should match your backend endpoint
-            const response = await axios.post('http://localhost:8080/api/auth/forgot-password', {
+            // 2. CHANGE THIS: Use the clean apiClient for the request
+            const response = await apiClient.post('/api/auth/forgot-password', {
                 email: email
             });
             setMessage(response.data); // Display the success message from the backend
         } catch (err) {
-            // Even on error, we might want to show a generic message for security
-            // but for development, let's show the actual error.
             setError('Er is iets misgegaan. Probeer het later opnieuw.');
             console.error("Forgot Password error:", err);
         } finally {

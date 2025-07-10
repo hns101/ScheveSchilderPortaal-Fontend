@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../../api/api.js';
 import './ResetPassword.css';
 import logo from '../../assets/ScheveSchilder-logo.svg';
 
@@ -12,7 +12,7 @@ function ResetPassword() {
     const [loading, setLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
-    const { token } = useParams(); // Get the token from the URL
+    const { token } = useParams();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -20,22 +20,32 @@ function ResetPassword() {
         setError('');
         setMessage('');
 
+        // --- NEW: Client-side validation checks ---
+        if (password.length < 8) {
+            setError('Wachtwoord moet minimaal 8 tekens lang zijn.');
+            return; // Stop the submission
+        }
+
         if (password !== confirmPassword) {
             setError('Wachtwoorden komen niet overeen.');
-            return;
+            return; // Stop the submission
         }
 
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/reset-password', {
+            const response = await apiClient.post('/api/auth/reset-password', {
                 token: token,
                 newPassword: password
             });
             setMessage(response.data);
-            setIsSuccess(true); // Set success state to change the view
+            setIsSuccess(true);
         } catch (err) {
-            setError(err.response?.data || 'Er is iets misgegaan. De link is mogelijk verlopen of ongeldig.');
+            if (err.response && err.response.data && err.response.data.message) {
+                setError(err.response.data.message);
+            } else {
+                setError('Er is iets misgegaan. De link is mogelijk verlopen of ongeldig.');
+            }
             console.error("Reset Password error:", err);
         } finally {
             setLoading(false);
@@ -66,8 +76,9 @@ function ResetPassword() {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Voer nieuw wachtwoord in"
+                            placeholder="Minimaal 8 tekens"
                             required
+                            minLength="8" // Standard HTML validation
                         />
 
                         <label className="reset-password-form-label">Bevestig wachtwoord</label>
@@ -78,6 +89,7 @@ function ResetPassword() {
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             placeholder="Bevestig nieuw wachtwoord"
                             required
+                            minLength="8" // Standard HTML validation
                         />
 
                         <button className="reset-password-button" type="submit" disabled={loading}>
