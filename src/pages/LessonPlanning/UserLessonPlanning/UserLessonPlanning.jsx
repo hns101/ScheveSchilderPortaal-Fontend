@@ -1,17 +1,17 @@
-import '../LessonPlanning.css';
-import { useState } from "react";
+import React, { useState } from 'react'; // Combined import
+import './../LessonPlanning.css';
 import UserWeekNavigator from "../../../components/user/UserWeekNavigator.jsx";
 import LessonSwitcher from "../../../components/user/LessonSwitcher.jsx";
 import LessonGrid from "../../../components/user/LessonGrid.jsx";
 import useWeeks from "../../../hooks/useWeeks";
-import useAuth from "../../../hooks/useAuth";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import { updateLessonSlot } from "../../../helpers/lessonHelpers.js";
 
 function UserLessonPlanning() {
     const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
     const [selections, setSelections] = useState({});
-    const { user, token } = useAuth();
-    const { weeks: allData, loading, error } = useWeeks(token);
+    const { user } = useAuth();
+    const { weeks: allData, loading, error } = useWeeks(user?.token);
 
     const handleSlotChange = (lessonId, newLessonId) => {
         setSelections(prev => ({ ...prev, [lessonId]: newLessonId }));
@@ -47,22 +47,33 @@ function UserLessonPlanning() {
 
     if (loading) return <p className="loading">Loading...</p>;
     if (error) return <p className="loading" style={{ color: "red" }}>{error}</p>;
-    if (!allData.length) return <p className="loading" >Geen lesdata beschikbaar.</p>;
     if (!user || !user?.student) return <p className="loading" style={{ color: "red" }}>Gebruiker niet gevonden. Log opnieuw in.</p>;
+
+    if (!user.student.active) {
+        return (
+            <main className="main">
+                <div className="inactive-message-container">
+                    <h2>Account Inactief</h2>
+                    <p>Je account is momenteel inactief. Je kunt geen lessen plannen of wijzigen.</p>
+                    <p>Neem contact op met de beheerder voor meer informatie.</p>
+                </div>
+            </main>
+        );
+    }
+
+    if (!allData.length) return <p className="loading" >Geen lesdata beschikbaar.</p>;
 
     const currentWeek = allData[currentWeekIndex];
     const upcomingWeeksRaw = allData.slice(currentWeekIndex + 1, currentWeekIndex + 3);
 
-// Count how many lessons the student is already in across both weeks
     const totalUpcomingRegistrations = upcomingWeeksRaw.reduce((count, week) => {
         return count + week.lessons.filter(lesson =>
             lesson.students.some(s => s.id === user.student.id)
         ).length;
     }, 0);
 
-// Only allow extra options if the student is in fewer than 3 lessons for the coming 2 weeks
     const upcomingLessons = totalUpcomingRegistrations >= 3
-        ? [] // no extra options if 3 or more
+        ? []
         : upcomingWeeksRaw
             .flatMap(week =>
                 week.lessons.filter(lesson => {
@@ -71,7 +82,6 @@ function UserLessonPlanning() {
                     return !isFull && !alreadyRegistered;
                 })
             );
-
 
     return (
         <main className="main">
@@ -94,7 +104,6 @@ function UserLessonPlanning() {
                     combinedLessons={[...currentWeek.lessons, ...upcomingLessons]}
                 />
 
-
                 <LessonGrid
                     lessons={currentWeek.lessons}
                     studentId={user.student.id}
@@ -105,4 +114,3 @@ function UserLessonPlanning() {
 }
 
 export default UserLessonPlanning;
-

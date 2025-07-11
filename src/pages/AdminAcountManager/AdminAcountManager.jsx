@@ -1,8 +1,11 @@
 import './AdminAcountManager.css';
 import { useEffect, useState } from "react";
-import axiosWithAuth from "../../helpers/axiosWithAuth.js";
+// Import the secure API client we created earlier
+import { authApiClient } from "../../api/api.js";
 import CreateUserModal from "../../components/admin/CreateUserModal.jsx";
 import EditUserModal from "../../components/admin/EditUserModal.jsx";
+// Import the new ToggleSwitch component
+import ToggleSwitch from "../../components/admin/ToggleSwitch.jsx";
 
 const SLOT_OPTIONS = ["Woensdag Avond", "Vrijdag Avond", "Zaterdag Ochtend"];
 
@@ -14,7 +17,8 @@ function AdminAccountManager() {
 
     const fetchUsers = async () => {
         try {
-            const response = await axiosWithAuth().get("/users");
+            // Use the secure client for this request
+            const response = await authApiClient.get("/users");
             setUsers(response.data);
         } catch (error) {
             console.error("Error fetching users:", error);
@@ -30,7 +34,7 @@ function AdminAccountManager() {
         if (!window.confirm(`Weet je zeker dat je ${email} wilt verwijderen?`)) return;
 
         try {
-            const res = await axiosWithAuth().delete(`/users/${email}`);
+            const res = await authApiClient.delete(`/users/${email}`);
             if (res.status === 204) {
                 alert("Gebruiker verwijderd.");
                 fetchUsers();
@@ -38,6 +42,18 @@ function AdminAccountManager() {
         } catch (err) {
             console.error("Delete failed", err);
             alert("Verwijderen mislukt.");
+        }
+    };
+
+    // --- NEW: Function to handle the status toggle ---
+    const handleStatusChange = async (email, newStatus) => {
+        try {
+            await authApiClient.put(`/users/${email}/status`, { active: newStatus });
+            // Refresh the user list to show the change
+            fetchUsers();
+        } catch (error) {
+            console.error("Error updating user status:", error);
+            alert("Status bijwerken mislukt.");
         }
     };
 
@@ -73,13 +89,22 @@ function AdminAccountManager() {
                     <li key={user.email} className="user-list-item">
                         <p>📧 {user.email} — 🪪 {user.roles.join(", ")}</p>
                         {user.student && (
-                            <p>
-                                ID:{user.student.id} 👤 {user.student.firstname} {user.student.lastname} —
-                                🎨 {user.student.defaultSlot}
-                            </p>
+                            <>
+                                <p>
+                                    ID:{user.student.id} 👤 {user.student.firstname} {user.student.lastname} —
+                                    🎨 {user.student.defaultSlot || 'Geen'}
+                                </p>
+                                <div className="user-actions">
+                                    <button type="button" className="user-edit-button" onClick={() => setEditingUser({ ...user })}>✏️ Bewerken</button>
+                                    <button type="button" className="user-edit-button" onClick={() => handleDelete(user.email)}>🗑 Verwijderen</button>
+                                    <ToggleSwitch
+                                        label={user.student.active ? "Actief" : "Inactief"}
+                                        checked={user.student.active}
+                                        onChange={(newStatus) => handleStatusChange(user.email, newStatus)}
+                                    />
+                                </div>
+                            </>
                         )}
-                        <button type="button" className="user-edit-button" onClick={() => setEditingUser({ ...user })}>✏️ Bewerken</button>
-                        <button type="button" className="user-edit-button" onClick={() => handleDelete(user.email)}>🗑 Verwijderen</button>
                     </li>
                 ))}
             </ul>

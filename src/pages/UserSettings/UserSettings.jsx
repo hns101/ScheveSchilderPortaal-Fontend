@@ -19,9 +19,15 @@ function UserSettings() {
 
     const [editingField, setEditingField] = useState(null);
 
+    // --- NEW: Determine if the form should be disabled ---
+    const isInactive = !user?.student?.active;
+
     if (loading || !formData) return <p className="loading">Loading...</p>;
 
     const handleSubmit = async () => {
+        // Prevent submission if user is inactive
+        if (isInactive) return;
+
         try {
             if (editingField === "password") {
                 await changePassword();
@@ -41,6 +47,7 @@ function UserSettings() {
         <main className="user-settings-outer-container">
             <section className="user-settings-container">
                 <h3 className="user-settings-header">Account</h3>
+
                 <ul className="user-settings-list">
                     <EditableField
                         label="Voornaam"
@@ -49,6 +56,7 @@ function UserSettings() {
                         onChange={handleChange}
                         editingField={editingField}
                         setEditingField={setEditingField}
+                        disabled={isInactive}
                     />
                     <EditableField
                         label="Achternaam"
@@ -57,6 +65,7 @@ function UserSettings() {
                         onChange={handleChange}
                         editingField={editingField}
                         setEditingField={setEditingField}
+                        disabled={isInactive}
                     />
                     <li className="user-settings-item">
                         <label>Email:</label>
@@ -69,11 +78,12 @@ function UserSettings() {
                                 type="password"
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
+                                disabled={isInactive}
                             />
                         ) : (
                             <span>{"*".repeat(8)}</span>
                         )}
-                        <img className="icon-edit" src={edit} alt="wijzig" onClick={() => setEditingField("password")} />
+                        <img className="icon-edit" src={edit} alt="wijzig" onClick={() => !isInactive && setEditingField("password")} />
                     </li>
                     <li className="user-settings-item">
                         <label>Standaard les moment:</label>
@@ -81,6 +91,7 @@ function UserSettings() {
                             name="defaultSlot"
                             value={selectedClassTime}
                             onChange={handleChange}
+                            disabled={isInactive}
                         >
                             {["Woensdag Avond", "Vrijdag Avond", "Zaterdag Ochtend"].map(slot => (
                                 <option key={slot} value={slot}>{slot}</option>
@@ -88,7 +99,12 @@ function UserSettings() {
                         </select>
                     </li>
                 </ul>
-                <button className="save-settings-button" onClick={handleSubmit}>
+                {isInactive && (
+                    <p className="inactive-warning">
+                        Je account is inactief. Je kunt je gegevens niet wijzigen.
+                    </p>
+                )}
+                <button className="save-settings-button" onClick={handleSubmit} disabled={isInactive}>
                     Opslaan
                 </button>
             </section>
@@ -96,16 +112,16 @@ function UserSettings() {
     );
 }
 
-function EditableField({ label, fieldKey, value, onChange, editingField, setEditingField }) {
+function EditableField({ label, fieldKey, value, onChange, editingField, setEditingField, disabled }) {
     return (
         <li className="user-settings-item">
             <label>{label}:</label>
             {editingField === fieldKey ? (
-                <input type="text" name={fieldKey} value={value} onChange={onChange} />
+                <input type="text" name={fieldKey} value={value} onChange={onChange} disabled={disabled} />
             ) : (
                 <span>{value}</span>
             )}
-            <img className="icon-edit" src={edit} alt="wijzig" onClick={() => setEditingField(fieldKey)} />
+            <img className="icon-edit" src={edit} alt="wijzig" onClick={() => !disabled && setEditingField(fieldKey)} />
         </li>
     );
 }
