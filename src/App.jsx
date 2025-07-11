@@ -11,7 +11,8 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import AdminGalleryManager from "./pages/AdminGalleryManager/AdminGalleryManager.jsx";
 import AdminAcountManager from "./pages/AdminAcountManager/AdminAcountManager.jsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
-import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx"; // Import the new component
+import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
+import NotFound from "./pages/NotFound/NotFound.jsx"; // Import the new NotFound page
 
 function App() {
 
@@ -21,8 +22,7 @@ function App() {
                 {/* Public Routes */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password/:token" element={<ResetPassword />} /> {/* Add the new dynamic route */}
-
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
 
                 {/* Redirect root to login */}
                 <Route path="/" element={<Navigate to="/login" />} />
@@ -31,12 +31,14 @@ function App() {
                 <Route path="/planning" element={<PrivateRoute><UserHeader /><UserLessonPlanning /></PrivateRoute>} />
                 <Route path="/gallerij" element={<PrivateRoute><UserHeader /><UserGallery /></PrivateRoute>} />
                 <Route path="/settings" element={<PrivateRoute><UserHeader /><UserSettings /></PrivateRoute>} />
-                <Route path="*" element={<PrivateRoute><UserHeader /><h2>Pagina niet gevonden</h2></PrivateRoute>} />
 
                 {/* Protected Admin Routes */}
                 <Route path="/planning-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminLessonPlanning /></PrivateRoute>} />
                 <Route path="/gallerij-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminGalleryManager /></PrivateRoute>} />
                 <Route path="/account-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminAcountManager /></PrivateRoute>} />
+
+                {/* --- NEW: Public Catch-all Route for 404 --- */}
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </>
     )

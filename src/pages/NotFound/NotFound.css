@@ -1,0 +1,43 @@
+.not-found-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 80vh; /* Use less than 100vh to account for the header */
+    color: var(--text-color);
+    font-family: sans-serif;
+}
+
+.not-found-content h1 {
+    font-size: 6rem;
+    font-weight: bold;
+    color: var(--brown);
+    margin: 0;
+}
+
+.not-found-content h2 {
+    font-size: 2rem;
+    margin: 0 0 1rem 0;
+}
+
+.not-found-content p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.not-found-button {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background-color: var(--brown);
+    color: var(--background-color);
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.not-found-button:hover {
+    background-color: var(--mid-brown);
+}
