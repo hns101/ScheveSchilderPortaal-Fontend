@@ -160,14 +160,14 @@
         border-radius: 1rem;
     }
     .menu-list {
-        flex-direction: column;
+        flex-direction: row;
         gap: 0.5rem;
         align-items: center;
         padding: 0;
         margin: 0;
     }
     .menu-item {
-        width: 100%;
+        /*width: 2%;*/
         justify-content: center;
     }
     .default-menu-link,
@@ -186,10 +186,15 @@
         border-radius: 0.5rem;
     }
     .logout-button {
-        width: 100%;
+        width: 25%;
         margin-top: 0;
-        font-size: 1rem;
+        font-size: 0.9rem;
         margin-bottom: -8px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-radius:0 0 0 0.6rem ;
+
     }
 
     /* Hide decorative pseudo text labels to avoid overflow */
