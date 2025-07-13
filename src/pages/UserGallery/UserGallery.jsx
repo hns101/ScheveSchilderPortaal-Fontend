@@ -95,6 +95,11 @@ function UserGallery() {
         <main className="gallery-outer-container">
             <div className="gallery-title-container">
                 <h2 className="gallery-title">{user.student.firstname}'s Gallerij</h2>
+
+            </div>
+
+            {/* --- NEW: Public/Private Toggle Section --- */}
+            <div className="gallery-settings-container">
                 <button
                     className="open-upload-button"
                     aria-label="Upload een nieuw kunstwerk"
@@ -102,12 +107,8 @@ function UserGallery() {
                 >
                     Upload kunstwerk
                 </button>
-            </div>
-
-            {/* --- NEW: Public/Private Toggle Section --- */}
-            <div className="gallery-settings-container">
                 <ToggleSwitch
-                    label={gallery?.isPublic ? "Galerij is Publiek" : "Galerij is Privé"}
+                    label={gallery?.isPublic ? "Publieke galerij" : "Privé gallerij"}
                     checked={gallery?.isPublic || false}
                     onChange={handleStatusChange}
                 />

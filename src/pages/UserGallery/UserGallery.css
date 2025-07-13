@@ -21,8 +21,8 @@
     color: var(--white);
     border: none;
     padding: 0.6rem 1.2rem;
-    margin-top: 0.5rem;
-    margin-left: 0.5rem;
+    margin-top: -1.1rem;
+    margin-right: 1.5rem;
     border-radius: 6px;
     cursor: pointer;
 }
