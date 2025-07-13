@@ -12,7 +12,8 @@ import AdminGalleryManager from "./pages/AdminGalleryManager/AdminGalleryManager
 import AdminAcountManager from "./pages/AdminAcountManager/AdminAcountManager.jsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
-import NotFound from "./pages/NotFound/NotFound.jsx"; // Import the new NotFound page
+import NotFound from "./pages/NotFound/NotFound.jsx";
+import PublicGalleries from "./pages/PublicGalleries/PublicGalleries.jsx"; // Import the new component
 
 function App() {
 
@@ -23,6 +24,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
+                <Route path="/galleries" element={<PublicGalleries />} />
+
 
                 {/* Redirect root to login */}
                 <Route path="/" element={<Navigate to="/login" />} />
@@ -37,7 +40,7 @@ function App() {
                 <Route path="/gallerij-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminGalleryManager /></PrivateRoute>} />
                 <Route path="/account-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminAcountManager /></PrivateRoute>} />
 
-                {/* --- NEW: Public Catch-all Route for 404 --- */}
+                {/* Public Catch-all Route for 404 */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </>
