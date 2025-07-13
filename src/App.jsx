@@ -10,10 +10,11 @@ import Login from "./pages/Login/Login.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import AdminGalleryManager from "./pages/AdminGalleryManager/AdminGalleryManager.jsx";
 import AdminAcountManager from "./pages/AdminAcountManager/AdminAcountManager.jsx";
-import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.js";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
-import PublicGalleries from "./pages/PublicGalleries/PublicGalleries.jsx"; // Import the new component
+import PublicGalleries from "./pages/PublicGalleries/PublicGalleries.jsx";
+import PublicGalleryDetail from "./pages/PublicGalleryDetail/PublicGalleryDetail.jsx"; // Import the new component
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/galleries" element={<PublicGalleries />} />
+                <Route path="/gallery/:studentId" element={<PublicGalleryDetail />} />
 
 
                 {/* Redirect root to login */}
@@ -47,4 +49,4 @@ function App() {
     )
 }
 
-export default App;
+export default App;;

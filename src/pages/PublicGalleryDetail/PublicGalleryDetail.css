@@ -1,0 +1,74 @@
+.gallery-detail-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: sans-serif;
+    color: var(--text-color);
+}
+
+.gallery-detail-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 2rem;
+}
+
+.gallery-detail-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.back-to-hub-link {
+    color: var(--brown);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-to-hub-link:hover {
+    text-decoration: underline;
+}
+
+.artwork-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.artwork-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.artwork-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    background-color: #f0f0f0;
+}
+
+.artwork-info {
+    padding: 1rem;
+}
+
+.artwork-title {
+    font-weight: bold;
+    margin: 0 0 0.25rem 0;
+}
+
+.artwork-year {
+    color: #666;
+    margin: 0;
+}
+
+.gallery-detail-message {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 4rem;
+}
+
+.gallery-detail-message.error {
+    color: #d9534f;
+}
