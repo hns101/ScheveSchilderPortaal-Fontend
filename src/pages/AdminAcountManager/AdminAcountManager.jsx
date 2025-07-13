@@ -5,7 +5,7 @@ import { authApiClient } from "../../api/api.js";
 import CreateUserModal from "../../components/admin/CreateUserModal.jsx";
 import EditUserModal from "../../components/admin/EditUserModal.jsx";
 // Import the new ToggleSwitch component
-import ToggleSwitch from "../../components/admin/ToggleSwitch.jsx";
+import ToggleSwitch from "../../components/common/ToggleSwitch.jsx";
 
 const SLOT_OPTIONS = ["Woensdag Avond", "Vrijdag Avond", "Zaterdag Ochtend"];
 

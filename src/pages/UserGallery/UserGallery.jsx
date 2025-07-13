@@ -5,7 +5,9 @@ import GalleryGrid from '../../components/user/GalleryGrid.jsx';
 import ArtworkPreviewModal from '../../components/user/ArtworkPreviewModal.jsx';
 import useGallery from '../../hooks/useGallery.js';
 import { uploadArtwork } from '../../helpers/artworkHelpers.js';
-import useAuth from '../../hooks/useAuth.js';
+import { useAuth } from '../../context/AuthContext.jsx'; // Correctly import useAuth
+import { authApiClient } from '../../api/api.js'; // Import the secure API client
+import ToggleSwitch from '../../components/common/ToggleSwitch.jsx'; // Import the toggle switch
 
 function UserGallery() {
     const { user } = useAuth();
@@ -17,10 +19,12 @@ function UserGallery() {
     const [showPreview, setShowPreview] = useState(false);
 
     const {
+        gallery, // Assuming your hook returns the full gallery object
         artworks,
         loading,
         error,
         fetchArtworks,
+        fetchGallery, // Assuming you have a function to refresh gallery data
         deleteArtwork,
         previewImageUrl,
         loadPreviewImage,
@@ -73,6 +77,20 @@ function UserGallery() {
         setSelectedArtwork(null);
     };
 
+    // --- NEW: Function to handle gallery status change ---
+    const handleStatusChange = async (newStatus) => {
+        try {
+            await authApiClient.put(`/galleries/${user.email}/status`, { isPublic: newStatus });
+            // Refresh gallery data to get the updated status
+            if (fetchGallery) {
+                fetchGallery();
+            }
+        } catch (err) {
+            console.error("Status update failed:", err);
+            alert("Kon de status van de galerij niet bijwerken.");
+        }
+    };
+
     return (
         <main className="gallery-outer-container">
             <div className="gallery-title-container">
@@ -85,6 +103,16 @@ function UserGallery() {
                     Upload kunstwerk
                 </button>
             </div>
+
+            {/* --- NEW: Public/Private Toggle Section --- */}
+            <div className="gallery-settings-container">
+                <ToggleSwitch
+                    label={gallery?.isPublic ? "Galerij is Publiek" : "Galerij is Privé"}
+                    checked={gallery?.isPublic || false}
+                    onChange={handleStatusChange}
+                />
+            </div>
+
 
             {loading && <p className="loading">Loading...</p>}
             {error && <p className="error">{error}</p>}
@@ -119,6 +147,3 @@ function UserGallery() {
 }
 
 export default UserGallery;
-
-
-

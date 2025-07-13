@@ -148,3 +148,11 @@
         padding: 1rem;
     }
 }
+/* Add to UserGallery.css */
+.gallery-settings-container {
+    display: flex;
+    justify-content: flex-end; /* Aligns the toggle to the right */
+    padding: 1rem;
+    max-width: 1200px; /* Or your main content width */
+    margin: 0 auto;
+}
