@@ -10,7 +10,7 @@ import Login from "./pages/Login/Login.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import AdminGalleryManager from "./pages/AdminGalleryManager/AdminGalleryManager.jsx";
 import AdminAcountManager from "./pages/AdminAcountManager/AdminAcountManager.jsx";
-import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.js";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 import PublicGalleries from "./pages/PublicGalleries/PublicGalleries.jsx";
