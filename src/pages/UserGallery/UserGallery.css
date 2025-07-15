@@ -5,7 +5,7 @@
     align-items: center;
 }
 .gallery-title {
-    margin: 30px 20px;
+    margin: 30px 10px;
     color: var(--text-color);
 }
 .gallery-title-container {
@@ -78,6 +78,22 @@
     cursor: pointer;
 }
 
+
+.view-public-button {
+    background-color: var(--brown);
+    color: var(--background-color);
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1rem;
+    /*font-weight: bold;*/
+    transition: background-color 0.3s;
+    margin-right: -25px;/* Add some spacing */
+}
+
+.view-public-button:hover, .open-upload-button:hover {
+    background-color: var(--mid-brown);
+}
 /* ========== MOBILE STYLING ========== */
 @media (max-width: 600px) {
     .gallery-grid {
@@ -115,6 +131,13 @@
         width: 90%;
         text-align: center;
         padding: 0.8rem;
+    }
+    .view-public-button {
+        margin-top: 1.5rem;
+        margin-bottom: -2.2rem;
+    }
+    .gallery-title{
+        margin-bottom: 1rem;
     }
 }
 /* MID-RANGE DEVICES */

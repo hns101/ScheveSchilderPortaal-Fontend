@@ -4,8 +4,6 @@ import UserLessonPlanning from "./pages/LessonPlanning/UserLessonPlanning/UserLe
 import AdminLessonPlanning from "./pages/LessonPlanning/AdminLessonPlanning/AdminLessonPlanning.jsx";
 import UserGallery from "./pages/UserGallery/UserGallery.jsx";
 import UserSettings from "./pages/UserSettings/UserSettings.jsx";
-import UserHeader from "./components/Headers/UserHeader.jsx";
-import AdminHeader from "./components/Headers/AdminHeader.jsx";
 import Login from "./pages/Login/Login.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import AdminGalleryManager from "./pages/AdminGalleryManager/AdminGalleryManager.jsx";
@@ -14,39 +12,41 @@ import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 import PublicGalleries from "./pages/PublicGalleries/PublicGalleries.jsx";
-import PublicGalleryDetail from "./pages/PublicGalleryDetail/PublicGalleryDetail.jsx"; // Import the new component
+import PublicGalleryDetail from "./pages/PublicGalleryDetail/PublicGalleryDetail.jsx";
+import MainLayout from "./components/Layout/MainLayout.jsx"; // Import the layout
 
 function App() {
 
     return (
         <>
             <Routes>
-                {/* Public Routes */}
+                {/* Routes that should NEVER have a header */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
-                <Route path="/galleries" element={<PublicGalleries />} />
-                <Route path="/gallery/:studentId" element={<PublicGalleryDetail />} />
 
+                {/* All other pages are children of MainLayout and will get a header */}
+                <Route path="/" element={<MainLayout />}>
+                    {/* Public pages that get a header */}
+                    <Route path="galleries" element={<PublicGalleries />} />
+                    <Route path="gallery/:studentId" element={<PublicGalleryDetail />} />
 
-                {/* Redirect root to login */}
-                <Route path="/" element={<Navigate to="/login" />} />
+                    {/* Protected User Routes */}
+                    <Route path="planning" element={<PrivateRoute><UserLessonPlanning /></PrivateRoute>} />
+                    <Route path="gallerij" element={<PrivateRoute><UserGallery /></PrivateRoute>} />
+                    <Route path="settings" element={<PrivateRoute><UserSettings /></PrivateRoute>} />
 
-                {/* Protected User Routes */}
-                <Route path="/planning" element={<PrivateRoute><UserHeader /><UserLessonPlanning /></PrivateRoute>} />
-                <Route path="/gallerij" element={<PrivateRoute><UserHeader /><UserGallery /></PrivateRoute>} />
-                <Route path="/settings" element={<PrivateRoute><UserHeader /><UserSettings /></PrivateRoute>} />
+                    {/* Protected Admin Routes */}
+                    <Route path="planning-beheer" element={<PrivateRoute adminOnly={true}><AdminLessonPlanning /></PrivateRoute>} />
+                    <Route path="gallerij-beheer" element={<PrivateRoute adminOnly={true}><AdminGalleryManager /></PrivateRoute>} />
+                    <Route path="account-beheer" element={<PrivateRoute adminOnly={true}><AdminAcountManager /></PrivateRoute>} />
 
-                {/* Protected Admin Routes */}
-                <Route path="/planning-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminLessonPlanning /></PrivateRoute>} />
-                <Route path="/gallerij-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminGalleryManager /></PrivateRoute>} />
-                <Route path="/account-beheer" element={<PrivateRoute adminOnly={true}><AdminHeader /><AdminAcountManager /></PrivateRoute>} />
-
-                {/* Public Catch-all Route for 404 */}
-                <Route path="*" element={<NotFound />} />
+                    {/* The 404 page is now inside the layout, so it gets the correct header */}
+                    <Route path="*" element={<NotFound />} />
+                </Route>
             </Routes>
         </>
     )
 }
 
-export default App;;
+export default App;

@@ -1,13 +1,14 @@
 import './UserGallery.css';
 import { useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link
 import UploadModal from '../../components/user/UploadModal.jsx';
 import GalleryGrid from '../../components/user/GalleryGrid.jsx';
 import ArtworkPreviewModal from '../../components/user/ArtworkPreviewModal.jsx';
 import useGallery from '../../hooks/useGallery.js';
 import { uploadArtwork } from '../../helpers/artworkHelpers.js';
-import { useAuth } from '../../context/AuthContext.jsx'; // Correctly import useAuth
-import { authApiClient } from '../../api/api.js'; // Import the secure API client
-import ToggleSwitch from '../../components/common/ToggleSwitch.jsx'; // Import the toggle switch
+import { useAuth } from '../../context/AuthContext.jsx';
+import { authApiClient } from '../../api/api.js';
+import ToggleSwitch from '../../components/common/ToggleSwitch.jsx';
 
 function UserGallery() {
     const { user } = useAuth();
@@ -19,12 +20,12 @@ function UserGallery() {
     const [showPreview, setShowPreview] = useState(false);
 
     const {
-        gallery, // Assuming your hook returns the full gallery object
+        gallery,
         artworks,
         loading,
         error,
         fetchArtworks,
-        fetchGallery, // Assuming you have a function to refresh gallery data
+        fetchGallery,
         deleteArtwork,
         previewImageUrl,
         loadPreviewImage,
@@ -77,11 +78,9 @@ function UserGallery() {
         setSelectedArtwork(null);
     };
 
-    // --- NEW: Function to handle gallery status change ---
     const handleStatusChange = async (newStatus) => {
         try {
             await authApiClient.put(`/galleries/${user.email}/status`, { isPublic: newStatus });
-            // Refresh gallery data to get the updated status
             if (fetchGallery) {
                 fetchGallery();
             }
@@ -94,11 +93,13 @@ function UserGallery() {
     return (
         <main className="gallery-outer-container">
             <div className="gallery-title-container">
+                <Link to="/galleries" className="view-public-button">
+                    Gallerijen Hub
+                </Link>
                 <h2 className="gallery-title">{user.student.firstname}'s Gallerij</h2>
 
             </div>
 
-            {/* --- NEW: Public/Private Toggle Section --- */}
             <div className="gallery-settings-container">
                 <button
                     className="open-upload-button"
@@ -107,13 +108,13 @@ function UserGallery() {
                 >
                     Upload kunstwerk
                 </button>
+
                 <ToggleSwitch
                     label={gallery?.isPublic ? "Publieke galerij" : "Privé gallerij"}
                     checked={gallery?.isPublic || false}
                     onChange={handleStatusChange}
                 />
             </div>
-
 
             {loading && <p className="loading">Loading...</p>}
             {error && <p className="error">{error}</p>}
