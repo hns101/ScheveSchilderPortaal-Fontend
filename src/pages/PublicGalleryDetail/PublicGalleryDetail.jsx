@@ -3,12 +3,10 @@ import { useParams, Link } from 'react-router-dom';
 import { apiClient } from '../../api/api.js';
 import './PublicGalleryDetail.css';
 
-// Helper function to format the display name
 const getDisplayName = (student) => {
     if (!student || !student.firstname) {
         return 'een artiest';
     }
-    // The 'lastname' property now only contains the initial. We just add a period.
     const lastNameInitial = student.lastname ? ` ${student.lastname}.` : '';
     return `${student.firstname}${lastNameInitial}`;
 };
@@ -55,9 +53,9 @@ function PublicGalleryDetail() {
                 {gallery.artworks && gallery.artworks.length > 0 ? (
                     gallery.artworks.map(artwork => (
                         <div key={artwork.id} className="artwork-card">
-                            {/* Use the secure artwork photo endpoint */}
+                            {/* Use the NEW public and secure artwork photo endpoint */}
                             <img
-                                src={`http://localhost:8080/artworks/${artwork.id}/photo`}
+                                src={`http://localhost:8080/public/artworks/${artwork.id}/photo`}
                                 alt={artwork.title}
                                 onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/600x400/EFEFEF/AAAAAA&text=Fout+bij+laden'; }}
                             />
