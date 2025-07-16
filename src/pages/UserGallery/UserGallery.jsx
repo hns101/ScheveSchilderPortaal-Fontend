@@ -1,6 +1,6 @@
 import './UserGallery.css';
 import { useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link
+import { Link } from 'react-router-dom';
 import UploadModal from '../../components/user/UploadModal.jsx';
 import GalleryGrid from '../../components/user/GalleryGrid.jsx';
 import ArtworkPreviewModal from '../../components/user/ArtworkPreviewModal.jsx';
@@ -27,6 +27,7 @@ function UserGallery() {
         fetchArtworks,
         fetchGallery,
         deleteArtwork,
+        setCoverPhoto, // Get the new function from the hook
         previewImageUrl,
         loadPreviewImage,
         clearPreviewImage
@@ -90,6 +91,19 @@ function UserGallery() {
         }
     };
 
+    // --- Function to handle setting the cover photo ---
+    const handleSetCover = async (artworkId) => {
+        try {
+            await setCoverPhoto(artworkId);
+            alert("Omslagfoto succesvol ingesteld!");
+            closePreview(); // Close the modal
+            fetchGallery(); // Refresh gallery data to show the change
+        } catch (err) {
+            console.error("Set cover failed:", err);
+            alert("Kon omslagfoto niet instellen.");
+        }
+    };
+
     return (
         <main className="gallery-outer-container">
             <div className="gallery-title-container">
@@ -97,7 +111,6 @@ function UserGallery() {
                     Gallerijen Hub
                 </Link>
                 <h2 className="gallery-title">{user.student.firstname}'s Gallerij</h2>
-
             </div>
 
             <div className="gallery-settings-container">
@@ -108,7 +121,6 @@ function UserGallery() {
                 >
                     Upload kunstwerk
                 </button>
-
                 <ToggleSwitch
                     label={gallery?.isPublic ? "Publieke galerij" : "Privé gallerij"}
                     checked={gallery?.isPublic || false}
@@ -138,6 +150,8 @@ function UserGallery() {
                     imageUrl={previewImageUrl}
                     onDelete={handleDelete}
                     onClose={closePreview}
+                    onSetCover={handleSetCover} // Pass the new function
+                    isCover={gallery?.coverArtworkId === selectedArtwork.id} // Check if it's the current cover
                 />
             )}
 

@@ -72,3 +72,38 @@
 .gallery-detail-message.error {
     color: #d9534f;
 }
+
+/* Add to your modal CSS files */
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.set-cover-button, .delete-button {
+    padding: 0.6rem 0.6rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.set-cover-button {
+    background-color: #28a745;
+    color: white;
+    font-size: 0.8rem;
+    padding: -0.1rem 0.5rem;
+}
+
+.set-cover-button.disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+}

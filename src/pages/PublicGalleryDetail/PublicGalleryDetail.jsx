@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { apiClient } from '../../api/api.js';
-import ArtworkModal from '../../components/common/ArtworkModal.jsx'; // Import the new modal
+import { apiClient, authApiClient } from '../../api/api.js';
+import ArtworkModal from '../../components/common/ArtworkModal.jsx';
+import { useAuth } from '../../context/AuthContext.jsx';
 import './PublicGalleryDetail.css';
 
 const getDisplayName = (student) => {
@@ -14,27 +15,45 @@ const getDisplayName = (student) => {
 
 function PublicGalleryDetail() {
     const { studentId } = useParams();
+    const { user } = useAuth(); // Get the logged-in user
     const [gallery, setGallery] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [selectedArtwork, setSelectedArtwork] = useState(null); // State for the modal
+    const [selectedArtwork, setSelectedArtwork] = useState(null);
+
+    const fetchGalleryDetails = useCallback(async () => {
+        setLoading(true);
+        try {
+            const response = await apiClient.get(`/public/gallery/${studentId}`);
+            setGallery(response.data);
+        } catch (err) {
+            setError('Deze galerij kon niet worden gevonden of is privé.');
+            console.error("Error fetching public gallery details:", err);
+        } finally {
+            setLoading(false);
+        }
+    }, [studentId]);
 
     useEffect(() => {
-        const fetchGalleryDetails = async () => {
-            setLoading(true);
-            try {
-                const response = await apiClient.get(`/public/gallery/${studentId}`);
-                setGallery(response.data);
-            } catch (err) {
-                setError('Deze galerij kon niet worden gevonden of is privé.');
-                console.error("Error fetching public gallery details:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchGalleryDetails();
-    }, [studentId]);
+    }, [fetchGalleryDetails]);
+
+    // Check if the currently logged-in user is the owner of this gallery
+    const isOwner = user?.student?.id === Number(studentId);
+
+    // Function to handle the API call to set the cover photo
+    const handleSetCover = async (artworkId) => {
+        if (!isOwner) return; // Security check
+        try {
+            await authApiClient.put(`/galleries/${user.email}/cover/${artworkId}`);
+            alert("Omslagfoto succesvol ingesteld!");
+            setSelectedArtwork(null); // Close the modal
+            fetchGalleryDetails(); // Refresh gallery data to show the change
+        } catch (err) {
+            console.error("Set cover failed:", err);
+            alert("Kon omslagfoto niet instellen.");
+        }
+    };
 
     if (loading) {
         return <p className="gallery-detail-message">Galerij wordt geladen...</p>;
@@ -60,7 +79,7 @@ function PublicGalleryDetail() {
                             <div
                                 key={artwork.id}
                                 className="artwork-card"
-                                onClick={() => setSelectedArtwork(artwork)} // Open modal on click
+                                onClick={() => setSelectedArtwork(artwork)}
                             >
                                 <img
                                     src={`http://localhost:8080/public/artworks/${artwork.id}/photo`}
@@ -79,12 +98,14 @@ function PublicGalleryDetail() {
                 </div>
             </main>
 
-            {/* Render the modal if an artwork is selected */}
             {selectedArtwork && (
                 <ArtworkModal
                     artwork={selectedArtwork}
                     artistName={artistName}
                     onClose={() => setSelectedArtwork(null)}
+                    isOwner={isOwner}
+                    onSetCover={handleSetCover}
+                    isCover={gallery?.coverArtworkId === selectedArtwork.id}
                 />
             )}
         </>

@@ -1,12 +1,11 @@
 import React from 'react';
-import './ArtworkModal.css'; // We'll create this next
+import './ArtworkModal.css';
 
-const ArtworkModal = ({ artwork, artistName, onClose }) => {
+const ArtworkModal = ({ artwork, artistName, onClose, isOwner, onSetCover, isCover }) => {
     if (!artwork) {
         return null;
     }
 
-    // Stop the click from propagating to the overlay and closing the modal
     const handleModalContentClick = (e) => {
         e.stopPropagation();
     };
@@ -24,6 +23,16 @@ const ArtworkModal = ({ artwork, artistName, onClose }) => {
                     <h2 className="modal-title">{artwork.title}</h2>
                     <p className="modal-detail"><strong>Jaar:</strong> {artwork.year}</p>
                     <p className="modal-detail"><strong>Kunstenaar:</strong> {artistName}</p>
+                    {/* --- NEW: Conditional Button --- */}
+                    {isOwner && (
+                        <div className="modal-actions">
+                            {isCover ? (
+                                <button type="button" className="set-cover-button disabled" disabled>Huidige Omslagfoto</button>
+                            ) : (
+                                <button type="button" className="set-cover-button" onClick={() => onSetCover(artwork.id)}>Instellen als Omslagfoto</button>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
