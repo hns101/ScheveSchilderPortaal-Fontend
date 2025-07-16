@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ArtworkModal.css';
 
-const ArtworkModal = ({ artwork, artistName, onClose, isOwner, onSetCover, isCover }) => {
-    if (!artwork) {
-        return null;
-    }
+const ArtworkModal = ({ artwork, artistName, onClose, isOwner, isAdmin, onSetCover, isCover, collections, onAddToCollection }) => {
+    const [selectedCollection, setSelectedCollection] = useState('');
 
-    const handleModalContentClick = (e) => {
-        e.stopPropagation();
-    };
+    if (!artwork) return null;
 
+    const handleModalContentClick = (e) => e.stopPropagation();
     const imageUrl = `http://localhost:8080/public/artworks/${artwork.id}/photo`;
+
+    const handleAddClick = () => {
+        if (selectedCollection) {
+            onAddToCollection(selectedCollection, artwork.id);
+        }
+    };
 
     return (
         <div className="modal-overlay" onClick={onClose}>
@@ -23,14 +26,33 @@ const ArtworkModal = ({ artwork, artistName, onClose, isOwner, onSetCover, isCov
                     <h2 className="modal-title">{artwork.title}</h2>
                     <p className="modal-detail"><strong>Jaar:</strong> {artwork.year}</p>
                     <p className="modal-detail"><strong>Kunstenaar:</strong> {artistName}</p>
-                    {/* --- NEW: Conditional Button --- */}
-                    {isOwner && (
+
+                    {/* --- Admin/Owner Action Buttons --- */}
+                    {(isOwner || isAdmin) && (
                         <div className="modal-actions">
                             {isCover ? (
-                                <button type="button" className="set-cover-button disabled" disabled>Huidige Omslagfoto</button>
+                                <button className="set-cover-button disabled" disabled>Huidige Omslagfoto</button>
                             ) : (
-                                <button type="button" className="set-cover-button" onClick={() => onSetCover(artwork.id)}>Instellen als Omslagfoto</button>
+                                <button className="set-cover-button" onClick={() => onSetCover(artwork.id)}>Instellen als Omslagfoto</button>
                             )}
+                        </div>
+                    )}
+
+                    {/* --- NEW: Admin-only "Add to Collection" feature --- */}
+                    {isAdmin && (
+                        <div className="admin-collection-adder">
+                            <select
+                                value={selectedCollection}
+                                onChange={(e) => setSelectedCollection(e.target.value)}
+                            >
+                                <option value="">Kies een collectie...</option>
+                                {collections.map(col => (
+                                    <option key={col.id} value={col.id}>{col.name}</option>
+                                ))}
+                            </select>
+                            <button onClick={handleAddClick} disabled={!selectedCollection}>
+                                Toevoegen
+                            </button>
                         </div>
                     )}
                 </div>
