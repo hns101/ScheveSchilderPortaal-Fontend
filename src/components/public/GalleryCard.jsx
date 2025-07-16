@@ -11,11 +11,19 @@ const getDisplayName = (student) => {
 };
 
 function GalleryCard({ gallery }) {
-    const previewArtwork = gallery.artworks?.find(art => art.id);
-    // Use the NEW public and secure artwork photo endpoint
-    const previewImageUrl = previewArtwork
-        ? `http://localhost:8080/public/artworks/${previewArtwork.id}/photo`
-        : 'https://placehold.co/600x400/EFEFEF/AAAAAA&text=Geen+Preview';
+    let previewImageUrl = 'https://placehold.co/600x400/EFEFEF/AAAAAA&text=Geen+Preview';
+
+    // --- UPDATED LOGIC ---
+    // 1. Prioritize the selected cover artwork.
+    if (gallery.coverArtworkId) {
+        previewImageUrl = `http://localhost:8080/public/artworks/${gallery.coverArtworkId}/photo`;
+    }
+    // 2. If no cover is set, fall back to the first artwork in the gallery.
+    else if (gallery.artworks?.length > 0) {
+        const firstArtwork = gallery.artworks[0];
+        previewImageUrl = `http://localhost:8080/public/artworks/${firstArtwork.id}/photo`;
+    }
+    // 3. If no artworks exist, the placeholder will be used.
 
     return (
         <Link to={`/gallery/${gallery.student?.id}`} className="gallery-card">
