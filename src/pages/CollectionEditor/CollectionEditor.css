@@ -1,0 +1,85 @@
+.collection-editor-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: sans-serif;
+    color: var(--text-color);
+}
+
+.collection-editor-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.collection-editor-header h1 {
+    margin: 0 0 0.5rem 0;
+}
+
+.back-link {
+    color: var(--brown);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.collection-editor-container > p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.artwork-list {
+    list-style: none;
+    padding: 0;
+}
+
+.artwork-list-item {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.artwork-preview-thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin: 0 1rem;
+    background-color: #f0f0f0;
+}
+
+.artwork-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.artwork-details strong {
+    font-size: 1.1rem;
+}
+
+.artwork-details small {
+    color: #777;
+    font-size: 0.8rem;
+}
+
+.remove-artwork-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.remove-artwork-button:hover {
+    background-color: #c82333;
+}

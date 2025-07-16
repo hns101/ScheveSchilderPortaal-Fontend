@@ -5,11 +5,19 @@
     flex-direction: column;
     align-items: center;
     font-family: sans-serif;
+    gap: 4rem; /* Space between the two sections */
+}
+
+.management-section {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .admin-gallery-header {
     width: 100%;
-    max-width: 800px;
     text-align: center;
     margin-bottom: 2rem;
 }
@@ -24,7 +32,7 @@
 }
 
 .save-order-button {
-    background-color: #28a745; /* Green for save */
+    background-color: #28a745;
     color: white;
     padding: 0.8rem 1.5rem;
     border: none;
@@ -33,6 +41,7 @@
     font-size: 1rem;
     font-weight: bold;
     transition: background-color 0.3s;
+    margin-top: 1rem;
 }
 
 .save-order-button:hover {
@@ -52,7 +61,7 @@
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     margin-bottom: 0.5rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
@@ -64,18 +73,75 @@
     cursor: grab;
 }
 
-.gallery-info {
-    display: flex;
-    flex-direction: column;
+.item-cover-preview {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    object-fit: cover;
+    margin-right: 1rem;
+    background-color: #f0f0f0;
 }
 
-.gallery-info strong {
+.item-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allow info to take up space */
+}
+
+.item-info strong {
     font-size: 1.1rem;
 }
 
-.gallery-info small {
+.item-info small {
     color: #777;
     font-size: 0.8rem;
+}
+
+.item-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.edit-collection-button, .delete-collection-button {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.edit-collection-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.delete-collection-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.create-collection-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.create-collection-form input {
+    flex-grow: 1;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.create-collection-form button {
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--brown);
+    color: white;
+    cursor: pointer;
 }
 
 .error-message {

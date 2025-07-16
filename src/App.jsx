@@ -13,7 +13,8 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 import PublicGalleries from "./pages/PublicGalleries/PublicGalleries.jsx";
 import PublicGalleryDetail from "./pages/PublicGalleryDetail/PublicGalleryDetail.jsx";
-import MainLayout from "./components/Layout/MainLayout.jsx"; // Import the layout
+import MainLayout from "./components/Layout/MainLayout.jsx";
+import CollectionEditor from "./pages/CollectionEditor/CollectionEditor.jsx"; // Import the new component
 
 function App() {
 
@@ -40,6 +41,9 @@ function App() {
                     <Route path="planning-beheer" element={<PrivateRoute adminOnly={true}><AdminLessonPlanning /></PrivateRoute>} />
                     <Route path="gallerij-beheer" element={<PrivateRoute adminOnly={true}><AdminGalleryManager /></PrivateRoute>} />
                     <Route path="account-beheer" element={<PrivateRoute adminOnly={true}><AdminAcountManager /></PrivateRoute>} />
+                    {/* --- NEW ADMIN ROUTE --- */}
+                    <Route path="admin/collection-editor/:collectionId" element={<PrivateRoute adminOnly={true}><CollectionEditor /></PrivateRoute>} />
+
 
                     {/* The 404 page is now inside the layout, so it gets the correct header */}
                     <Route path="*" element={<NotFound />} />
