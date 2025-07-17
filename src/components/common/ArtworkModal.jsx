@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ArtworkModal.css';
 
-const ArtworkModal = ({ artwork, artistName, onClose, isOwner, isAdmin, onSetCover, isCover, collections, onAddToCollection }) => {
+const ArtworkModal = ({ artwork, artistName, onClose, isOwner, isAdmin, onSetCover, isCover, collections, onAddToCollection, onAdminDelete }) => {
     const [selectedCollection, setSelectedCollection] = useState('');
 
     if (!artwork) return null;
@@ -27,18 +27,22 @@ const ArtworkModal = ({ artwork, artistName, onClose, isOwner, isAdmin, onSetCov
                     <p className="modal-detail"><strong>Jaar:</strong> {artwork.year}</p>
                     <p className="modal-detail"><strong>Kunstenaar:</strong> {artistName}</p>
 
-                    {/* --- Admin/Owner Action Buttons --- */}
-                    {(isOwner || isAdmin) && (
-                        <div className="modal-actions">
-                            {isCover ? (
-                                <button className="set-cover-button disabled" disabled>Huidige Omslagfoto</button>
-                            ) : (
-                                <button className="set-cover-button" onClick={() => onSetCover(artwork.id)}>Instellen als Omslagfoto</button>
-                            )}
-                        </div>
-                    )}
+                    <div className="modal-actions">
+                        {(isOwner || isAdmin) && (
+                            <>
+                                {isCover ? (
+                                    <button className="set-cover-button disabled" disabled>Huidige Omslagfoto</button>
+                                ) : (
+                                    <button className="set-cover-button" onClick={() => onSetCover(artwork.id)}>Instellen als Omslagfoto</button>
+                                )}
+                            </>
+                        )}
+                        {/* --- NEW: Admin Delete Button --- */}
+                        {isAdmin && (
+                            <button className="delete-button" onClick={() => onAdminDelete(artwork.id)}>Verwijder Kunstwerk</button>
+                        )}
+                    </div>
 
-                    {/* --- NEW: Admin-only "Add to Collection" feature --- */}
                     {isAdmin && (
                         <div className="admin-collection-adder">
                             <select

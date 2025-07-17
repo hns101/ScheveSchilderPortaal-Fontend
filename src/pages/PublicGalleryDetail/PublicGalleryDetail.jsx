@@ -18,8 +18,6 @@ function PublicGalleryDetail() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [selectedArtwork, setSelectedArtwork] = useState(null);
-
-    // --- NEW: State for admin features ---
     const [collections, setCollections] = useState([]);
     const isAdmin = user?.roles?.includes("ROLE_ADMIN");
     const isOwner = user?.student?.id === Number(studentId);
@@ -29,16 +27,12 @@ function PublicGalleryDetail() {
         try {
             const response = await apiClient.get(`/public/gallery/${studentId}`);
             setGallery(response.data);
-
-            // --- NEW: If user is admin, fetch all collections ---
             if (isAdmin) {
                 const collectionsRes = await authApiClient.get('/admin/collections');
                 setCollections(collectionsRes.data);
             }
-
         } catch (err) {
             setError('Deze galerij kon niet worden gevonden of is privé.');
-            console.error("Error fetching data:", err);
         } finally {
             setLoading(false);
         }
@@ -49,20 +43,13 @@ function PublicGalleryDetail() {
     }, [fetchGalleryDetails]);
 
     const handleSetCover = async (artworkId) => {
-        if (!isOwner && !isAdmin) return; // Allow admin or owner
-        const userEmail = gallery.student.userEmail; // Assuming DTO provides this
-        try {
-            await authApiClient.put(`/galleries/${userEmail}/cover/${artworkId}`);
-            alert("Omslagfoto succesvol ingesteld!");
-            setSelectedArtwork(null);
-            fetchGalleryDetails();
-        } catch (err) {
-            console.error("Set cover failed:", err);
-            alert("Kon omslagfoto niet instellen.");
-        }
+        // This function requires a new admin-specific endpoint to work correctly from this page,
+        // as the student's email is not available in the public DTO.
+        if (!isOwner && !isAdmin) return;
+        alert("Functie nog niet geïmplementeerd voor admins op deze publieke pagina.");
+        console.error("Cannot set cover photo: student email is not available here.");
     };
 
-    // --- NEW: Handler for adding artwork to a collection ---
     const handleAddToCollection = async (collectionId, artworkId) => {
         if (!isAdmin) return;
         try {
@@ -73,6 +60,21 @@ function PublicGalleryDetail() {
             alert("Kon kunstwerk niet toevoegen aan collectie.");
         }
     };
+
+    const handleAdminDelete = async (artworkId) => {
+        if (!isAdmin) return;
+        if (!window.confirm("Weet je zeker dat je dit kunstwerk permanent wilt verwijderen? Dit kan niet ongedaan worden gemaakt.")) return;
+        try {
+            await authApiClient.delete(`/admin/artworks/${artworkId}`);
+            alert("Kunstwerk succesvol verwijderd.");
+            setSelectedArtwork(null); // Close the modal
+            fetchGalleryDetails(); // Refresh the gallery
+        } catch (err) {
+            console.error("Admin delete failed:", err);
+            alert("Kon kunstwerk niet verwijderen.");
+        }
+    };
+
 
     if (loading) return <p className="gallery-detail-message">Laden...</p>;
     if (error) return <p className="gallery-detail-message error">{error}</p>;
@@ -103,11 +105,12 @@ function PublicGalleryDetail() {
                     artistName={artistName}
                     onClose={() => setSelectedArtwork(null)}
                     isOwner={isOwner}
-                    isAdmin={isAdmin} // Pass admin status
+                    isAdmin={isAdmin}
                     isCover={gallery?.coverArtworkId === selectedArtwork.id}
                     onSetCover={handleSetCover}
-                    collections={collections} // Pass the list of collections
-                    onAddToCollection={handleAddToCollection} // Pass the handler
+                    collections={collections}
+                    onAddToCollection={handleAddToCollection}
+                    onAdminDelete={handleAdminDelete}
                 />
             )}
         </>
