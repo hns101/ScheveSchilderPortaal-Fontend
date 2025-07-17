@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { apiClient, authApiClient } from '../../api/api.js';
 import ArtworkModal from '../../components/common/ArtworkModal.jsx';
+import UploadModal from '../../components/user/UploadModal.jsx'; // Import the upload modal
 import { useAuth } from '../../context/AuthContext.jsx';
 import './PublicGalleryDetail.css';
 
@@ -19,6 +20,14 @@ function PublicGalleryDetail() {
     const [error, setError] = useState('');
     const [selectedArtwork, setSelectedArtwork] = useState(null);
     const [collections, setCollections] = useState([]);
+
+    // --- NEW: State for the admin upload modal ---
+    const [showUploadModal, setShowUploadModal] = useState(false);
+    const [title, setTitle] = useState("");
+    const [year, setYear] = useState("");
+    const [file, setFile] = useState(null);
+
+
     const isAdmin = user?.roles?.includes("ROLE_ADMIN");
     const isOwner = user?.student?.id === Number(studentId);
 
@@ -33,6 +42,7 @@ function PublicGalleryDetail() {
             }
         } catch (err) {
             setError('Deze galerij kon niet worden gevonden of is privé.');
+            console.error("Error fetching data:", err);
         } finally {
             setLoading(false);
         }
@@ -43,11 +53,17 @@ function PublicGalleryDetail() {
     }, [fetchGalleryDetails]);
 
     const handleSetCover = async (artworkId) => {
-        // This function requires a new admin-specific endpoint to work correctly from this page,
-        // as the student's email is not available in the public DTO.
-        if (!isOwner && !isAdmin) return;
-        alert("Functie nog niet geïmplementeerd voor admins op deze publieke pagina.");
-        console.error("Cannot set cover photo: student email is not available here.");
+        if (!isAdmin && !isOwner) return;
+        try {
+            // Use the admin endpoint if the user is an admin
+            await authApiClient.put(`/admin/galleries/${studentId}/cover/${artworkId}`);
+            alert("Omslagfoto succesvol ingesteld!");
+            setSelectedArtwork(null);
+            fetchGalleryDetails();
+        } catch (err) {
+            console.error("Set cover failed:", err);
+            alert("Kon omslagfoto niet instellen.");
+        }
     };
 
     const handleAddToCollection = async (collectionId, artworkId) => {
@@ -67,11 +83,38 @@ function PublicGalleryDetail() {
         try {
             await authApiClient.delete(`/admin/artworks/${artworkId}`);
             alert("Kunstwerk succesvol verwijderd.");
-            setSelectedArtwork(null); // Close the modal
-            fetchGalleryDetails(); // Refresh the gallery
+            setSelectedArtwork(null);
+            fetchGalleryDetails();
         } catch (err) {
             console.error("Admin delete failed:", err);
             alert("Kon kunstwerk niet verwijderen.");
+        }
+    };
+
+    // --- NEW: Handler for admin artwork uploads ---
+    const handleAdminUpload = async () => {
+        if (!isAdmin || !file) return;
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('year', year);
+        formData.append('file', file);
+
+        try {
+            await authApiClient.post(`/admin/galleries/${studentId}/artworks`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            alert("Kunstwerk succesvol toegevoegd aan de galerij van deze student!");
+            setShowUploadModal(false);
+            setTitle("");
+            setYear("");
+            setFile(null);
+            fetchGalleryDetails(); // Refresh the gallery
+        } catch (err) {
+            console.error("Admin upload failed:", err);
+            alert("Er ging iets mis tijdens het uploaden.");
         }
     };
 
@@ -86,7 +129,15 @@ function PublicGalleryDetail() {
             <main className="gallery-detail-container">
                 <header className="gallery-detail-header">
                     <h1>Galerij van {artistName}</h1>
-                    <Link to="/galleries" className="back-to-hub-link">← Terug naar de Gallerij Hub</Link>
+                    <div className="header-controls">
+                        {/* --- NEW: Conditional upload button for admin --- */}
+                        {isAdmin && (
+                            <button className="admin-upload-button" onClick={() => setShowUploadModal(true)}>
+                                Upload Kunstwerk
+                            </button>
+                        )}
+                        <Link to="/galleries" className="back-to-hub-link">← Terug naar de Gallerij Hub</Link>
+                    </div>
                 </header>
 
                 <div className="artwork-grid">
@@ -111,6 +162,20 @@ function PublicGalleryDetail() {
                     collections={collections}
                     onAddToCollection={handleAddToCollection}
                     onAdminDelete={handleAdminDelete}
+                />
+            )}
+
+            {/* --- NEW: Admin Upload Modal --- */}
+            {isAdmin && showUploadModal && (
+                <UploadModal
+                    title={title}
+                    year={year}
+                    file={file}
+                    setTitle={setTitle}
+                    setYear={setYear}
+                    setFile={setFile}
+                    onUpload={handleAdminUpload}
+                    onClose={() => setShowUploadModal(false)}
                 />
             )}
         </>

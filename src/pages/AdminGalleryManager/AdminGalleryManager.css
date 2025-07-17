@@ -5,7 +5,7 @@
     flex-direction: column;
     align-items: center;
     font-family: sans-serif;
-    gap: 4rem; /* Space between the two sections */
+    gap: 4rem;
 }
 
 .management-section {
@@ -30,6 +30,23 @@
     color: #666;
     margin-bottom: 1.5rem;
 }
+
+/* --- NEW: Style for the public hub link --- */
+.view-public-hub-button {
+    display: inline-block;
+    background-color: var(--brown);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    transition: background-color 0.3s;
+}
+.view-public-hub-button:hover {
+    background-color: var(--mid-brown);
+}
+/* --- End of new styles --- */
 
 .save-order-button {
     background-color: #28a745;
@@ -85,7 +102,7 @@
 .item-info {
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Allow info to take up space */
+    flex-grow: 1;
 }
 
 .item-info strong {
@@ -102,12 +119,15 @@
     gap: 0.5rem;
 }
 
-.edit-collection-button, .delete-collection-button {
+.edit-collection-button, .delete-collection-button, .visit-gallery-button {
     padding: 0.4rem 0.8rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.8rem;
+    text-decoration: none; /* For Link component */
+    display: inline-block; /* For Link component */
+    text-align: center;
 }
 
 .edit-collection-button {
@@ -119,6 +139,13 @@
     background-color: #dc3545;
     color: white;
 }
+
+/* --- NEW: Style for the visit button --- */
+.visit-gallery-button {
+    background-color: #6c757d;
+    color: white;
+}
+/* --- End of new styles --- */
 
 .create-collection-form {
     display: flex;

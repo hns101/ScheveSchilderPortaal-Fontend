@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -23,12 +23,18 @@ function SortableGalleryItem({ id, gallery }) {
         : 'https://placehold.co/100x100/EFEFEF/AAAAAA&text=...';
 
     return (
-        <li ref={setNodeRef} style={style} {...attributes} {...listeners} className="gallery-list-item">
-            <span className="drag-handle">☰</span>
+        <li ref={setNodeRef} style={style} className="gallery-list-item">
+            <span className="drag-handle" {...attributes} {...listeners}>☰</span>
             <img src={coverPhotoUrl} alt="Cover" className="item-cover-preview" />
             <div className="item-info">
                 <strong>{getDisplayName(gallery.student)}</strong>
                 <small>(Galerij ID: {gallery.id})</small>
+            </div>
+            {/* --- NEW: Visit Gallery Button --- */}
+            <div className="item-actions">
+                <Link to={`/gallery/${gallery.student.id}`} className="visit-gallery-button" target="_blank" rel="noopener noreferrer">
+                    Bezoek
+                </Link>
             </div>
         </li>
     );
@@ -185,6 +191,10 @@ function AdminGalleryManager() {
                 <div className="admin-gallery-header">
                     <h2>Beheer Studentengalerijen</h2>
                     <p>Sleep de galerijen om de weergavevolgorde op de publieke hub-pagina aan te passen.</p>
+                    {/* --- NEW: Link to Public Hub --- */}
+                    <Link to="/galleries" className="view-public-hub-button" target="_blank" rel="noopener noreferrer">
+                        Bekijk Publieke Hub
+                    </Link>
                 </div>
                 <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleGalleryDragEnd}>
                     <ul className="gallery-list">
