@@ -1,7 +1,19 @@
 import React, { useState } from 'react';
 import './ArtworkModal.css';
 
-const ArtworkModal = ({ artwork, artistName, onClose, isOwner, isAdmin, onSetCover, isCover, collections, onAddToCollection, onAdminDelete }) => {
+const ArtworkModal = ({
+                          artwork,
+                          artistName,
+                          onClose,
+                          isOwner,
+                          isAdmin,
+                          isCover,
+                          onSetCover,
+                          collections,
+                          onAddToCollection,
+                          onAdminDelete,
+                          onRemoveFromCollection // New prop for removing from a collection
+                      }) => {
     const [selectedCollection, setSelectedCollection] = useState('');
 
     if (!artwork) return null;
@@ -28,7 +40,8 @@ const ArtworkModal = ({ artwork, artistName, onClose, isOwner, isAdmin, onSetCov
                     <p className="modal-detail"><strong>Kunstenaar:</strong> {artistName}</p>
 
                     <div className="modal-actions">
-                        {(isOwner || isAdmin) && (
+                        {/* This button appears if it's a user gallery and viewer is owner/admin */}
+                        {(isOwner || (isAdmin && onSetCover)) && (
                             <>
                                 {isCover ? (
                                     <button className="set-cover-button disabled" disabled>Huidige Omslagfoto</button>
@@ -37,20 +50,27 @@ const ArtworkModal = ({ artwork, artistName, onClose, isOwner, isAdmin, onSetCov
                                 )}
                             </>
                         )}
-                        {/* --- NEW: Admin Delete Button --- */}
-                        {isAdmin && (
+
+                        {/* This button appears if it's a collection and viewer is admin */}
+                        {isAdmin && onRemoveFromCollection && (
+                            <button className="delete-button" onClick={() => onRemoveFromCollection(artwork.id)}>Verwijder uit Collectie</button>
+                        )}
+
+                        {/* This button appears if viewer is admin */}
+                        {isAdmin && onAdminDelete && (
                             <button className="delete-button" onClick={() => onAdminDelete(artwork.id)}>Verwijder Kunstwerk</button>
                         )}
                     </div>
 
-                    {isAdmin && (
+                    {/* This section appears if it's a user gallery and viewer is admin */}
+                    {isAdmin && onAddToCollection && (
                         <div className="admin-collection-adder">
                             <select
                                 value={selectedCollection}
                                 onChange={(e) => setSelectedCollection(e.target.value)}
                             >
                                 <option value="">Kies een collectie...</option>
-                                {collections.map(col => (
+                                {collections?.map(col => (
                                     <option key={col.id} value={col.id}>{col.name}</option>
                                 ))}
                             </select>

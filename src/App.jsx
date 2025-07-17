@@ -14,7 +14,8 @@ import NotFound from "./pages/NotFound/NotFound.jsx";
 import PublicGalleries from "./pages/PublicGalleries/PublicGalleries.jsx";
 import PublicGalleryDetail from "./pages/PublicGalleryDetail/PublicGalleryDetail.jsx";
 import MainLayout from "./components/Layout/MainLayout.jsx";
-import CollectionEditor from "./pages/CollectionEditor/CollectionEditor.jsx"; // Import the new component
+import CollectionEditor from "./pages/CollectionEditor/CollectionEditor.jsx";
+import CollectionDetail from "./pages/CollectionDetail/CollectionDetail.jsx"; // Import the new component
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
                     {/* Public pages that get a header */}
                     <Route path="galleries" element={<PublicGalleries />} />
                     <Route path="gallery/:studentId" element={<PublicGalleryDetail />} />
+                    <Route path="collection/:collectionId" element={<CollectionDetail />} />
 
                     {/* Protected User Routes */}
                     <Route path="planning" element={<PrivateRoute><UserLessonPlanning /></PrivateRoute>} />
