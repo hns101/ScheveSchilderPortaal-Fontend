@@ -7,9 +7,15 @@ function PublicHeader() {
     return (
         <header className="public-header">
             <div className="public-header-content">
-                <Link to="/galleries">
-                    <img src={logo} alt="ScheveSchilder Logo" className="public-header-logo" />
-                </Link>
+
+                <a
+                    href="https://www.scheveschilder.nl/"
+                    className="external-site-link"
+                    // target="_blank"
+                    // rel="noopener noreferrer"
+                >
+                    <img src={logo} alt="ScheveSchilder Logo" className="public-header-logo"/>
+                </a>
             </div>
         </header>
     );

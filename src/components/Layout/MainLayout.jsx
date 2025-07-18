@@ -19,7 +19,7 @@ function MainLayout() {
         }
 
         // If the user is logged OUT, only show a header on specific public pages.
-        const publicPathsWithHeader = ['/galleries', '/gallery'];
+        const publicPathsWithHeader = ['/galleries', '/gallery','/collection'];
         const isPublicPageWithHeader = publicPathsWithHeader.some(path => location.pathname.startsWith(path));
 
         if (isPublicPageWithHeader) {

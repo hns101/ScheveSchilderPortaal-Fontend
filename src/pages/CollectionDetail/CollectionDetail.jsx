@@ -66,7 +66,7 @@ function CollectionDetail() {
         <>
             <main className="collection-detail-container">
                 <header className="collection-detail-header">
-                    <h1>Collectie: {collection.name}</h1>
+                    <h1>{collection.name}</h1>
                     <Link to="/galleries" className="back-to-hub-link">← Terug naar de Gallerij Hub</Link>
                 </header>
 
