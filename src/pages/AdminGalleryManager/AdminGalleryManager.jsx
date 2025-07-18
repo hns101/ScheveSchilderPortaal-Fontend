@@ -157,6 +157,30 @@ function AdminGalleryManager() {
             {loading && <p>Laden...</p>}
             {error && <p className="error-message">{error}</p>}
 
+            {/* --- Galleries Management Section --- */}
+            <div className="management-section">
+                <div className="admin-gallery-header">
+                    <h2>Beheer Studentengalerijen</h2>
+                    <p>Sleep de galerijen om de weergavevolgorde op de publieke hub-pagina aan te passen.</p>
+                    {/* --- NEW: Link to Public Hub --- */}
+                    <Link to="/galleries" className="view-public-hub-button" target="_blank" rel="noopener noreferrer">
+                        Bekijk Publieke Hub
+                    </Link>
+                </div>
+                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleGalleryDragEnd}>
+                    <ul className="gallery-list">
+                        <SortableContext items={galleries.map(g => g.id)} strategy={verticalListSortingStrategy}>
+                            {galleries.map((gallery) => (
+                                <SortableGalleryItem key={gallery.id} id={gallery.id} gallery={gallery} />
+                            ))}
+                        </SortableContext>
+                    </ul>
+                </DndContext>
+                <button className="save-order-button" onClick={handleSaveGalleryOrder}>
+                    Galerij Volgorde Opslaan
+                </button>
+            </div>
+
             {/* --- Collections Management Section --- */}
             <div className="management-section">
                 <div className="admin-gallery-header">
@@ -183,30 +207,6 @@ function AdminGalleryManager() {
                 </DndContext>
                 <button className="save-order-button" onClick={handleSaveCollectionOrder}>
                     Collectie Volgorde Opslaan
-                </button>
-            </div>
-
-            {/* --- Galleries Management Section --- */}
-            <div className="management-section">
-                <div className="admin-gallery-header">
-                    <h2>Beheer Studentengalerijen</h2>
-                    <p>Sleep de galerijen om de weergavevolgorde op de publieke hub-pagina aan te passen.</p>
-                    {/* --- NEW: Link to Public Hub --- */}
-                    <Link to="/galleries" className="view-public-hub-button" target="_blank" rel="noopener noreferrer">
-                        Bekijk Publieke Hub
-                    </Link>
-                </div>
-                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleGalleryDragEnd}>
-                    <ul className="gallery-list">
-                        <SortableContext items={galleries.map(g => g.id)} strategy={verticalListSortingStrategy}>
-                            {galleries.map((gallery) => (
-                                <SortableGalleryItem key={gallery.id} id={gallery.id} gallery={gallery} />
-                            ))}
-                        </SortableContext>
-                    </ul>
-                </DndContext>
-                <button className="save-order-button" onClick={handleSaveGalleryOrder}>
-                    Galerij Volgorde Opslaan
                 </button>
             </div>
         </main>
