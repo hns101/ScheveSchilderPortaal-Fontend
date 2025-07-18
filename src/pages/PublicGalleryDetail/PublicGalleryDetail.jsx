@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { apiClient, authApiClient } from '../../api/api.js';
 import ArtworkModal from '../../components/common/ArtworkModal.jsx';
-import UploadModal from '../../components/user/UploadModal.jsx'; // Import the upload modal
+import UploadModal from '../../components/user/UploadModal.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
 import './PublicGalleryDetail.css';
 
@@ -20,13 +20,10 @@ function PublicGalleryDetail() {
     const [error, setError] = useState('');
     const [selectedArtwork, setSelectedArtwork] = useState(null);
     const [collections, setCollections] = useState([]);
-
-    // --- NEW: State for the admin upload modal ---
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [title, setTitle] = useState("");
     const [year, setYear] = useState("");
     const [file, setFile] = useState(null);
-
 
     const isAdmin = user?.roles?.includes("ROLE_ADMIN");
     const isOwner = user?.student?.id === Number(studentId);
@@ -55,7 +52,7 @@ function PublicGalleryDetail() {
     const handleSetCover = async (artworkId) => {
         if (!isAdmin && !isOwner) return;
         try {
-            // Use the admin endpoint if the user is an admin
+            // Use the admin endpoint which works with studentId
             await authApiClient.put(`/admin/galleries/${studentId}/cover/${artworkId}`);
             alert("Omslagfoto succesvol ingesteld!");
             setSelectedArtwork(null);
@@ -91,33 +88,27 @@ function PublicGalleryDetail() {
         }
     };
 
-    // --- NEW: Handler for admin artwork uploads ---
     const handleAdminUpload = async () => {
         if (!isAdmin || !file) return;
-
         const formData = new FormData();
         formData.append('title', title);
         formData.append('year', year);
         formData.append('file', file);
-
         try {
             await authApiClient.post(`/admin/galleries/${studentId}/artworks`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
             alert("Kunstwerk succesvol toegevoegd aan de galerij van deze student!");
             setShowUploadModal(false);
             setTitle("");
             setYear("");
             setFile(null);
-            fetchGalleryDetails(); // Refresh the gallery
+            fetchGalleryDetails();
         } catch (err) {
             console.error("Admin upload failed:", err);
             alert("Er ging iets mis tijdens het uploaden.");
         }
     };
-
 
     if (loading) return <p className="gallery-detail-message">Laden...</p>;
     if (error) return <p className="gallery-detail-message error">{error}</p>;
@@ -130,7 +121,6 @@ function PublicGalleryDetail() {
                 <header className="gallery-detail-header">
                     <h1>Galerij van {artistName}</h1>
                     <div className="header-controls">
-                        {/* --- NEW: Conditional upload button for admin --- */}
                         {isAdmin && (
                             <button className="admin-upload-button" onClick={() => setShowUploadModal(true)}>
                                 Upload Kunstwerk
@@ -153,7 +143,7 @@ function PublicGalleryDetail() {
             {selectedArtwork && (
                 <ArtworkModal
                     artwork={selectedArtwork}
-                    artistName={artistName}
+                    artist={selectedArtwork.artist} // Pass the entire artist object
                     onClose={() => setSelectedArtwork(null)}
                     isOwner={isOwner}
                     isAdmin={isAdmin}
@@ -165,7 +155,6 @@ function PublicGalleryDetail() {
                 />
             )}
 
-            {/* --- NEW: Admin Upload Modal --- */}
             {isAdmin && showUploadModal && (
                 <UploadModal
                     title={title}
