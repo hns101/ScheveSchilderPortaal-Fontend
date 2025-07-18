@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './ArtworkModal.css';
+
+// Helper function to format the display name
+const getDisplayName = (artist) => {
+    if (!artist || !artist.firstname) return 'Onbekende Artiest';
+    const lastNameInitial = artist.lastname ? ` ${artist.lastname}.` : '';
+    return `${artist.firstname}${lastNameInitial}`;
+};
 
 const ArtworkModal = ({
                           artwork,
-                          artistName,
+                          artist, // Changed from artistName to artist object
                           onClose,
                           isOwner,
                           isAdmin,
@@ -12,7 +20,7 @@ const ArtworkModal = ({
                           collections,
                           onAddToCollection,
                           onAdminDelete,
-                          onRemoveFromCollection // New prop for removing from a collection
+                          onRemoveFromCollection
                       }) => {
     const [selectedCollection, setSelectedCollection] = useState('');
 
@@ -27,6 +35,8 @@ const ArtworkModal = ({
         }
     };
 
+    const artistName = getDisplayName(artist);
+
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={handleModalContentClick}>
@@ -37,10 +47,18 @@ const ArtworkModal = ({
                 <div className="modal-info">
                     <h2 className="modal-title">{artwork.title}</h2>
                     <p className="modal-detail"><strong>Jaar:</strong> {artwork.year}</p>
-                    <p className="modal-detail"><strong>Kunstenaar:</strong> {artistName}</p>
+                    <p className="modal-detail">
+                        <strong>Kunstenaar:</strong>
+                        {artist && artist.id ? (
+                            <Link to={`/gallery/${artist.id}`} className="artist-link" onClick={onClose}>
+                                {artistName}
+                            </Link>
+                        ) : (
+                            <span> {artistName}</span>
+                        )}
+                    </p>
 
                     <div className="modal-actions">
-                        {/* This button appears if it's a user gallery and viewer is owner/admin */}
                         {(isOwner || (isAdmin && onSetCover)) && (
                             <>
                                 {isCover ? (
@@ -50,19 +68,14 @@ const ArtworkModal = ({
                                 )}
                             </>
                         )}
-
-                        {/* This button appears if it's a collection and viewer is admin */}
                         {isAdmin && onRemoveFromCollection && (
                             <button className="delete-button" onClick={() => onRemoveFromCollection(artwork.id)}>Verwijder uit Collectie</button>
                         )}
-
-                        {/* This button appears if viewer is admin */}
                         {isAdmin && onAdminDelete && (
                             <button className="delete-button" onClick={() => onAdminDelete(artwork.id)}>Verwijder Kunstwerk</button>
                         )}
                     </div>
 
-                    {/* This section appears if it's a user gallery and viewer is admin */}
                     {isAdmin && onAddToCollection && (
                         <div className="admin-collection-adder">
                             <select

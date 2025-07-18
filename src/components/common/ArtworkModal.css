@@ -114,3 +114,7 @@
     background-color: #ccc;
     cursor: not-allowed;
 }
+.artist-link:visited , .artist-link {
+    margin-left: 0.5rem;
+    color: var(--text-color);
+}

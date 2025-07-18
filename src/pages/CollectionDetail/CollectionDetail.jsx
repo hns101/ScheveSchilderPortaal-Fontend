@@ -32,7 +32,6 @@ function CollectionDetail() {
         fetchCollectionDetails();
     }, [fetchCollectionDetails]);
 
-    // --- NEW: Handler for setting the collection's cover photo ---
     const handleSetCover = async (artworkId) => {
         if (!isAdmin) return;
         try {
@@ -46,7 +45,6 @@ function CollectionDetail() {
         }
     };
 
-    // --- NEW: Handler for removing an artwork from the collection ---
     const handleRemoveFromCollection = async (artworkId) => {
         if (!isAdmin) return;
         if (!window.confirm("Weet je zeker dat je dit kunstwerk uit de collectie wilt verwijderen?")) return;
@@ -96,13 +94,12 @@ function CollectionDetail() {
             {selectedArtwork && (
                 <ArtworkModal
                     artwork={selectedArtwork}
-                    artistName={selectedArtwork.artist?.firstname} // Get artist name from the artwork itself
+                    artist={selectedArtwork.artist} // Pass the entire artist object
                     onClose={() => setSelectedArtwork(null)}
                     isAdmin={isAdmin}
                     isCover={collection?.coverArtworkId === selectedArtwork.id}
                     onSetCover={handleSetCover}
                     onRemoveFromCollection={handleRemoveFromCollection}
-                    // We don't need owner-specific logic here, only admin logic
                 />
             )}
         </>
