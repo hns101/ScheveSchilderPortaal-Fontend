@@ -38,7 +38,7 @@ const ArtworkModal = ({
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={handleModalContentClick}>
+            <div className="modal-content-photo" onClick={handleModalContentClick}>
                 <button className="modal-close-button" onClick={onClose}>×</button>
 
                 {/* --- STRUCTURE CORRECTION: Image and Info are now siblings --- */}

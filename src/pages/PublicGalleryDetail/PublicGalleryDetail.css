@@ -118,3 +118,6 @@
     margin-top: 0.5rem;
     margin-right: 1rem;
 }
+#content-modal-admin-photo{
+    flex-direction: column;
+}

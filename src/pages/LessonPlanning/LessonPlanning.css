@@ -386,6 +386,7 @@
     margin-bottom: 20px;
 }
 
+
 @media (max-width: 1134px) {
     .lesson-editor-box {
         flex-direction: column;
