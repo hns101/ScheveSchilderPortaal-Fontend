@@ -2,15 +2,17 @@
     padding: 2rem;
     color: var(--text-color);
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    /* On large screens, display side-by-side */
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
     font-family: sans-serif;
     gap: 4rem;
 }
 
 .management-section {
     width: 100%;
-    max-width: 800px;
+    max-width: 450px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -30,7 +32,6 @@
     margin-bottom: 1.5rem;
 }
 
-/* --- NEW: Style for the public hub link --- */
 .view-public-hub-button {
     display: inline-block;
     background-color: var(--brown);
@@ -45,7 +46,6 @@
 .view-public-hub-button:hover {
     background-color: var(--mid-brown);
 }
-/* --- End of new styles --- */
 
 .save-order-button {
     background-color: #28a745;
@@ -124,8 +124,8 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.8rem;
-    text-decoration: none; /* For Link component */
-    display: inline-block; /* For Link component */
+    text-decoration: none;
+    display: inline-block;
     text-align: center;
 }
 
@@ -139,12 +139,10 @@
     color: white;
 }
 
-/* --- NEW: Style for the visit button --- */
 .visit-gallery-button {
     background-color: #6c757d;
     color: white;
 }
-/* --- End of new styles --- */
 
 .create-collection-form {
     display: flex;
@@ -173,4 +171,18 @@
 .error-message {
     color: #d9534f;
     font-weight: bold;
+}
+
+/* --- NEW: Media Query for Responsive Layout --- */
+@media (max-width: 960px) {
+    .admin-gallery-manager {
+        /* On smaller screens, stack the sections vertically */
+        flex-direction: column;
+        align-items: center; /* Center the sections in the viewport */
+    }
+
+    .management-section {
+        /* Allow sections to take more width on smaller screens */
+        max-width: 600px;
+    }
 }
