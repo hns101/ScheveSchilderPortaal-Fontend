@@ -170,8 +170,8 @@
 }
 
 /* --- Responsive Design for Mobile --- */
-@media (max-width: 830px) {
-    .modal-content {
+@media (max-width: 888px) {
+    .modal-content-photo {
         /* On small screens, stack image on top of text */
         flex-direction: column;
         height: auto; /* Allow height to be determined by content */
