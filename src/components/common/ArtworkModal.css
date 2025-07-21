@@ -10,22 +10,23 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    padding: 20px;
+    padding: 1rem;
     box-sizing: border-box;
 }
 
-/* The white box holding the content */
+/* The main white container for the modal content */
 .modal-content {
     background-color: #fff;
     border-radius: 8px;
     position: relative;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    /* On large screens, image is on the left, text on the right */
+    flex-direction: row;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    /* Set max dimensions to prevent the modal from ever being larger than the screen */
-    width: 90vw;
-    max-height: 95vh;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto; /* Let content determine width */
+    height: auto; /* Let content determine height */
 }
 
 /* The 'X' close button */
@@ -36,17 +37,18 @@
     background: none;
     border: none;
     font-size: 2.5rem;
-    color: #333;
+    color: #888;
     cursor: pointer;
     line-height: 1;
     z-index: 10;
 }
+.modal-close-button:hover {
+    color: #333;
+}
 
-/* --- REVISED STYLES --- */
-
-/* The container for the image */
+/* The container for the image on the left */
 .modal-image-container {
-    /* This container will be flexible and provide padding */
+    flex-shrink: 0; /* Prevent the image container from shrinking */
     padding: 2rem;
     box-sizing: border-box;
     display: flex;
@@ -56,46 +58,86 @@
 
 /* The image itself */
 .modal-image-container img {
-    /* The image will scale up or down to fit within these viewport limits, maintaining its aspect ratio */
-    max-width: 85vw;
-    max-height: 75vh; /* A bit less than the modal's max height to leave room for text */
-    object-fit: contain; /* This is the key: it ensures the whole image is visible without distortion */
+    max-width: 50vw;  /* Limit width on large screens */
+    max-height: 85vh; /* Limit height */
+    object-fit: contain;
+    border-radius: 4px;
 }
 
-/* --- END OF REVISED STYLES --- */
-
-
-/* The text block below the image */
+/* The text and actions block on the right */
 .modal-info {
-    text-align: center;
-    padding: 1rem 1.5rem;
+    flex-grow: 1; /* Allow the info block to take up remaining space */
+    padding: 0.5rem;
+    text-align: left;
     color: var(--text-color);
-    background-color: #fff;
-    width: 100%;
-    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 300px; /* Ensure info block has a minimum width */
 }
 
 .modal-title {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.5rem;
+    margin: 0 0 1rem 0;
+    font-size: 1.8rem;
 }
 
 .modal-detail {
     margin: 0.25rem 0;
     color: #555;
+    font-size: 1rem;
+}
+
+.artist-link, .artist-link:visited {
+    margin-left: 0.5rem;
+    color: var(--brown);
+    font-weight: bold;
+    text-decoration: none;
+}
+.artist-link:hover {
+    text-decoration: underline;
+}
+
+.modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 200px;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.set-cover-button, .delete-button {
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.set-cover-button {
+    background-color: #28a745;
+    color: white;
+}
+.set-cover-button.disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+.delete-button {
+    background-color: #dc3545;
+    color: white;
 }
 
 .admin-collection-adder {
     display: flex;
     gap: 0.5rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #eee;
+    margin-top: 1.5rem;
     width: 100%;
-    justify-content: center;
 }
 
 .admin-collection-adder select {
+    flex-grow: 1;
     padding: 0.5rem;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -109,12 +151,35 @@
     color: white;
     cursor: pointer;
 }
-
 .admin-collection-adder button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
-.artist-link:visited , .artist-link {
-    margin-left: 0.5rem;
-    color: var(--text-color);
+
+/* --- Responsive Design for Mobile --- */
+@media (max-width: 830px) {
+    .modal-content {
+        /* On small screens, stack image on top of text */
+        flex-direction: column;
+        height: auto; /* Allow height to be determined by content */
+        max-height: 95vh;
+        overflow-y: auto; /* Allow scrolling if content is too tall */
+    }
+
+    .modal-image-container img {
+        max-width: 85vw; /* Allow image to be wider on mobile */
+        max-height: 50vh; /* Limit image height to leave room for text */
+    }
+
+    .modal-info {
+        text-align: center;
+        min-width: unset; /* Remove min-width on mobile */
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .modal-actions {
+        justify-content: center;
+        max-width: 500px;
+    }
 }

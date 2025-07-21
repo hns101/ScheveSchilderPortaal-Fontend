@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ArtworkModal.css';
 
-// Helper function to format the display name
 const getDisplayName = (artist) => {
     if (!artist || !artist.firstname) return 'Onbekende Artiest';
     const lastNameInitial = artist.lastname ? ` ${artist.lastname}.` : '';
@@ -11,7 +10,7 @@ const getDisplayName = (artist) => {
 
 const ArtworkModal = ({
                           artwork,
-                          artist, // Changed from artistName to artist object
+                          artist,
                           onClose,
                           isOwner,
                           isAdmin,
@@ -41,9 +40,12 @@ const ArtworkModal = ({
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={handleModalContentClick}>
                 <button className="modal-close-button" onClick={onClose}>×</button>
+
+                {/* --- STRUCTURE CORRECTION: Image and Info are now siblings --- */}
                 <div className="modal-image-container">
                     <img src={imageUrl} alt={artwork.title} />
                 </div>
+
                 <div className="modal-info">
                     <h2 className="modal-title">{artwork.title}</h2>
                     <p className="modal-detail"><strong>Jaar:</strong> {artwork.year}</p>
