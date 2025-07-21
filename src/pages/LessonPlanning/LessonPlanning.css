@@ -193,19 +193,7 @@
     margin-bottom: 10px;
     color: var(--text-color);
 }
-.adding-students {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width: 80vw;
-    max-width: 700px;
-    background: var(--mid-brown);
-    min-height: 50px;
-    border-radius: 10px;
-    flex-wrap: wrap;
-    padding: 10px;
-}
+
 .lesson-student-adding-input{
     background-color: var(--mid-brown);
     margin-bottom: -1px;
@@ -213,6 +201,7 @@
     color: var(--white);
     border: none;
     border-radius: 10px 10px 0 0;
+    margin-left: 40px;
 }
 .adding-students-names{
     color: var(--text-color);
@@ -240,19 +229,7 @@
 .submit-week-button:hover {
     background-color: var(--green);
 }
-.adding-week-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 90vw;
-    max-width: 700px;
-    background: var(--light-gray);
-    box-shadow: var(--box-black) 1px 1px 5px;
-    min-height: 550px;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 40px 0;
-}
+
 .input-week-item {
     display: flex;
     flex-direction: row;
@@ -351,4 +328,69 @@
     border: 1px solid #ffeeba;
     border-radius: 8px;
     color: #856404;
+}
+
+.lesson-editor-box {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1rem;
+    width: 80vw;
+    margin-top: 1rem;
+
+}
+
+.student-selector-admin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    max-width: 400px;
+
+}
+.student-selector-admin:first-child {
+    /*max-width: 300px;*/
+}
+#weekcard-adder-admin {
+    margin: 1rem;
+    display: flex;
+}
+.adding-students {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    max-width: 700px;
+    background: var(--mid-brown);
+    min-height: 50px;
+    border-radius: 10px;
+    flex-wrap: wrap;
+    padding: 10px;
+    box-shadow: var(--box-black) 1px 1px 5px;
+}
+
+.adding-week-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90vw;
+    max-width: 550px;
+    background: var(--light-brown);
+    box-shadow: var(--box-black) 1px 1px 5px;
+    min-height: 500px;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 1134px) {
+    .lesson-editor-box {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
 }

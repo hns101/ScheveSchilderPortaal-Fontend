@@ -173,7 +173,9 @@
     font-weight: bold;
 }
 
-/* --- NEW: Media Query for Responsive Layout --- */
+
+
+/* --- Media Query for Responsive Layout --- */
 @media (max-width: 960px) {
     .admin-gallery-manager {
         /* On smaller screens, stack the sections vertically */

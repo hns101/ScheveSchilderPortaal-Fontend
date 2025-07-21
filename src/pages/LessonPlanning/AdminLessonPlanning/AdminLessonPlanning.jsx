@@ -1,7 +1,7 @@
 import "../LessonPlanning.css";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import useAdminWeeks from "../../../hooks/useAdminWeeks.js";
-import { handleAddStudent, handleRemoveStudent } from "../../../helpers/adminLessonHelpers.js";
+import {handleAddStudent, handleRemoveStudent} from "../../../helpers/adminLessonHelpers.js";
 import axiosWithAuth from "../../../helpers/axiosWithAuth.js";
 
 import LessonCard from "../../../components/admin/LessonCard.jsx";
@@ -41,13 +41,13 @@ function AdminLessonPlanning() {
     const currentWeek = weekData[currentWeekIndex];
 
     const modifiedHandleAddStudent = (params) =>
-        handleAddStudent({ ...params, axiosInstance: axiosWithAuth });
+        handleAddStudent({...params, axiosInstance: axiosWithAuth});
 
     const modifiedHandleRemoveStudent = (params) =>
-        handleRemoveStudent({ ...params, axiosInstance: axiosWithAuth });
+        handleRemoveStudent({...params, axiosInstance: axiosWithAuth});
 
     if (loading) return <p className="loading">Loading...</p>;
-    if (error) return <p style={{ color: "red" }}>{error}</p>;
+    if (error) return <p style={{color: "red"}}>{error}</p>;
 
     return (
         <main className="main">
@@ -89,31 +89,34 @@ function AdminLessonPlanning() {
 
                     <p className="removal-message">{message}</p>
 
-                    <LessonSelector
-                        lessons={currentWeek.lessons ?? []}
-                        selectedLessonId={selectedLessonId}
-                        onChange={setSelectedLessonId}
-                    />
-
-                    <StudentList
-                        students={allStudents}
-                        onStudentClick={(student) =>
-                            modifiedHandleAddStudent({
-                                weekId: currentWeek.id,
-                                lessonId: selectedLessonId,
-                                student,
-                                setMessage,
-                                onSuccess: fetchWeeks,
-                            })
-                        }
-                    />
-
-                    <AddWeekCard
-                        editableWeek={editableWeek}
-                        setEditableWeek={setEditableWeek}
-                        allStudents={allStudents}
-                        handleSubmitWeek={() => addWeek(editableWeek)}
-                    />
+                    <section className="lesson-editor-box">
+                        <div className="student-selector-admin">
+                            <LessonSelector
+                                lessons={currentWeek.lessons ?? []}
+                                selectedLessonId={selectedLessonId}
+                                onChange={setSelectedLessonId}
+                            />
+                            <StudentList
+                                students={allStudents}
+                                onStudentClick={(student) =>
+                                    modifiedHandleAddStudent({
+                                        weekId: currentWeek.id,
+                                        lessonId: selectedLessonId,
+                                        student,
+                                        setMessage,
+                                        onSuccess: fetchWeeks,
+                                    })
+                                }
+                            />
+                        </div>
+                        <AddWeekCard
+                            id="weekcard-adder-admin"
+                            editableWeek={editableWeek}
+                            setEditableWeek={setEditableWeek}
+                            allStudents={allStudents}
+                            handleSubmitWeek={() => addWeek(editableWeek)}
+                        />
+                    </section>
                 </div>
             ) : (
                 <p>Geen weekdata beschikbaar.</p>
