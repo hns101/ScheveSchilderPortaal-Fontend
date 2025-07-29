@@ -19,7 +19,8 @@ const ArtworkModal = ({
                           collections,
                           onAddToCollection,
                           onAdminDelete,
-                          onRemoveFromCollection
+                          onRemoveFromCollection,
+                          onDelete // New, more generic delete prop for owners
                       }) => {
     const [selectedCollection, setSelectedCollection] = useState('');
 
@@ -40,12 +41,9 @@ const ArtworkModal = ({
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content-photo" onClick={handleModalContentClick}>
                 <button className="modal-close-button" onClick={onClose}>×</button>
-
-                {/* --- STRUCTURE CORRECTION: Image and Info are now siblings --- */}
                 <div className="modal-image-container">
                     <img src={imageUrl} alt={artwork.title} />
                 </div>
-
                 <div className="modal-info">
                     <h2 className="modal-title">{artwork.title}</h2>
                     <p className="modal-detail"><strong>Jaar:</strong> {artwork.year}</p>
@@ -69,6 +67,10 @@ const ArtworkModal = ({
                                     <button className="set-cover-button" onClick={() => onSetCover(artwork.id)}>Instellen als Omslagfoto</button>
                                 )}
                             </>
+                        )}
+                        {/* --- UPDATED: Logic for Delete Buttons --- */}
+                        {isOwner && onDelete && (
+                            <button className="delete-button" onClick={() => onDelete(artwork.id)}>Verwijder</button>
                         )}
                         {isAdmin && onRemoveFromCollection && (
                             <button className="delete-button" onClick={() => onRemoveFromCollection(artwork.id)}>Verwijder uit Collectie</button>
