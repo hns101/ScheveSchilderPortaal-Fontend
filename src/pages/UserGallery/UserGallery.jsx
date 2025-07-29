@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import UploadModal from '../../components/user/UploadModal.jsx';
 import GalleryGrid from '../../components/user/GalleryGrid.jsx';
-// --- CHANGE: Import the shared, powerful modal ---
 import ArtworkModal from '../../components/common/ArtworkModal.jsx';
 import useGallery from '../../hooks/useGallery.js';
 import { uploadArtwork } from '../../helpers/artworkHelpers.js';
@@ -52,7 +51,6 @@ function UserGallery() {
     const handleDelete = async (artworkId) => {
         if (!window.confirm("Weet je zeker dat je dit kunstwerk wilt verwijderen?")) return;
         try {
-            // Note: This uses the user-specific delete endpoint
             await authApiClient.delete(`/galleries/${user.email}/artworks/${artworkId}`);
             alert("Kunstwerk verwijderd");
             setShowPreview(false);
@@ -64,8 +62,6 @@ function UserGallery() {
     };
 
     const openPreview = async (art) => {
-        // We don't need to load a separate preview image anymore,
-        // the shared modal handles it.
         setSelectedArtwork(art);
         setShowPreview(true);
     };
@@ -139,17 +135,16 @@ function UserGallery() {
                 />
             )}
 
-            {/* --- CHANGE: Use the shared ArtworkModal --- */}
             {showPreview && selectedArtwork && (
                 <ArtworkModal
                     artwork={selectedArtwork}
-                    artist={user.student} // Pass the student object as the artist
+                    artist={user.student}
                     onClose={closePreview}
-                    isOwner={true} // The user is always the owner on this page
-                    isAdmin={user.roles?.includes("ROLE_ADMIN")} // Check if user is also an admin
+                    isOwner={true}
+                    isAdmin={user.roles?.includes("ROLE_ADMIN")}
                     isCover={gallery?.coverArtworkId === selectedArtwork.id}
                     onSetCover={handleSetCover}
-                    onAdminDelete={handleDelete} // User's own delete function
+                    onDelete={handleDelete} // --- CHANGE: Use the new onDelete prop ---
                 />
             )}
 
