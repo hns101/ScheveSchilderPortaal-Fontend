@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import UploadModal from '../../components/user/UploadModal.jsx';
 import GalleryGrid from '../../components/user/GalleryGrid.jsx';
+// --- CHANGE: Import the one, shared modal ---
 import ArtworkModal from '../../components/common/ArtworkModal.jsx';
 import useGallery from '../../hooks/useGallery.js';
 import { uploadArtwork } from '../../helpers/artworkHelpers.js';
@@ -26,11 +27,7 @@ function UserGallery() {
         error,
         fetchArtworks,
         fetchGallery,
-        deleteArtwork,
         setCoverPhoto,
-        previewImageUrl,
-        loadPreviewImage,
-        clearPreviewImage
     } = useGallery(user.email);
 
     const handleUpload = async () => {
@@ -61,7 +58,7 @@ function UserGallery() {
         }
     };
 
-    const openPreview = async (art) => {
+    const openPreview = (art) => {
         setSelectedArtwork(art);
         setShowPreview(true);
     };
@@ -135,6 +132,7 @@ function UserGallery() {
                 />
             )}
 
+            {/* --- CHANGE: Use the shared ArtworkModal with all correct props --- */}
             {showPreview && selectedArtwork && (
                 <ArtworkModal
                     artwork={selectedArtwork}
@@ -144,7 +142,7 @@ function UserGallery() {
                     isAdmin={user.roles?.includes("ROLE_ADMIN")}
                     isCover={gallery?.coverArtworkId === selectedArtwork.id}
                     onSetCover={handleSetCover}
-                    onDelete={handleDelete} // --- CHANGE: Use the new onDelete prop ---
+                    onDelete={handleDelete}
                 />
             )}
 
