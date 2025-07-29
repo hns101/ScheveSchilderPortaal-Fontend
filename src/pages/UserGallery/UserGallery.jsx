@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import UploadModal from '../../components/user/UploadModal.jsx';
 import GalleryGrid from '../../components/user/GalleryGrid.jsx';
-import ArtworkPreviewModal from '../../components/user/ArtworkPreviewModal.jsx';
+// --- CHANGE: Import the shared, powerful modal ---
+import ArtworkModal from '../../components/common/ArtworkModal.jsx';
 import useGallery from '../../hooks/useGallery.js';
 import { uploadArtwork } from '../../helpers/artworkHelpers.js';
 import { useAuth } from '../../context/AuthContext.jsx';
@@ -27,7 +28,7 @@ function UserGallery() {
         fetchArtworks,
         fetchGallery,
         deleteArtwork,
-        setCoverPhoto, // Get the new function from the hook
+        setCoverPhoto,
         previewImageUrl,
         loadPreviewImage,
         clearPreviewImage
@@ -50,9 +51,9 @@ function UserGallery() {
 
     const handleDelete = async (artworkId) => {
         if (!window.confirm("Weet je zeker dat je dit kunstwerk wilt verwijderen?")) return;
-
         try {
-            await deleteArtwork(artworkId);
+            // Note: This uses the user-specific delete endpoint
+            await authApiClient.delete(`/galleries/${user.email}/artworks/${artworkId}`);
             alert("Kunstwerk verwijderd");
             setShowPreview(false);
             fetchArtworks();
@@ -63,18 +64,13 @@ function UserGallery() {
     };
 
     const openPreview = async (art) => {
-        try {
-            await loadPreviewImage(art.id);
-            setSelectedArtwork(art);
-            setShowPreview(true);
-        } catch (err) {
-            console.error("Preview mislukt", err);
-            alert("Kon afbeelding niet laden.");
-        }
+        // We don't need to load a separate preview image anymore,
+        // the shared modal handles it.
+        setSelectedArtwork(art);
+        setShowPreview(true);
     };
 
     const closePreview = () => {
-        clearPreviewImage();
         setShowPreview(false);
         setSelectedArtwork(null);
     };
@@ -91,13 +87,12 @@ function UserGallery() {
         }
     };
 
-    // --- Function to handle setting the cover photo ---
     const handleSetCover = async (artworkId) => {
         try {
             await setCoverPhoto(artworkId);
             alert("Omslagfoto succesvol ingesteld!");
-            closePreview(); // Close the modal
-            fetchGallery(); // Refresh gallery data to show the change
+            closePreview();
+            fetchGallery();
         } catch (err) {
             console.error("Set cover failed:", err);
             alert("Kon omslagfoto niet instellen.");
@@ -144,14 +139,17 @@ function UserGallery() {
                 />
             )}
 
+            {/* --- CHANGE: Use the shared ArtworkModal --- */}
             {showPreview && selectedArtwork && (
-                <ArtworkPreviewModal
+                <ArtworkModal
                     artwork={selectedArtwork}
-                    imageUrl={previewImageUrl}
-                    onDelete={handleDelete}
+                    artist={user.student} // Pass the student object as the artist
                     onClose={closePreview}
-                    onSetCover={handleSetCover} // Pass the new function
-                    isCover={gallery?.coverArtworkId === selectedArtwork.id} // Check if it's the current cover
+                    isOwner={true} // The user is always the owner on this page
+                    isAdmin={user.roles?.includes("ROLE_ADMIN")} // Check if user is also an admin
+                    isCover={gallery?.coverArtworkId === selectedArtwork.id}
+                    onSetCover={handleSetCover}
+                    onAdminDelete={handleDelete} // User's own delete function
                 />
             )}
 
