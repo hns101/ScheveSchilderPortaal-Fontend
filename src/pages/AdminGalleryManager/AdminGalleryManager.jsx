@@ -31,6 +31,7 @@ function SortableGalleryItem({ id, gallery, onStatusChange }) {
             </div>
             <div className="item-actions">
                 <ToggleSwitch
+                    id="gallery-public-toggle-switch"
                     checked={gallery.isPublic}
                     onChange={(newStatus) => onStatusChange(gallery.id, newStatus)}
                 />

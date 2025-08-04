@@ -174,7 +174,9 @@
 }
 
 
-
+.item-actions label {
+    margin-top: 0;
+}
 /* --- Media Query for Responsive Layout --- */
 @media (max-width: 960px) {
     .admin-gallery-manager {
