@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import UploadModal from '../../components/user/UploadModal.jsx';
 import GalleryGrid from '../../components/user/GalleryGrid.jsx';
-// --- CHANGE: Import the one, shared modal ---
 import ArtworkModal from '../../components/common/ArtworkModal.jsx';
 import useGallery from '../../hooks/useGallery.js';
 import { uploadArtwork } from '../../helpers/artworkHelpers.js';
@@ -31,6 +30,12 @@ function UserGallery() {
     } = useGallery(user.email);
 
     const handleUpload = async () => {
+        // --- NEW: Client-side validation ---
+        if (!title.trim() || !year.trim() || !file) {
+            alert("Vul alstublieft alle velden in (Titel, Jaar, en Bestand) voordat u uploadt.");
+            return; // Stop the function if validation fails
+        }
+
         try {
             await uploadArtwork({ email: user.email, title, year, file });
             alert("Kunstwerk succesvol toegevoegd!");
@@ -132,7 +137,6 @@ function UserGallery() {
                 />
             )}
 
-            {/* --- CHANGE: Use the shared ArtworkModal with all correct props --- */}
             {showPreview && selectedArtwork && (
                 <ArtworkModal
                     artwork={selectedArtwork}
