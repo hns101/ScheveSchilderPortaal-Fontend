@@ -2,31 +2,35 @@ import React, { useState } from 'react';
 import './Login.css';
 import logo from '../../assets/ScheveSchilder-logo.svg';
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useNavigate, Link } from "react-router-dom"; // Import Link
+import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const { login } = useAuth(); // Get login function from AuthContext
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(""); // Clear previous errors
+        setError("");
 
         try {
-            const response = await login(email, password);// Call login function
-            if (response.status === 401) {
-                setError("Login mislukt! Controleer je e-mail en wachtwoord.");
-            } else {
-                navigate('/planning-beheer'); // Try's to direct to admin page, user will be redirected by PrivateRoute
-            }
+            // This will now only handle the success case
+            await login(email, password);
+            navigate('/planning-beheer'); // Redirect on successful login
 
         } catch (err) {
-            console.error(err.message);
-            setError(err.message);
+            // All errors are now caught here. We check the error object for details.
+            if (err.response && err.response.status === 401) {
+                // If the error has a response object with status 401, it's a failed login
+                setError("Login mislukt! Controleer je e-mail en wachtwoord.");
+            } else {
+                // For any other errors (network issues, server down, etc.)
+                console.error("An unexpected error occurred:", err.message);
+                setError("Er is een onverwachte fout opgetreden. Probeer het later opnieuw.");
+            }
         }
     };
 
@@ -64,7 +68,6 @@ function Login() {
                     </button>
                     {error && <p className="error-message">{error}</p>}
 
-                    {/* --- NEW: Forgot Password Link --- */}
                     <div className="forgot-password-container-link">
                         <Link className="forgot-password-link" to="/forgot-password">Wachtwoord vergeten?</Link>
                     </div>

@@ -39,7 +39,6 @@ function PublicGalleryDetail() {
             }
         } catch (err) {
             setError('Deze galerij kon niet worden gevonden of is privé.');
-            console.error("Error fetching data:", err);
         } finally {
             setLoading(false);
         }
@@ -52,8 +51,11 @@ function PublicGalleryDetail() {
     const handleSetCover = async (artworkId) => {
         if (!isAdmin && !isOwner) return;
         try {
-            // Use the admin endpoint which works with studentId
-            await authApiClient.put(`/admin/galleries/${studentId}/cover/${artworkId}`);
+            if (isAdmin) {
+                await authApiClient.put(`/admin/galleries/${studentId}/cover/${artworkId}`);
+            } else {
+                await authApiClient.put(`/galleries/${user.email}/cover/${artworkId}`);
+            }
             alert("Omslagfoto succesvol ingesteld!");
             setSelectedArtwork(null);
             fetchGalleryDetails();
@@ -74,16 +76,21 @@ function PublicGalleryDetail() {
         }
     };
 
-    const handleAdminDelete = async (artworkId) => {
-        if (!isAdmin) return;
-        if (!window.confirm("Weet je zeker dat je dit kunstwerk permanent wilt verwijderen? Dit kan niet ongedaan worden gemaakt.")) return;
+    const handleDelete = async (artworkId) => {
+        if (!isAdmin && !isOwner) return;
+        if (!window.confirm("Weet je zeker dat je dit kunstwerk wilt verwijderen?")) return;
+
         try {
-            await authApiClient.delete(`/admin/artworks/${artworkId}`);
+            if (isAdmin) {
+                await authApiClient.delete(`/admin/artworks/${artworkId}`);
+            } else {
+                await authApiClient.delete(`/galleries/${user.email}/artworks/${artworkId}`);
+            }
             alert("Kunstwerk succesvol verwijderd.");
             setSelectedArtwork(null);
             fetchGalleryDetails();
         } catch (err) {
-            console.error("Admin delete failed:", err);
+            console.error("Delete failed:", err);
             alert("Kon kunstwerk niet verwijderen.");
         }
     };
@@ -143,7 +150,7 @@ function PublicGalleryDetail() {
             {selectedArtwork && (
                 <ArtworkModal
                     artwork={selectedArtwork}
-                    artist={selectedArtwork.artist} // Pass the entire artist object
+                    artist={selectedArtwork.artist}
                     onClose={() => setSelectedArtwork(null)}
                     isOwner={isOwner}
                     isAdmin={isAdmin}
@@ -151,7 +158,7 @@ function PublicGalleryDetail() {
                     onSetCover={handleSetCover}
                     collections={collections}
                     onAddToCollection={handleAddToCollection}
-                    onAdminDelete={handleAdminDelete}
+                    onDelete={handleDelete}
                 />
             )}
 

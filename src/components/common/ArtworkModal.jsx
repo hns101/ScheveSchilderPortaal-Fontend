@@ -18,9 +18,8 @@ const ArtworkModal = ({
                           onSetCover,
                           collections,
                           onAddToCollection,
-                          onAdminDelete,
                           onRemoveFromCollection,
-                          onDelete // New, more generic delete prop for owners
+                          onDelete // This is our unified delete prop
                       }) => {
     const [selectedCollection, setSelectedCollection] = useState('');
 
@@ -59,7 +58,7 @@ const ArtworkModal = ({
                     </p>
 
                     <div className="modal-actions">
-                        {(isOwner || (isAdmin && onSetCover)) && (
+                        {(isOwner || isAdmin) && onSetCover && (
                             <>
                                 {isCover ? (
                                     <button className="set-cover-button disabled" disabled>Huidige Omslagfoto</button>
@@ -68,15 +67,12 @@ const ArtworkModal = ({
                                 )}
                             </>
                         )}
-                        {/* --- UPDATED: Logic for Delete Buttons --- */}
-                        {isOwner && onDelete && (
-                            <button className="delete-button" onClick={() => onDelete(artwork.id)}>Verwijder</button>
-                        )}
                         {isAdmin && onRemoveFromCollection && (
                             <button className="delete-button" onClick={() => onRemoveFromCollection(artwork.id)}>Verwijder uit Collectie</button>
                         )}
-                        {isAdmin && onAdminDelete && (
-                            <button className="delete-button" onClick={() => onAdminDelete(artwork.id)}>Verwijder Kunstwerk</button>
+                        {/* --- UPDATED: Show delete button for owner OR admin --- */}
+                        {(isOwner || isAdmin) && onDelete && (
+                            <button className="delete-button" onClick={() => onDelete(artwork.id)}>Verwijder Kunstwerk</button>
                         )}
                     </div>
 
