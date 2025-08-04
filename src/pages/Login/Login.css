@@ -67,6 +67,10 @@
 .forgot-password-link:visited {
     color: var(--mid-brown);
 }
+#login-error-message {
+    margin-top: -1.5rem;
+    margin-bottom: -1.5rem;
+}
 
 @media (max-width: 768px) {
     .login-container {

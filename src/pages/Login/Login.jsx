@@ -66,7 +66,7 @@ function Login() {
                     <button className="login-button" type="submit">
                         Login
                     </button>
-                    {error && <p className="error-message">{error}</p>}
+                    {error && <p className="error-message" id="login-error-message">{error}</p>}
 
                     <div className="forgot-password-container-link">
                         <Link className="forgot-password-link" to="/forgot-password">Wachtwoord vergeten?</Link>
