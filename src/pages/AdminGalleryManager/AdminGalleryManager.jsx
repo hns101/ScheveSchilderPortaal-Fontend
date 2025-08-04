@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Import Link
+import { useNavigate, Link } from 'react-router-dom';
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-import { apiClient, authApiClient } from '../../api/api.js';
+import { authApiClient } from '../../api/api.js';
+import ToggleSwitch from '../../components/common/ToggleSwitch.jsx';
 import './AdminGalleryManager.css';
 
-// Helper to format the artist's name
 const getDisplayName = (student) => {
     if (!student || !student.firstname) return 'Onbekende Artiest';
     const lastNameInitial = student.lastname ? ` ${student.lastname}.` : '';
     return `${student.firstname}${lastNameInitial}`;
 };
 
-// --- Draggable Item for Student Galleries ---
-function SortableGalleryItem({ id, gallery }) {
+function SortableGalleryItem({ id, gallery, onStatusChange }) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
     const style = { transform: CSS.Transform.toString(transform), transition };
     const coverPhotoUrl = gallery.coverArtworkId
@@ -30,8 +29,11 @@ function SortableGalleryItem({ id, gallery }) {
                 <strong>{getDisplayName(gallery.student)}</strong>
                 <small>(Galerij ID: {gallery.id})</small>
             </div>
-            {/* --- NEW: Visit Gallery Button --- */}
             <div className="item-actions">
+                <ToggleSwitch
+                    checked={gallery.isPublic}
+                    onChange={(newStatus) => onStatusChange(gallery.id, newStatus)}
+                />
                 <Link to={`/gallery/${gallery.student.id}`} className="visit-gallery-button" target="_blank" rel="noopener noreferrer">
                     Bezoek
                 </Link>
@@ -40,7 +42,6 @@ function SortableGalleryItem({ id, gallery }) {
     );
 }
 
-// --- Draggable Item for Admin Collections ---
 function SortableCollectionItem({ id, collection, onDelete }) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
     const style = { transform: CSS.Transform.toString(transform), transition };
@@ -74,20 +75,18 @@ function AdminGalleryManager() {
 
     const sensors = useSensors(useSensor(PointerSensor));
 
-    // Fetch both galleries and collections on mount
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
                 const [galleriesRes, collectionsRes] = await Promise.all([
-                    apiClient.get('/public/galleries'),
+                    authApiClient.get('/admin/galleries'),
                     authApiClient.get('/admin/collections')
                 ]);
                 setGalleries(galleriesRes.data);
                 setCollections(collectionsRes.data);
             } catch (err) {
                 setError('Kon gegevens niet laden.');
-                console.error("Error fetching data:", err);
             } finally {
                 setLoading(false);
             }
@@ -95,13 +94,13 @@ function AdminGalleryManager() {
         fetchData();
     }, []);
 
-    // Drag handlers for the two separate lists
     const handleGalleryDragEnd = (event) => {
         const { active, over } = event;
         if (active.id !== over.id) {
             setGalleries((items) => arrayMove(items, items.findIndex(item => item.id === active.id), items.findIndex(item => item.id === over.id)));
         }
     };
+
     const handleCollectionDragEnd = (event) => {
         const { active, over } = event;
         if (active.id !== over.id) {
@@ -109,7 +108,6 @@ function AdminGalleryManager() {
         }
     };
 
-    // Save handlers for the two separate lists
     const handleSaveGalleryOrder = async () => {
         const orderedIds = galleries.map(g => g.id);
         try {
@@ -119,17 +117,17 @@ function AdminGalleryManager() {
             setError('Kon galerij volgorde niet opslaan.');
         }
     };
+
     const handleSaveCollectionOrder = async () => {
         const orderedIds = collections.map(c => c.id);
         try {
-            await authApiClient.put('/admin/collections/order', { galleryIds: orderedIds }); // Re-using DTO, backend expects 'galleryIds'
+            await authApiClient.put('/admin/collections/order', { galleryIds: orderedIds });
             alert('Collectie volgorde opgeslagen!');
         } catch (err) {
             setError('Kon collectie volgorde niet opslaan.');
         }
     };
 
-    // Handlers for creating and deleting collections
     const handleCreateCollection = async (e) => {
         e.preventDefault();
         if (!newCollectionName.trim()) return;
@@ -152,17 +150,28 @@ function AdminGalleryManager() {
         }
     };
 
+    const handleGalleryStatusChange = async (galleryId, newStatus) => {
+        try {
+            await authApiClient.put(`/admin/galleries/${galleryId}/status`, { isPublic: newStatus });
+            setGalleries(prevGalleries =>
+                prevGalleries.map(g =>
+                    g.id === galleryId ? { ...g, isPublic: newStatus } : g
+                )
+            );
+        } catch (err) {
+            setError('Kon de status van de galerij niet bijwerken.');
+        }
+    };
+
     return (
         <main className="admin-gallery-manager">
             {loading && <p>Laden...</p>}
             {error && <p className="error-message">{error}</p>}
 
-            {/* --- Galleries Management Section --- */}
             <div className="management-section">
                 <div className="admin-gallery-header">
                     <h2>Beheer Studentengalerijen</h2>
-                    <p>Sleep de galerijen om de weergavevolgorde op de publieke hub-pagina aan te passen.</p>
-                    {/* --- NEW: Link to Public Hub --- */}
+                    <p>Sleep de galerijen en beheer hun publieke status.</p>
                     <Link to="/galleries" className="view-public-hub-button" target="_blank" rel="noopener noreferrer">
                         Bekijk Publieke Hub
                     </Link>
@@ -171,7 +180,12 @@ function AdminGalleryManager() {
                     <ul className="gallery-list">
                         <SortableContext items={galleries.map(g => g.id)} strategy={verticalListSortingStrategy}>
                             {galleries.map((gallery) => (
-                                <SortableGalleryItem key={gallery.id} id={gallery.id} gallery={gallery} />
+                                <SortableGalleryItem
+                                    key={gallery.id}
+                                    id={gallery.id}
+                                    gallery={gallery}
+                                    onStatusChange={handleGalleryStatusChange}
+                                />
                             ))}
                         </SortableContext>
                     </ul>
@@ -181,7 +195,6 @@ function AdminGalleryManager() {
                 </button>
             </div>
 
-            {/* --- Collections Management Section --- */}
             <div className="management-section">
                 <div className="admin-gallery-header">
                     <h2>Beheer Collecties</h2>
