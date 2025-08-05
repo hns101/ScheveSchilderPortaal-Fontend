@@ -35,7 +35,7 @@ function SortableGalleryItem({ id, gallery, onStatusChange }) {
                     checked={gallery.isPublic}
                     onChange={(newStatus) => onStatusChange(gallery.id, newStatus)}
                 />
-                <Link to={`/gallery/${gallery.student.id}`} className="visit-gallery-button" target="_blank" rel="noopener noreferrer">
+                <Link to={`/gallery/${gallery.student.id}`} className="visit-gallery-button"  rel="noopener noreferrer">
                     Bezoek
                 </Link>
             </div>
@@ -173,7 +173,7 @@ function AdminGalleryManager() {
                 <div className="admin-gallery-header">
                     <h2>Beheer Studentengalerijen</h2>
                     <p>Sleep de galerijen en beheer hun publieke status.</p>
-                    <Link to="/galleries" className="view-public-hub-button" target="_blank" rel="noopener noreferrer">
+                    <Link to="/galleries" className="view-public-hub-button" rel="noopener noreferrer">
                         Bekijk Publieke Hub
                     </Link>
                 </div>

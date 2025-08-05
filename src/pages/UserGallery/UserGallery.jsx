@@ -1,14 +1,47 @@
 import './UserGallery.css';
-import { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import UploadModal from '../../components/user/UploadModal.jsx';
 import GalleryGrid from '../../components/user/GalleryGrid.jsx';
-import ArtworkModal from '../../components/common/ArtworkModal.jsx';
 import useGallery from '../../hooks/useGallery.js';
 import { uploadArtwork } from '../../helpers/artworkHelpers.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { authApiClient } from '../../api/api.js';
 import ToggleSwitch from '../../components/common/ToggleSwitch.jsx';
+import { shuffleArray } from '../../helpers/shuffleArray.js';
+
+// --- NEW: Local Modal Component, defined inside UserGallery ---
+// This modal is completely separate from the shared ArtworkModal
+function UserGalleryModal({ artwork, imageUrl, onClose, onSetCover, isCover, onDelete }) {
+    if (!artwork) return null;
+
+    const handleModalContentClick = (e) => e.stopPropagation();
+
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content-photo" onClick={handleModalContentClick}>
+                <button className="modal-close-button" onClick={onClose}>×</button>
+                <div className="modal-image-container">
+                    {/* It uses the pre-loaded imageUrl */}
+                    <img src={imageUrl} alt={artwork.title} />
+                </div>
+                <div className="modal-info">
+                    <h2 className="modal-title">{artwork.title}</h2>
+                    <p className="modal-detail"><strong>Jaar:</strong> {artwork.year}</p>
+                    <div className="modal-actions">
+                        {isCover ? (
+                            <button className="set-cover-button disabled" disabled>Huidige Omslagfoto</button>
+                        ) : (
+                            <button className="set-cover-button" onClick={() => onSetCover(artwork.id)}>Instellen als Omslagfoto</button>
+                        )}
+                        <button className="delete-button" onClick={() => onDelete(artwork.id)}>Verwijder Kunstwerk</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 
 function UserGallery() {
     const { user } = useAuth();
@@ -18,6 +51,9 @@ function UserGallery() {
     const [file, setFile] = useState(null);
     const [selectedArtwork, setSelectedArtwork] = useState(null);
     const [showPreview, setShowPreview] = useState(false);
+
+    // --- NEW: Thumbnail state is now managed here ---
+    const [thumbnails, setThumbnails] = useState({});
 
     const {
         gallery,
@@ -29,13 +65,47 @@ function UserGallery() {
         setCoverPhoto,
     } = useGallery(user.email);
 
-    const handleUpload = async () => {
-        // --- NEW: Client-side validation ---
-        if (!title.trim() || !year.trim() || !file) {
-            alert("Vul alstublieft alle velden in (Titel, Jaar, en Bestand) voordat u uploadt.");
-            return; // Stop the function if validation fails
+    // Shuffle artworks once when they are loaded
+    const shuffledArtworks = useMemo(() => shuffleArray(artworks), [artworks]);
+
+    // --- NEW: Thumbnail loading logic is now here ---
+    useEffect(() => {
+        const loadThumbnails = async () => {
+            const newThumbs = {};
+            for (const art of shuffledArtworks) {
+                try {
+                    // Note: This still uses a separate request for each image,
+                    // which is necessary for blob URLs.
+                    const res = await authApiClient.get(`/artworks/${art.id}/photo`, {
+                        responseType: "blob"
+                    });
+                    const url = URL.createObjectURL(res.data);
+                    newThumbs[art.id] = url;
+                } catch (err) {
+                    console.error(`Kan afbeelding niet laden voor artwork ${art.id}`, err);
+                }
+            }
+            // Clean up old blob URLs before setting new ones
+            Object.values(thumbnails).forEach(url => URL.revokeObjectURL(url));
+            setThumbnails(newThumbs);
+        };
+
+        if (shuffledArtworks.length > 0) {
+            loadThumbnails();
         }
 
+        // Cleanup function to revoke URLs when the component unmounts
+        return () => {
+            Object.values(thumbnails).forEach(url => URL.revokeObjectURL(url));
+        };
+    }, [shuffledArtworks]);
+
+
+    const handleUpload = async () => {
+        if (!title.trim() || !year.trim() || !file) {
+            alert("Vul alstublieft alle velden in (Titel, Jaar, en Bestand) voordat u uploadt.");
+            return;
+        }
         try {
             await uploadArtwork({ email: user.email, title, year, file });
             alert("Kunstwerk succesvol toegevoegd!");
@@ -138,12 +208,10 @@ function UserGallery() {
             )}
 
             {showPreview && selectedArtwork && (
-                <ArtworkModal
+                <UserGalleryModal
                     artwork={selectedArtwork}
-                    artist={user.student}
+                    imageUrl={thumbnails[selectedArtwork.id]}
                     onClose={closePreview}
-                    isOwner={true}
-                    isAdmin={user.roles?.includes("ROLE_ADMIN")}
                     isCover={gallery?.coverArtworkId === selectedArtwork.id}
                     onSetCover={handleSetCover}
                     onDelete={handleDelete}
@@ -151,7 +219,11 @@ function UserGallery() {
             )}
 
             <section className="gallery-inner-container">
-                <GalleryGrid artworks={artworks} onSelect={openPreview} />
+                <GalleryGrid
+                    artworks={shuffledArtworks}
+                    thumbnails={thumbnails}
+                    onSelect={openPreview}
+                />
             </section>
         </main>
     );
