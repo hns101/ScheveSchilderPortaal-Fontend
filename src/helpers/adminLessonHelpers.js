@@ -1,15 +1,15 @@
-import axios from "axios";
-
-export async function handleAddStudent({ weekId, lessonId, student, setMessage, onSuccess }) {
+// The functions now accept the 'axiosInstance' as a parameter
+export async function handleAddStudent({ weekId, lessonId, student, setMessage, onSuccess, axiosInstance }) {
     try {
-        const result = await axios.post(
-            `http://localhost:8080/weeks/${weekId}/lessons/${lessonId}/students/${student.email}`
+        // --- FIX: Use the provided axiosInstance, not the default axios ---
+        const result = await axiosInstance.post(
+            `/weeks/${weekId}/lessons/${lessonId}/students/${student.email}`
         );
 
         if (result.status === 200) {
             setMessage(`${student.firstname} successfully added`);
             if (onSuccess) {
-                onSuccess(); // e.g., refetch data
+                onSuccess();
             }
         }
     } catch (error) {
@@ -19,16 +19,17 @@ export async function handleAddStudent({ weekId, lessonId, student, setMessage, 
     }
 }
 
-export async function handleRemoveStudent({ weekId, lessonId, student, setMessage, onSuccess }) {
+export async function handleRemoveStudent({ weekId, lessonId, student, setMessage, onSuccess, axiosInstance }) {
     try {
-        const result = await axios.delete(
-            `http://localhost:8080/weeks/${weekId}/lessons/${lessonId}/students/${student.email}`
+        // --- FIX: Use the provided axiosInstance, not the default axios ---
+        const result = await axiosInstance.delete(
+            `/weeks/${weekId}/lessons/${lessonId}/students/${student.email}`
         );
 
         if (result.status === 200) {
             setMessage(`${student.firstname} successfully removed`);
             if (onSuccess) {
-                onSuccess(); // e.g., refetch data
+                onSuccess();
             }
         }
     } catch (error) {
