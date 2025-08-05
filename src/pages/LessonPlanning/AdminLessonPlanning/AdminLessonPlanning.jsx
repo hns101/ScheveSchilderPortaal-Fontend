@@ -29,22 +29,26 @@ function AdminLessonPlanning() {
     const [selectedLessonId, setSelectedLessonId] = useState(null);
     const [editableWeek, setEditableWeek] = useState(testWeekInputData);
 
+    // --- FIX: Create the authenticated instance once ---
+    const authenticatedAxios = axiosWithAuth();
+
     useEffect(() => {
         const firstLesson = weekData[currentWeekIndex]?.lessons?.[0];
         if (firstLesson) {
             setSelectedLessonId(firstLesson.id);
         } else {
-            setSelectedLessonId(null); // in case no lessons exist
+            setSelectedLessonId(null);
         }
     }, [currentWeekIndex, weekData]);
 
     const currentWeek = weekData[currentWeekIndex];
 
+    // --- FIX: Pass the created instance to the helpers ---
     const modifiedHandleAddStudent = (params) =>
-        handleAddStudent({...params, axiosInstance: axiosWithAuth});
+        handleAddStudent({...params, axiosInstance: authenticatedAxios});
 
     const modifiedHandleRemoveStudent = (params) =>
-        handleRemoveStudent({...params, axiosInstance: axiosWithAuth});
+        handleRemoveStudent({...params, axiosInstance: authenticatedAxios});
 
     if (loading) return <p className="loading">Loading...</p>;
     if (error) return <p style={{color: "red"}}>{error}</p>;
