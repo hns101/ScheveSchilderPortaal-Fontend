@@ -1,17 +1,26 @@
+import React from 'react';
+
 function LessonSwitcher({
                             user,
                             lessons = [],
-                            upcomingLessons = [],
                             selections,
                             onSlotChange,
                             onSlotUpdate,
-                            combinedLessons
+                            combinedLessons // This now contains all relevant lessons
                         }) {
     const lessonsWithStudent = lessons.filter(lesson =>
         lesson.students?.some(s => s.id === user.student.id)
     );
 
-    // CASE: User is already in a lesson
+    // Helper to format the date string
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+        const parts = dateString.split('-');
+        if (parts.length !== 3) return dateString;
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    };
+
+    // CASE: User is already in a lesson for the current week
     if (lessonsWithStudent.length > 0) {
         return lessonsWithStudent.map(originalLesson => {
             const selectedValue = selections[originalLesson.id] ?? originalLesson.id;
@@ -32,14 +41,15 @@ function LessonSwitcher({
                         }
                     >
                         <option value="niet-aanwezig">Niet aanwezig</option>
-                        {lessons
+                        {/* --- FIX: Use combinedLessons for all options --- */}
+                        {(combinedLessons || [])
                             .filter(lesson =>
-                                (lesson.students.every(s => s.id !== user.student.id) || lesson.id === originalLesson.id) &&
-                                lesson.students.length < 10
+                                // Show a lesson if it's not full, OR if it's the lesson the user is already in
+                                (lesson.students.length < 10 || lesson.id === originalLesson.id)
                             )
                             .map(lesson => (
                                 <option key={lesson.id} value={lesson.id}>
-                                    {lesson.slot} {lesson.date}
+                                    {lesson.slot} {formatDate(lesson.date)}
                                 </option>
                             ))}
                     </select>
@@ -55,7 +65,7 @@ function LessonSwitcher({
         });
     }
 
-    // CASE: User is not in any lesson for this week
+    // CASE: User is NOT in any lesson for this week
     const selectedNew = selections["new"];
     return (
         <div className="lesson-slot-selector">
@@ -75,7 +85,7 @@ function LessonSwitcher({
                         .filter(lesson => lesson.students.length < 10)
                         .map(lesson => (
                             <option key={lesson.id} value={lesson.id}>
-                                {lesson.slot} {lesson.date}
+                                {lesson.slot} {formatDate(lesson.date)}
                             </option>
                         ))}
                 </select>

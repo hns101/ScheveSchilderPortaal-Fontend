@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // Combined import
+import React, { useState } from 'react';
 import './../LessonPlanning.css';
 import UserWeekNavigator from "../../../components/user/UserWeekNavigator.jsx";
 import LessonSwitcher from "../../../components/user/LessonSwitcher.jsx";
@@ -64,24 +64,13 @@ function UserLessonPlanning() {
     if (!allData.length) return <p className="loading" >Geen lesdata beschikbaar.</p>;
 
     const currentWeek = allData[currentWeekIndex];
-    const upcomingWeeksRaw = allData.slice(currentWeekIndex + 1, currentWeekIndex + 3);
 
-    const totalUpcomingRegistrations = upcomingWeeksRaw.reduce((count, week) => {
-        return count + week.lessons.filter(lesson =>
-            lesson.students.some(s => s.id === user.student.id)
-        ).length;
-    }, 0);
-
-    const upcomingLessons = totalUpcomingRegistrations >= 3
-        ? []
-        : upcomingWeeksRaw
-            .flatMap(week =>
-                week.lessons.filter(lesson => {
-                    const isFull = lesson.students.length >= 10;
-                    const alreadyRegistered = lesson.students.some(s => s.id === user.student.id);
-                    return !isFull && !alreadyRegistered;
-                })
-            );
+    // Calculate the full range of lessons for the dropdowns
+    // (1 week before, current week, and 2 weeks after)
+    const relevantWeeksStartIndex = Math.max(0, currentWeekIndex - 1);
+    const relevantWeeksEndIndex = Math.min(allData.length, currentWeekIndex + 3);
+    const relevantWeeks = allData.slice(relevantWeeksStartIndex, relevantWeeksEndIndex);
+    const allAvailableLessons = relevantWeeks.flatMap(week => week.lessons);
 
     return (
         <main className="main">
@@ -97,11 +86,10 @@ function UserLessonPlanning() {
                 <LessonSwitcher
                     user={user}
                     lessons={currentWeek.lessons}
-                    upcomingLessons={upcomingLessons}
                     selections={selections}
                     onSlotChange={handleSlotChange}
                     onSlotUpdate={handleSlotUpdate}
-                    combinedLessons={[...currentWeek.lessons, ...upcomingLessons]}
+                    combinedLessons={allAvailableLessons} // Pass the single, correct list of lessons
                 />
 
                 <LessonGrid
