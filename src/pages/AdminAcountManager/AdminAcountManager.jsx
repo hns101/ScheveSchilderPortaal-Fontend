@@ -7,7 +7,7 @@ import EditUserModal from "../../components/admin/EditUserModal.jsx";
 // Import the new ToggleSwitch component
 import ToggleSwitch from "../../components/common/ToggleSwitch.jsx";
 
-const SLOT_OPTIONS = ["Woensdag Avond", "Vrijdag Avond", "Zaterdag Ochtend"];
+const SLOT_OPTIONS = ["Woensdag Avond", "Vrijdag Avond", "Zaterdag Ochtend" , "Non-actief"];
 
 function AdminAccountManager() {
     const [users, setUsers] = useState([]);
