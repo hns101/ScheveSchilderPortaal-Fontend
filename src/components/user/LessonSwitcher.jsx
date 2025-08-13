@@ -12,7 +12,7 @@ function LessonSwitcher({
         lesson.students?.some(s => s.id === user.student.id)
     );
 
-    // Helper to format the date string
+    // Helper to format the date string to DD-MM-YYYY
     const formatDate = (dateString) => {
         if (!dateString) return "";
         const parts = dateString.split('-');
@@ -25,54 +25,61 @@ function LessonSwitcher({
         return lessonsWithStudent.map(originalLesson => {
             const selectedValue = selections[originalLesson.id] ?? originalLesson.id;
 
+            // --- THIS IS THE FIX ---
+            // Determine which list of lessons to show in the dropdown.
+            // If "Niet aanwezig" is selected, show the wide range (combinedLessons).
+            // Otherwise, show only the current week's lessons (lessons).
+            const optionsToShow = selectedValue === "niet-aanwezig" ? combinedLessons : lessons;
+
             return (
                 <div key={originalLesson.id} className="lesson-slot-selector">
                     <h3 className="lesson-student-fullname">
                         {user.student.firstname} {user.student.lastname}
                     </h3>
-                    <select
-                        className="lesson-student-input"
-                        value={selectedValue}
-                        onChange={(e) =>
-                            onSlotChange(
-                                originalLesson.id,
-                                e.target.value === "niet-aanwezig" ? "niet-aanwezig" : parseInt(e.target.value)
-                            )
-                        }
-                    >
-                        <option value="niet-aanwezig">Niet aanwezig</option>
-                        {/* --- FIX: Use combinedLessons for all options --- */}
-                        {(combinedLessons || [])
-                            .filter(lesson =>
-                                // Show a lesson if it's not full, OR if it's the lesson the user is already in
-                                (lesson.students.length < 10 || lesson.id === originalLesson.id)
-                            )
-                            .map(lesson => (
-                                <option key={lesson.id} value={lesson.id}>
-                                    {lesson.slot} {formatDate(lesson.date)}
-                                </option>
-                            ))}
-                    </select>
-                    <button
-                        className="lesson-send-button"
-                        onClick={() => onSlotUpdate(originalLesson, selectedValue)}
-                        disabled={selectedValue === originalLesson.id}
-                    >
-                        wijzig
-                    </button>
+                    <div className="lesson-student-option">
+                        <select
+                            className="lesson-student-input"
+                            value={selectedValue}
+                            onChange={(e) =>
+                                onSlotChange(
+                                    originalLesson.id,
+                                    e.target.value === "niet-aanwezig" ? "niet-aanwezig" : parseInt(e.target.value)
+                                )
+                            }
+                        >
+                            <option value="niet-aanwezig">Niet aanwezig</option>
+                            {(optionsToShow || [])
+                                .filter(lesson =>
+                                    // Show a lesson if it's not full, OR if it's the lesson the user is already in
+                                    (lesson.students.length < 10 || lesson.id === originalLesson.id)
+                                )
+                                .map(lesson => (
+                                    <option key={lesson.id} value={lesson.id}>
+                                        {lesson.slot} {formatDate(lesson.date)}
+                                    </option>
+                                ))}
+                        </select>
+                        <button
+                            className="lesson-send-button"
+                            onClick={() => onSlotUpdate(originalLesson, selectedValue)}
+                            disabled={selectedValue === originalLesson.id}
+                        >
+                            wijzig
+                        </button>
+                    </div>
                 </div>
             );
         });
     }
 
-    // CASE: User is NOT in any lesson for this week
+    // CASE: User is NOT in any lesson for this week (this part was already correct)
     const selectedNew = selections["new"];
     return (
         <div className="lesson-slot-selector">
             <h3 className="lesson-student-fullname">
                 {user.student.firstname} {user.student.lastname}
             </h3>
-            <span className='lesson-student-option'>
+            <div className="lesson-student-option">
                 <select
                     className="lesson-student-input"
                     value={selectedNew || "niet-aanwezig"}
@@ -96,7 +103,7 @@ function LessonSwitcher({
                 >
                     wijzig
                 </button>
-            </span>
+            </div>
         </div>
     );
 }

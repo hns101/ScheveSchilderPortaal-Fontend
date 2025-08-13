@@ -17,17 +17,14 @@ function Login() {
         setError("");
 
         try {
-            // This will now only handle the success case
-            await login(email, password);
+            // Convert the email to lowercase before sending it to the login function.
+            await login(email.toLowerCase(), password);
             navigate('/planning-beheer'); // Redirect on successful login
 
         } catch (err) {
-            // All errors are now caught here. We check the error object for details.
             if (err.response && err.response.status === 401) {
-                // If the error has a response object with status 401, it's a failed login
                 setError("Login mislukt! Controleer je e-mail en wachtwoord.");
             } else {
-                // For any other errors (network issues, server down, etc.)
                 console.error("An unexpected error occurred:", err.message);
                 setError("Er is een onverwachte fout opgetreden. Probeer het later opnieuw.");
             }
@@ -81,3 +78,4 @@ function Login() {
 }
 
 export default Login;
+
