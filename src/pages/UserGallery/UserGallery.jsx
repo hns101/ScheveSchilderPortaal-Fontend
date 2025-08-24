@@ -185,7 +185,7 @@ function UserGallery() {
                     Upload kunstwerk
                 </button>
                 <ToggleSwitch
-                    label={gallery?.isPublic ? "Publieke galerij" : "Privé gallerij"}
+                    label={gallery?.isPublic ? "Publiek" : "Privé"}
                     checked={gallery?.isPublic || false}
                     onChange={handleStatusChange}
                 />
